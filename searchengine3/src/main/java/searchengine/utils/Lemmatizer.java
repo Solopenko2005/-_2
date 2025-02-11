@@ -18,7 +18,8 @@ public class Lemmatizer {
     private final JdbcTemplate jdbcTemplate;
     private final SiteRepository siteRepository;
     private final LemmaRepository lemmaRepository;
-    // Конструктор для инициализации JdbcTemplate
+
+    // Конструктор для инициализации зависимостей
     public Lemmatizer(JdbcTemplate jdbcTemplate, SiteRepository siteRepository, LemmaRepository lemmaRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.siteRepository = siteRepository;
@@ -34,28 +35,30 @@ public class Lemmatizer {
         }
     }
 
-    // Метод для получения лемм и их частоты
+    /**
+     * Возвращает карту лемм из текста с указанием частоты встречаемости.
+     *
+     * @param text исходный текст
+     * @return Map, где ключ — лемма, значение — её частота
+     */
     public static Map<String, Integer> getLemmas(String text) {
         if (text == null || text.isEmpty()) {
             return Collections.emptyMap();
         }
-
-        // Оставляем только русские буквы и пробелы
+        // Приводим текст к нижнему регистру и оставляем только русские буквы и пробелы
         text = text.toLowerCase().replaceAll("[^а-яё ]", "");
 
         Map<String, Integer> lemmas = new HashMap<>();
 
         try {
-            // Разделяем текст на слова и получаем леммы
+            // Разбиваем текст на слова
             for (String word : text.split("\\s+")) {
                 if (word.isEmpty()) continue; // Пропускаем пустые строки
 
-                // Получаем нормальную форму слова
-                List<String> wordBaseForms = luceneMorph.getNormalForms(word);
-                if (!wordBaseForms.isEmpty()) {
-                    String lemma = wordBaseForms.get(0);
-
-                    // Обновляем или добавляем лемму в карту с частотами
+                // Получаем нормальные формы слова
+                List<String> wordNormalForms = luceneMorph.getNormalForms(word);
+                if (!wordNormalForms.isEmpty()) {
+                    String lemma = wordNormalForms.get(0);
                     if (!isStopWord(lemma)) {
                         lemmas.put(lemma, lemmas.getOrDefault(lemma, 0) + 1);
                     }
@@ -68,33 +71,51 @@ public class Lemmatizer {
         return lemmas;
     }
 
-    // Метод для извлечения множества лемм из текста
+    /**
+     * Извлекает множество лемм из текста.
+     *
+     * @param text исходный текст
+     * @return множество уникальных лемм
+     */
     public static Set<String> extractLemmas(String text) {
         return getLemmas(text).keySet();
     }
 
-    // Метод для получения частоты леммы из базы данных
+    /**
+     * Получает суммарную частоту леммы из базы данных.
+     *
+     * @param lemma текст леммы
+     * @return частота леммы
+     */
     public int getLemmaFrequency(String lemma) {
         // Открытие сессии Hibernate
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            // Создание HQL запроса для получения частоты леммы
             String hql = "SELECT SUM(frequency) FROM Lemma WHERE lemma = :lemma";
             Query<Long> query = session.createQuery(hql, Long.class);
             query.setParameter("lemma", lemma);
-
             Long result = query.uniqueResult();
             return result != null ? result.intValue() : 0;
         }
     }
 
-    // Метод для проверки, является ли слово стоп-словом
+    /**
+     * Проверяет, является ли слово стоп-словом.
+     *
+     * @param word слово для проверки
+     * @return true, если слово является стоп-словом, иначе false
+     */
     private static boolean isStopWord(String word) {
-        // Можно загрузить стоп-слова из внешнего источника, базы данных и т. д.
+        // Список стоп-слов (можно расширить или загрузить из внешнего источника)
         List<String> stopWords = Arrays.asList("и", "в", "на", "с", "по", "за", "из", "у", "для");
         return stopWords.contains(word);
     }
 
-    // Метод для удаления HTML тегов
+    /**
+     * Удаляет HTML-теги из строки.
+     *
+     * @param html исходная HTML-строка
+     * @return текст без HTML-тегов
+     */
     public static String removeHtmlTags(String html) {
         return Jsoup.parse(html).text();
     }

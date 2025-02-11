@@ -1,45 +1,37 @@
 package searchengine.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import searchengine.model.Lemma;
+import searchengine.model.Site;
 import searchengine.repository.LemmaRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class LemmaService {
-
+    private static final Logger logger = LoggerFactory.getLogger(LemmaService.class);
     private final LemmaRepository lemmaRepository;
 
-    @Autowired
     public LemmaService(LemmaRepository lemmaRepository) {
         this.lemmaRepository = lemmaRepository;
     }
 
-    // Метод для обновления частот лемм в базе и возврата частоты
-    public Map<String, Integer> updateLemmaFrequenciesAndReturn(Set<String> lemmas) {
-        Map<String, Integer> lemmaFrequency = new HashMap<>();
-
-        for (String lemma : lemmas) {
-            Lemma existingLemma = lemmaRepository.findByLemma(lemma);
-            if (existingLemma != null) {
-                // Лемма уже существует, увеличиваем частоту
-                existingLemma.setFrequency(existingLemma.getFrequency() + 1);
-                lemmaRepository.save(existingLemma);
-                lemmaFrequency.put(lemma, existingLemma.getFrequency());
-            } else {
-                // Лемма не найдена, создаем новую с частотой 1
-                Lemma newLemma = new Lemma();
-                newLemma.setLemma(lemma);
-                newLemma.setFrequency(1);
-                lemmaRepository.save(newLemma);
-                lemmaFrequency.put(lemma, 1); // Частота новой леммы = 1
-            }
+    @Transactional
+    public void saveOrUpdateLemma(String lemmaText, Site site) {
+        if (site == null) {
+            logger.error("Ошибка: site == null при сохранении леммы '{}'", lemmaText);
+            throw new IllegalArgumentException("Ошибка: site не может быть null при сохранении леммы");
         }
 
-        return lemmaFrequency;
+        try {
+            lemmaRepository.upsertLemma(lemmaText, site.getId());
+            logger.info("Лемма '{}' добавлена/обновлена для сайта '{}'", lemmaText, site.getUrl());
+        } catch (Exception e) {
+            logger.error("Ошибка при сохранении леммы '{}': {}", lemmaText, e.getMessage());
+            throw new RuntimeException("Ошибка при сохранении леммы: " + e.getMessage());
+        }
     }
 }

@@ -4,7 +4,9 @@ import lombok.Setter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import searchengine.config.IndexingSettings;
 import searchengine.model.*;
@@ -14,33 +16,30 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveTask;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 @Service
 public class SiteIndexingService {
+    private static final Logger logger = LoggerFactory.getLogger(SiteIndexingService.class);
 
-    @Setter
-    @Autowired
-    private DatabaseService databaseService;
-
-    @Setter
-    @Autowired
-    private IndexingSettings indexingSettings;
-
+    private final DatabaseService databaseService;
+    private final IndexingSettings indexingSettings;
     private final AtomicBoolean indexingInProgress = new AtomicBoolean(false);
     private final ForkJoinPool pool = new ForkJoinPool();
     private final Set<String> visitedUrls = Collections.synchronizedSet(new HashSet<>());
     private static final int MAX_RETRIES = 3;
     private static final int TIMEOUT = 10000;
 
+    public SiteIndexingService(DatabaseService databaseService, IndexingSettings indexingSettings) {
+        this.databaseService = databaseService;
+        this.indexingSettings = indexingSettings;
+    }
+
     public boolean startIndexing() {
         if (indexingInProgress.compareAndSet(false, true)) {
-            clearSiteData();
+            logger.info("Запуск индексации...");
+            databaseService.clearAllData();
 
             for (IndexingSettings.SiteConfig siteConfig : indexingSettings.getSites()) {
                 Site site = new Site();
@@ -51,10 +50,13 @@ public class SiteIndexingService {
                 databaseService.saveSite(site);
 
                 pool.submit(() -> {
-                    new SiteIndexingTask(site, siteConfig.getUrl(), 0, visitedUrls).fork();
+                    logger.info("Индексация началась для: {}", site.getUrl());
+                    new SiteIndexingTask(site, site.getUrl(), 0).invoke();
+
                     site.setStatus(Status.INDEXED);
                     site.setStatusTime(LocalDateTime.now());
                     databaseService.saveSite(site);
+                    logger.info("Индексация завершена для: {}", site.getUrl());
                 });
             }
             return true;
@@ -64,22 +66,20 @@ public class SiteIndexingService {
 
     public boolean stopIndexing() {
         if (indexingInProgress.compareAndSet(true, false)) {
-            pool.shutdown(); // Позволяет завершить текущие задачи
+            logger.info("Остановка индексации...");
+            pool.shutdown();
             try {
                 if (!pool.awaitTermination(10, TimeUnit.SECONDS)) {
-                    pool.shutdownNow(); // Если за 10 сек не завершилось — принудительное завершение
+                    pool.shutdownNow();
                 }
             } catch (InterruptedException e) {
                 pool.shutdownNow();
+                logger.error("Ошибка при остановке индексации", e);
             }
+            logger.info("Индексация успешно остановлена.");
             return true;
         }
         return false;
-    }
-
-
-    private void clearSiteData() {
-        databaseService.clearAllData();
     }
 
     private Document fetchDocumentWithRetries(String url) throws IOException {
@@ -92,34 +92,31 @@ public class SiteIndexingService {
                         .get();
             } catch (SocketTimeoutException e) {
                 retries++;
-                System.out.println("Ошибка подключения к " + url + ". Попытка " + retries);
+                logger.warn("Ошибка подключения к {}. Попытка {}/{}", url, retries, MAX_RETRIES);
             }
         }
         throw new IOException("Не удалось загрузить страницу после " + MAX_RETRIES + " попыток: " + url);
     }
 
-
     private class SiteIndexingTask extends RecursiveTask<Void> {
         private final Site site;
         private final String url;
         private final int depth;
-        private final Set<String> visitedUrls;
 
-        public SiteIndexingTask(Site site, String url, int depth, Set<String> visitedUrls) {
+        public SiteIndexingTask(Site site, String url, int depth) {
             this.site = site;
             this.url = url;
             this.depth = depth;
-            this.visitedUrls = visitedUrls;
         }
 
         @Override
         protected Void compute() {
+            logger.info("Выполняется compute() для URL: {}", url);
             if (!visitedUrls.add(url)) {
                 return null;
             }
 
             try {
-
                 Document document = fetchDocumentWithRetries(url);
                 if (document == null) return null;
 
@@ -130,42 +127,48 @@ public class SiteIndexingService {
                 page.setContent(document.outerHtml());
                 databaseService.savePage(page);
 
-                // Обрабатываем текст страницы и сохраняем леммы
+                // Извлекаем и сохраняем леммы
                 String text = document.body().text();
                 Set<String> lemmas = Lemmatizer.extractLemmas(text);
-                System.out.println("Извлечённые леммы: " + lemmas);
+                logger.info("Извлечено {} лемм для URL: {}", lemmas.size(), url);
+                logger.info("Леммы, извлеченные из {}: {}", url, lemmas);
 
                 for (String lemma : lemmas) {
-                    databaseService.saveLemma(lemma, site);
+                    if (lemma != null && !lemma.trim().isEmpty()) {
+                        try {
+                            databaseService.saveLemma(lemma, site);
+                        } catch (DataIntegrityViolationException e) {
+                            logger.warn("Лемма '{}' уже существует в базе, пропускаем", lemma);
+                        } catch (Exception e) {
+                            logger.error("Ошибка при сохранении леммы '{}': {}", lemma, e.getMessage(), e);
+                        }
+                    }
                 }
 
+
                 Elements links = document.select("a[href]");
-                List<SiteIndexingTask> subTasks = links.stream()
-                        .map(link -> link.absUrl("href"))
-                        .filter(this::isValidUrl)
-                        .map(link -> new SiteIndexingTask(site, link, depth + 1, visitedUrls))
-                        .collect(Collectors.toList());
+                List<SiteIndexingTask> subTasks = new ArrayList<>();
+
+                for (String link : links.eachAttr("abs:href")) {
+                    if (isValidUrl(link)) {
+                        subTasks.add(new SiteIndexingTask(site, link, depth + 1));
+                    }
+                }
 
                 invokeAll(subTasks);
-                System.out.println("Задача завершена успешно!");
+                logger.info("Обработано {} страниц на глубине {}", subTasks.size(), depth);
             } catch (Exception e) {
                 site.setStatus(Status.FAILED);
                 site.setStatusTime(LocalDateTime.now());
-
-                String errorMessage = e.getMessage(); // Получаем текст ошибки
-                site.setLastError(errorMessage); // Записываем в объект site
-
-                databaseService.updateSiteStatus(site, errorMessage); // Вызываем метод обновления статуса
-
-                e.printStackTrace(); // Логируем ошибку
+                String errorMessage = e.getMessage();
+                site.setLastError(errorMessage);
+                databaseService.updateSiteStatus(site, errorMessage);
+                logger.error("Ошибка при обработке URL {}: {}", url, errorMessage, e);
             }
-
             return null;
         }
 
-
-
-            public boolean isValidUrl(String url) {
+        private boolean isValidUrl(String url) {
             return url.startsWith(site.getUrl()) &&
                     !visitedUrls.contains(url) &&
                     !url.contains("#") &&

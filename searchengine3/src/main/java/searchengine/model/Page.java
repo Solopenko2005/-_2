@@ -26,7 +26,7 @@ public class Page {
     private String path;
 
     @Column(nullable = false)
-    private Integer code;
+    private Integer code;  // HTTP-код страницы
 
     @Column(nullable = false, columnDefinition = "VARCHAR")
     private String content;

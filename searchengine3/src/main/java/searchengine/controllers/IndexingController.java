@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import searchengine.config.Site;
+import searchengine.model.Site;
 import searchengine.repository.SiteRepository;
 import searchengine.services.PageProcessor;
 import searchengine.services.SiteIndexingService;
@@ -39,12 +39,16 @@ public class IndexingController {
                 return ResponseEntity.badRequest().body("Ошибка: сайт не найден");
             }
 
-            pageProcessor.parsePageAndSaveEntitiesToDB(url, Integer.parseInt(site.getUrl()));
+            // Используем site.getId(), а не Integer.parseInt(site.getUrl())
+            pageProcessor.parsePageAndSaveEntitiesToDB(url, site.getId());
+
             return ResponseEntity.ok("Страница успешно проиндексирована");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка индексации: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ошибка индексации: " + e.getMessage());
         }
     }
+
 
     @GetMapping("/api/startIndexing")
     public Map<String, Object> startIndexing() {

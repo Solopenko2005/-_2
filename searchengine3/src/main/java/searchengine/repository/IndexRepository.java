@@ -3,6 +3,7 @@ package searchengine.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import searchengine.model.Lemma;
 import searchengine.model.Page;
 import searchengine.model.SearchIndex;
 
@@ -20,6 +21,6 @@ public interface IndexRepository extends JpaRepository<SearchIndex, Long> {
     @Query("SELECT si FROM SearchIndex si WHERE si.page = :page AND si.lemma.lemma IN :lemmas")
     List<SearchIndex> findIndexesForPageAndLemmas(@Param("page") Page page, @Param("lemmas") Set<String> lemmas);
 
-    List<Page> findPagesByLemma(String s);
+    List<Page> findPagesByLemma(Lemma s);
 
 }

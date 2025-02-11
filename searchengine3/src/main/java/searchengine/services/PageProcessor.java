@@ -3,23 +3,26 @@ package searchengine.services;
 import lombok.SneakyThrows;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
 import org.jsoup.Connection;
-import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import searchengine.model.*;
 import searchengine.repository.IndexRepository;
 import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class PageProcessor {
+
+    private static final Logger logger = LoggerFactory.getLogger(PageProcessor.class);
 
     @Autowired
     private PageRepository pageRepository;
@@ -35,15 +38,21 @@ public class PageProcessor {
 
     @Autowired
     private RussianLuceneMorphology luceneMorphology;
-    private Object pagePath;
 
     /**
      * Метод для обработки страницы и сохранения данных в БД
      */
     public void parsePageAndSaveEntitiesToDB(String pageUrl, int siteId) throws IOException {
         // Получение сайта из БД
-        Site site = siteRepository.findById(Long.valueOf(siteId)).orElseThrow(() -> new RuntimeException("Сайт не найден"));
+        Site site = siteRepository.findById(siteId)
+                .orElseThrow(() -> new RuntimeException("Сайт не найден: ID " + siteId));
 
+        // Получение пути страницы (относительный путь)
+        String pagePath = getPagePath(pageUrl);
+        if (pagePath == null || pagePath.isEmpty()) {
+            logger.error("Ошибка: pagePath для URL {} не может быть null или пустым", pageUrl);
+            throw new RuntimeException("Некорректный путь страницы: " + pageUrl);
+        }
 
         // Получение HTML-кода страницы
         Connection.Response response = Jsoup.connect(pageUrl)
@@ -54,21 +63,24 @@ public class PageProcessor {
 
         int statusCode = response.statusCode();
         if (statusCode >= 400) {
+            logger.error("Ошибка HTTP {} при попытке загрузить {}", statusCode, pageUrl);
             throw new RuntimeException("Ошибка HTTP: " + statusCode);
         }
 
         String content = response.body();
         String textContent = Jsoup.parse(content).text();
+
         // Проверка или создание записи в таблице Page
-        Page page = pageRepository.findByPath((String) pagePath).orElseGet(() -> {
-            // Создание сущности страницы
+        Page page = pageRepository.findByPathAndSite(pagePath, site).orElseGet(() -> {
             Page newPage = new Page();
-            newPage.setUrl((String) pagePath);
+            newPage.setPath(pagePath);
+            newPage.setUrl(pageUrl);
             newPage.setSite(site);
             newPage.setContent(content);
-            newPage.setPath(((String) pagePath).replace(site.getUrl(), ""));
+            newPage.setCode(statusCode);  // Убеждаемся, что HTTP-код установлен
             return pageRepository.save(newPage);
         });
+
 
         // Получение лемм и их количества
         Map<String, Integer> pageLemmasMap = searchingLemmasAndTheirCount(textContent);
@@ -78,27 +90,19 @@ public class PageProcessor {
             String lemmaText = pair.getKey();
             int lemmaCount = pair.getValue();
 
-            Lemma lemmaEntity = lemmaRepository.findByLemmaAndSite(lemmaText, site)
-                    .orElseGet(() -> {
-                        Lemma newLemma = new Lemma();
-                        newLemma.setLemma(lemmaText);
-                        newLemma.setSite(site);
-                        newLemma.setFrequency(0);
-                        return lemmaRepository.save(newLemma);
-                    });
+            lemmaRepository.upsertLemma(lemmaText, site.getId());
 
-            // Увеличиваем частоту леммы
-            lemmaEntity.setFrequency(lemmaEntity.getFrequency() + 1);
-            lemmaRepository.save(lemmaEntity);
-            // Добавляем запись в таблицу index для связи леммы с страницей
+            Lemma lemmaEntity = lemmaRepository.findByLemmaAndSite(lemmaText, site)
+                    .orElseThrow(() -> new RuntimeException("Лемма не найдена после upsert: " + lemmaText));
+
+            // Добавление связи леммы со страницей
             SearchIndex index = new SearchIndex();
             index.setPage(page);
             index.setLemma(lemmaEntity);
-            index.setRanking(lemmaCount);  // Рейтинг леммы на странице
+            index.setRanking(lemmaCount);
             indexRepository.save(index);
         }
     }
-
 
     /**
      * Вспомогательный метод для получения пути страницы
@@ -106,8 +110,9 @@ public class PageProcessor {
     private String getPagePath(String pageUrl) {
         try {
             URL url = new URL(pageUrl);
-            return url.getPath();
+            return url.getPath().isEmpty() ? "/" : url.getPath();
         } catch (MalformedURLException e) {
+            logger.error("Некорректный URL: {}", pageUrl, e);
             throw new RuntimeException("Некорректный URL: " + pageUrl);
         }
     }
@@ -124,11 +129,9 @@ public class PageProcessor {
             if (word.isBlank()) continue;
 
             List<String> wordBaseForms = luceneMorphology.getMorphInfo(word);
-
             if (checkComplianceWordToParticlesNames(wordBaseForms)) continue;
 
             List<String> wordNormalFormList = luceneMorphology.getNormalForms(word);
-
             String wordInNormalForm = wordNormalFormList.get(0);
 
             lemmasMap.put(wordInNormalForm, lemmasMap.getOrDefault(wordInNormalForm, 0) + 1);
