@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG                           # Логирование всех SQL-запросов
+        type.descriptor.sql.BasicBinder: TRACE # Логирование привязанных параметров
+        transaction: DEBUG                    # Логирование транзакций Hibernate
+        engine: TRACE
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: testTest
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml  # Файл с миграциями
+    clear-check-sums: true
+
+indexing-settings:
+  user-agent: HeliontSearchBot
+  referer: http://www.google.com
+  sites:
+    - url: https://www.lenta.ru
+      name: Лента.ру
+    - url: https://www.skillbox.ru
+      name: Skillbox
+    - url: https://www.playback.ru
+      name: PlayBack.Ru
+    - url: https://volochek.life/
+      name: Volochek.LIFE
+
