@@ -1,41 +1,38 @@
 package searchengine.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import searchengine.model.Index;
 import searchengine.model.Lemma;
 import searchengine.model.Page;
+import searchengine.model.SearchIndex;
 import searchengine.model.Site;
 
 import java.util.List;
+import java.util.Set;
 
-public interface IndexRepository extends JpaRepository<Index, Integer> {
+public interface IndexRepository extends JpaRepository<SearchIndex, Long> {
 
-    // Поиск всех индексов для конкретной страницы
-    List<Index> findByPage(Page page);
+    @Query("SELECT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas")
+    List<Page> findPagesByLemmas(@Param("lemmas") List<String> lemmas);
 
-    // Проверка существования индекса для страницы и леммы
-    @Query("SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END FROM Index i WHERE i.page = :page AND i.lemma = :lemma")
-    boolean existsByPageAndLemma(@Param("page") Page page, @Param("lemma") Lemma lemma);
+    @Query("SELECT SUM(si.ranking) FROM SearchIndex si WHERE si.page = :page AND si.lemma.lemma IN :lemmas")
+    Float getRelevanceForPage(@Param("page") Page page, @Param("lemmas") List<String> lemmas);
 
-    // Поиск индекса по странице и лемме
-    @Query("SELECT i FROM Index i WHERE i.page = :page AND i.lemma = :lemma")
-    Index findByPageAndLemma(@Param("page") Page page, @Param("lemma") Lemma lemma);
+    @Query("SELECT si FROM SearchIndex si WHERE si.page = :page AND si.lemma.lemma IN :lemmas")
+    List<SearchIndex> findIndexesForPageAndLemmas(@Param("page") Page page, @Param("lemmas") Set<String> lemmas);
 
-    // Поиск страниц по лемме и сайту
-    @Query("SELECT i.page FROM Index i WHERE i.page.site = :site AND i.lemma = :lemma")
-    List<Page> findPagesByLemmaAndSite(@Param("site") Site site, @Param("lemma") Lemma lemma);
+    List<Page> findPagesByLemma(Lemma s);
 
-    // Поиск индексов по лемме
-    @Query("SELECT i FROM Index i WHERE i.lemma = :lemma")
-    List<Index> findByLemma(@Param("lemma") Lemma lemma);
-
-    // Поиск индексов по странице и лемме (с возвращением ранга)
-    @Query("SELECT i.rank FROM Index i WHERE i.page = :page AND i.lemma = :lemma")
+    @Query("SELECT si.ranking FROM SearchIndex si WHERE si.page = :page AND si.lemma = :lemma")
     Float findRankByPageAndLemma(@Param("page") Page page, @Param("lemma") Lemma lemma);
 
-    // Поиск страниц по лемме
-    @Query("SELECT i.page FROM Index i WHERE i.lemma = :lemma")
-    List<Page> findPagesByLemma(@Param("lemma") Lemma lemma);
+    List<SearchIndex> findByPage(Page page);
+    @Modifying
+    @Query(value = "DELETE FROM search_index si USING page p WHERE si.page_id = p.id AND p.site_id = :siteId", nativeQuery = true)
+    void deleteByPage_Site(@Param("siteId") Integer siteId);
+
+    @Query("SELECT DISTINCT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas AND si.page.site = :site")
+    List<Page> findPagesByLemmasAndSite(@Param("lemmas") List<String> lemmas, @Param("site") Site site);
 }
