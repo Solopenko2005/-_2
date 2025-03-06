@@ -35,7 +35,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         totalStatistics.setSites((int) siteRepository.count());
         totalStatistics.setPages((int) pageRepository.count());
         totalStatistics.setLemmas((int) lemmaRepository.count());
-        totalStatistics.setIndexing(!siteRepository.findByStatus(Status.INDEXING).isEmpty());
+        totalStatistics.setIndexing(!siteRepository.findByStatus(Status.INDEXED).isEmpty());
 
         // Формируем детальную статистику по сайтам
         List<DetailedStatisticsItem> detailed = siteRepository.findAll().stream()

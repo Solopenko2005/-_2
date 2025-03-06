@@ -85,6 +85,16 @@ public class Lemmatizer {
     }
 
     /**
+     * Извлекает леммы из текста с указанием их ранга (частоты встречаемости).
+     *
+     * @param text исходный текст
+     * @return Map, где ключ — лемма, значение — её ранг (частота)
+     */
+    public static Map<String, Integer> extractLemmasWithRank(String text) {
+        return getLemmas(text);
+    }
+
+    /**
      * Получает суммарную частоту леммы из базы данных.
      *
      * @param lemma текст леммы

@@ -1,7 +1,6 @@
 package searchengine.services;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +8,7 @@ import org.springframework.stereotype.Service;
 import searchengine.dto.response.SearchResponse;
 import searchengine.dto.response.SearchResult;
 import searchengine.model.*;
-import searchengine.repository.IndexRepository;
-import searchengine.repository.LemmaRepository;
-import searchengine.repository.PageRepository;
-import searchengine.repository.SiteRepository;
+import searchengine.repository.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,7 +39,6 @@ public class SearchService {
         List<SearchResult> results = new ArrayList<>();
 
         try {
-            // Проверка на пустой запрос
             if (query == null || query.trim().isEmpty()) {
                 response.setResult(false);
                 response.setError("Задан пустой поисковый запрос");
@@ -53,7 +48,7 @@ public class SearchService {
 
             Site site = null;
             if (siteUrl != null && !siteUrl.isEmpty()) {
-                site = siteRepository.findByUrl(siteUrl).orElse(null);
+                site = siteRepository.findSiteByUrl(siteUrl);
                 if (site == null) {
                     response.setResult(false);
                     response.setError("Сайт не найден");
@@ -65,8 +60,7 @@ public class SearchService {
                 logger.info("Поиск по всем сайтам");
             }
 
-            // Разбиваем запрос на леммы
-            Map<String, Integer> lemmasMap = lemmatizer.getLemmas(query);
+            Map<String, Integer> lemmasMap = Lemmatizer.getLemmas(query);
             List<String> queryLemmas = new ArrayList<>(lemmasMap.keySet());
             if (queryLemmas.isEmpty()) {
                 response.setResult(true);
@@ -77,7 +71,7 @@ public class SearchService {
             }
             logger.info("Леммы из запроса: {}", queryLemmas);
 
-            // Исключаем леммы с высокой частотой
+            // Фильтрация лемм только для выбранного сайта
             List<Lemma> filteredLemmas = filterCommonLemmas(site, queryLemmas);
             if (filteredLemmas.isEmpty()) {
                 response.setResult(true);
@@ -88,12 +82,11 @@ public class SearchService {
             }
             logger.info("Отфильтрованные леммы: {}", filteredLemmas.stream().map(Lemma::getLemma).collect(Collectors.toList()));
 
-            // Сортируем леммы по частоте (от самых редких к самым частым)
             filteredLemmas.sort(Comparator.comparingInt(Lemma::getFrequency));
             logger.info("Леммы после сортировки: {}", filteredLemmas.stream().map(Lemma::getLemma).collect(Collectors.toList()));
 
-            // Находим страницы, содержащие все леммы
-            List<Page> pages = findPagesByLemmas(site, filteredLemmas);
+            // Поиск страниц только для выбранного сайта
+            List<Page> pages = findPagesByLemmasAndSite(filteredLemmas, site);
             if (pages.isEmpty()) {
                 response.setResult(true);
                 response.setCount(0);
@@ -103,21 +96,18 @@ public class SearchService {
             }
             logger.info("Найдено страниц: {}", pages.size());
 
-            // Рассчитываем релевантность
+            // Расчет релевантности только для выбранного сайта
             Map<Page, Double> relevanceMap = calculateRelevance(pages, filteredLemmas);
             logger.info("Релевантность страниц: {}", relevanceMap);
 
-            // Сортируем страницы по релевантности (от большей к меньшей)
             pages.sort((p1, p2) -> Double.compare(relevanceMap.get(p2), relevanceMap.get(p1)));
             logger.info("Страницы после сортировки по релевантности: {}", pages.stream().map(Page::getPath).collect(Collectors.toList()));
 
-            // Применяем пагинацию (offset и limit)
             int totalResults = pages.size();
             int start = Math.min(offset, totalResults);
             int end = Math.min(start + limit, totalResults);
             List<Page> paginatedPages = pages.subList(start, end);
 
-            // Формируем результаты
             for (Page page : paginatedPages) {
                 SearchResult result = new SearchResult();
                 result.setSite(page.getSite().getUrl());
@@ -144,58 +134,30 @@ public class SearchService {
     }
 
     private List<Lemma> filterCommonLemmas(Site site, List<String> lemmas) {
-        // Получаем общее количество страниц на сайте
         long totalPages = site != null ? pageRepository.countBySite(site) : pageRepository.count();
-        double threshold = 0.99; // Порог для исключения лемм (99%)
+        double threshold = 1.0;
         List<Lemma> filteredLemmas = new ArrayList<>();
 
-        // Логируем общее количество страниц и порог
         logger.info("Общее количество страниц на сайте: {}", totalPages);
         logger.info("Порог для исключения лемм: {}", threshold);
 
-        // Если сайт содержит мало страниц (например, меньше 10), отключаем фильтрацию
-        if (totalPages < 200) {
-            logger.info("Сайт содержит мало страниц ({}), фильтрация лемм отключена", totalPages);
-            for (String lemma : lemmas) {
-                List<Lemma> lemmaEntities = site != null
-                        ? lemmaRepository.findByLemmaAndSite(lemma, site)
-                        : lemmaRepository.findByLemma(lemma);
-                if (!lemmaEntities.isEmpty()) {
-                    Lemma lemmaEntity = lemmaEntities.get(0);
-                    filteredLemmas.add(lemmaEntity);
-                    logger.info("Лемма добавлена (фильтрация отключена): {}", lemmaEntity.getLemma());
-                } else {
-                    logger.info("Лемма не найдена в базе данных: {}", lemma);
-                }
-            }
-            return filteredLemmas;
-        }
-
-        // Фильтрация для сайтов с большим количеством страниц
         for (String lemma : lemmas) {
             List<Lemma> lemmaEntities = site != null
-                    ? lemmaRepository.findByLemmaAndSite(lemma, site)
-                    : lemmaRepository.findByLemma(lemma);
-            if (!lemmaEntities.isEmpty()) {
-                Lemma lemmaEntity = lemmaEntities.get(0);
-                double lemmaFrequencyRatio = (double) lemmaEntity.getFrequency() / totalPages;
+                    ? lemmaRepository.findAllByLemmaAndSite(lemma, site)
+                    : lemmaRepository.findAllByLemma(lemma);
 
-                // Логируем информацию о лемме
-                logger.info("Лемма: {}, Частота: {}, Отношение частоты: {}", lemmaEntity.getLemma(), lemmaEntity.getFrequency(), lemmaFrequencyRatio);
-
-                // Проверяем, превышает ли отношение частоты порог
+            for (Lemma lemmaObj : lemmaEntities) {
+                double lemmaFrequencyRatio = (double) lemmaObj.getFrequency() / totalPages;
+                logger.info("Лемма: {}, Частота: {}, Отношение частоты: {}", lemmaObj.getLemma(), lemmaObj.getFrequency(), lemmaFrequencyRatio);
                 if (lemmaFrequencyRatio <= threshold) {
-                    filteredLemmas.add(lemmaEntity);
-                    logger.info("Лемма добавлена: {}", lemmaEntity.getLemma());
+                    filteredLemmas.add(lemmaObj);
+                    logger.info("Лемма добавлена: {}", lemmaObj.getLemma());
                 } else {
-                    logger.info("Лемма исключена из-за высокой частоты: {}", lemmaEntity.getLemma());
+                    logger.info("Лемма исключена из-за высокой частоты: {}", lemmaObj.getLemma());
                 }
-            } else {
-                logger.info("Лемма не найдена в базе данных: {}", lemma);
             }
         }
 
-        // Логируем итоговый список отфильтрованных лемм
         logger.info("Отфильтрованные леммы: {}", filteredLemmas.stream()
                 .map(Lemma::getLemma)
                 .collect(Collectors.toList()));
@@ -203,37 +165,18 @@ public class SearchService {
         return filteredLemmas;
     }
 
-    private List<Page> findPagesByLemmas(Site site, List<Lemma> lemmas) {
-        List<Page> pages = new ArrayList<>();
-        if (lemmas.isEmpty()) {
-            logger.warn("Список лемм пуст");
-            return pages;
+    private List<Page> findPagesByLemmasAndSite(List<Lemma> lemmas, Site site) {
+        if (site == null) {
+            // Если сайт не указан, ищем страницы по всем сайтам
+            return indexRepository.findPagesByLemmas(lemmas.stream()
+                    .map(Lemma::getLemma)
+                    .collect(Collectors.toList()));
+        } else {
+            // Если сайт указан, ищем страницы только для этого сайта
+            return indexRepository.findPagesByLemmasAndSite(lemmas.stream()
+                    .map(Lemma::getLemma)
+                    .collect(Collectors.toList()), site);
         }
-
-        // Начинаем с первой леммы
-        Lemma firstLemma = lemmas.get(0);
-        List<Page> initialPages = site != null
-                ? indexRepository.findPagesByLemmaAndSite(site, firstLemma)
-                : indexRepository.findPagesByLemma(firstLemma);
-
-        logger.info("Найдено страниц для первой леммы: {}", initialPages.size());
-
-        for (Page page : initialPages) {
-            boolean containsAllLemmas = true;
-            for (Lemma lemma : lemmas) {
-                if (!indexRepository.existsByPageAndLemma(page, lemma)) {
-                    containsAllLemmas = false;
-                    logger.debug("Страница {} не содержит лемму {}", page.getPath(), lemma.getLemma());
-                    break;
-                }
-            }
-            if (containsAllLemmas) {
-                pages.add(page);
-                logger.debug("Страница добавлена: {}", page.getPath());
-            }
-        }
-
-        return pages;
     }
 
     private Map<Page, Double> calculateRelevance(List<Page> pages, List<Lemma> lemmas) {
@@ -246,25 +189,19 @@ public class SearchService {
                 Float rank = indexRepository.findRankByPageAndLemma(page, lemma);
                 if (rank != null) {
                     relevance += rank;
-                } else {
-                    logger.debug("Ранг не найден для страницы {} и леммы {}", page.getPath(), lemma.getLemma());
                 }
             }
             relevanceMap.put(page, relevance);
             if (relevance > maxRelevance) {
                 maxRelevance = relevance;
             }
-            logger.debug("Релевантность страницы {}: {}", page.getPath(), relevance);
         }
 
         // Нормализация релевантности
         if (maxRelevance > 0) {
             for (Map.Entry<Page, Double> entry : relevanceMap.entrySet()) {
                 entry.setValue(entry.getValue() / maxRelevance);
-                logger.debug("Нормализованная релевантность страницы {}: {}", entry.getKey().getPath(), entry.getValue());
             }
-        } else {
-            logger.warn("Максимальная релевантность равна нулю. Нормализация невозможна.");
         }
 
         return relevanceMap;
@@ -282,13 +219,9 @@ public class SearchService {
                 String fragment = content.substring(start, end);
                 fragment = fragment.replaceAll("(?i)" + lemma, "<b>" + lemma + "</b>");
                 snippet.append(fragment).append("... ");
-                logger.debug("Сниппет для леммы {}: {}", lemma, fragment);
-            } else {
-                logger.debug("Лемма {} не найдена в тексте страницы", lemma);
             }
         }
 
         return snippet.toString();
     }
-
 }
