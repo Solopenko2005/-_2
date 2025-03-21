@@ -1,10 +1,14 @@
 package searchengine.model;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,36 +18,37 @@ import java.util.List;
 @ToString(exclude = "lemmas")
 @EqualsAndHashCode(exclude = "lemmas")
 @Entity
-@Table(name = "site")
 public class Site {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
-
-    @Column(nullable = false)
-    private LocalDateTime statusTime;
-
-    @Column(name = "last_error", length = 255)
-    private String lastError;
-
-    @Column(nullable = false, length = 255)
-    private String url;
-
-    @Column(nullable = false, length = 255)
-    private String name;
-
-    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Lemma> lemmas;
-
-    public Site(Status status, LocalDateTime statusTime, String url, String name) {
-        this.status = status;
-        this.statusTime = statusTime;
+    public Site(String url, String name, Status status, LocalDateTime statusTime, String lastError) {
         this.url = url;
         this.name = name;
+        this.status = status;
+        this.statusTime = statusTime;
+        this.lastError = lastError;
     }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(columnDefinition = "VARCHAR(255)")
+    private String url;
+
+    @Column(columnDefinition = "VARCHAR(255)")
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('INDEXING', 'INDEXED', 'FAILED')")
+    private Status status;
+
+    @Column(columnDefinition = "DATETIME")
+    private LocalDateTime statusTime;
+
+    @Column(columnDefinition = "TEXT")
+    private String lastError;
+
+    @OneToMany(mappedBy = "site", orphanRemoval = true)
+    @Cascade({}) // Убираем CascadeType.ALL
+    private Set<Page> pages = new HashSet<>();
+
+
 }

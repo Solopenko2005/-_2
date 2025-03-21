@@ -31,6 +31,13 @@ public class Page {
     @Column(nullable = false, columnDefinition = "VARCHAR")
     private String content;
 
+    public Page(Site site, String replace, int i, String s) {
+    }
+
+    public Page() {
+
+    }
+
     public void setUrl(String url) {
     }
 }

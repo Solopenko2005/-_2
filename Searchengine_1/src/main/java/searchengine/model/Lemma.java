@@ -1,9 +1,12 @@
 package searchengine.model;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -32,8 +35,9 @@ public class Lemma {
 
     @Column(nullable = false)
     private int frequency;
-    @OneToMany(mappedBy = "lemma", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SearchIndex> searchIndexes;
+    @OneToMany(mappedBy = "lemma", orphanRemoval = true)
+    @Cascade({}) // Убираем CascadeType.ALL
+    private Set<SearchIndex> searchIndexes = new HashSet<>();
 
     public Lemma(String lemma, Site site, int frequency) {
         this.lemma = lemma;
