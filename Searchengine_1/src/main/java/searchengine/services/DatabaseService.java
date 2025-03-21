@@ -1,115 +1,114 @@
 package searchengine.services;
 
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import searchengine.config.IndexingState;
 import searchengine.model.*;
 import searchengine.repository.IndexRepository;
 import searchengine.repository.LemmaRepository;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class DatabaseService {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseService.class);
+    @PersistenceContext
+    private EntityManager entityManager;
+    private final IndexingState indexingState;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
 
     private final SiteRepository siteRepository;
     private final PageRepository pageRepository;
     private final LemmaRepository lemmaRepository;
-    private final IndexRepository indexRepository ;
+    private final IndexRepository indexRepository;
+
     @Autowired
-    public DatabaseService(SiteRepository siteRepository, PageRepository pageRepository, LemmaRepository lemmaRepository, IndexRepository indexRepository) {
+    public DatabaseService(IndexingState indexingState, SiteRepository siteRepository, PageRepository pageRepository, LemmaRepository lemmaRepository, IndexRepository indexRepository) {
+        this.indexingState = indexingState;
         this.siteRepository = siteRepository;
         this.pageRepository = pageRepository;
         this.lemmaRepository = lemmaRepository;
         this.indexRepository = indexRepository;
     }
+    @Transactional
+    public void truncateAllTables() {
+        if (!indexingState.isStopRequested()) {
+            jdbcTemplate.execute("TRUNCATE TABLE search_index, page, lemma, site CASCADE");
+        }
+    }
 
     // Сохранение сайта
+    @Transactional(rollbackFor = Exception.class)
     public void saveSite(Site site) {
-        siteRepository.save(site);
-        logger.info("Сохранен сайт: {}", site.getUrl());
+        try {
+            siteRepository.save(site);
+            logger.info("Сохранен сайт: {}", site.getUrl());
+        } catch (DataAccessException e) {
+            logger.error("Ошибка доступа к данным при сохранении сайта '{}': {}", site.getUrl(), e.getMessage(), e);
+            throw e; // Пробрасываем исключение, чтобы транзакция откатилась
+        }
     }
 
-    // Обновление статуса сайта
-    public void updateSiteStatus(Site site, String errorMessage) {
-        site.setStatus(Status.FAILED);
-        site.setStatusTime(LocalDateTime.now());
-        site.setLastError(errorMessage);
-        siteRepository.save(site);
-        logger.error("Обновлен статус сайта '{}' с ошибкой: {}", site.getUrl(), errorMessage);
+    @Transactional(rollbackFor = Exception.class, timeout = 5)
+    public void savePage(Page page) {
+        if (indexingState.isStopRequested()) {
+            throw new RuntimeException("Индексация прервана");
+        }
+        entityManager.persist(page);
+        entityManager.flush(); // Принудительная запись
+        entityManager.clear(); // Сброс контекста
     }
 
-    @Transactional
-    public Page savePage(Page page) {
-        return pageRepository.save(page);
-    }
-
-    /**
-     * Сохранение леммы с защитой от дублирования.
-     *
-     * @return
-     */
     @Transactional
     public Lemma saveLemma(String lemmaText, Site site) {
-        try {
-            logger.info("Попытка сохранить лемму '{}' для сайта '{}'", lemmaText, site.getUrl());
+        // Ищем лемму в базе данных
+        Optional<Lemma> optionalLemma = lemmaRepository.findByLemmaAndSite(lemmaText, site);
 
-            // Ищем существующую лемму
-            Optional<Lemma> existingLemma = lemmaRepository.findByLemmaAndSite(lemmaText, site);
-            if (existingLemma.isPresent()) {
-                // Если лемма уже есть, увеличиваем её частоту
-                Lemma lemma = existingLemma.get();
-                lemma.setFrequency(lemma.getFrequency() + 1);
-                lemmaRepository.save(lemma);
-                logger.info("Частота леммы '{}' увеличена до {}", lemmaText, lemma.getFrequency());
-                return lemma; // Возвращаем существующую лемму
-            } else {
-                // Создаем новую лемму
-                Lemma newLemma = new Lemma(lemmaText, site, 1);
-                lemmaRepository.save(newLemma);
-                logger.info("Сохранена новая лемма '{}'", lemmaText);
-                return newLemma; // Возвращаем новую лемму
-            }
-        } catch (DataAccessException e) {
-            logger.error("Ошибка доступа к данным при сохранении леммы '{}': {}", lemmaText, e.getMessage(), e);
-        } catch (Exception e) {
-            logger.error("Неизвестная ошибка при сохранении леммы '{}': {}", lemmaText, e.getMessage(), e);
+        Lemma lemma;
+        if (optionalLemma.isPresent()) {
+            // Если лемма найдена, увеличиваем частоту
+            lemma = optionalLemma.get();
+            lemma.setFrequency(lemma.getFrequency() + 1);
+        } else {
+            // Если лемма не найдена, создаем новую запись
+            lemma = new Lemma();
+            lemma.setLemma(lemmaText);
+            lemma.setFrequency(1);
+            lemma.setSite(site);
         }
-        return null; // В случае ошибки возвращаем null
+
+        // Сохраняем или обновляем лемму
+        return lemmaRepository.save(lemma);
     }
 
-    // Очистка базы данных перед новой индексацией
-    public void clearAllData() {
-        lemmaRepository.deleteAll();
-        pageRepository.deleteAll();
-        siteRepository.deleteAll();
-        logger.info("База данных очищена перед новой индексацией.");
-    }
-    // Реализация метода для сохранения SearchIndex
+    // Сохранение SearchIndex
     @Transactional
     public void saveSearchIndex(SearchIndex searchIndex) {
         try {
             indexRepository.save(searchIndex);
-            logger.info("Сохранен SearchIndex для страницы {} и леммы {}",
+            logger.debug("Сохранен SearchIndex для страницы {} и леммы {}",
                     searchIndex.getPage().getId(), searchIndex.getLemma().getId());
         } catch (DataAccessException e) {
             logger.error("Ошибка доступа к данным при сохранении SearchIndex: {}", e.getMessage(), e);
-        } catch (Exception e) {
-            logger.error("Неизвестная ошибка при сохранении SearchIndex: {}", e.getMessage(), e);
+            throw e; // Пробрасываем исключение, чтобы транзакция откатилась
         }
     }
-
-    // Предположим, что DatabaseService также реализует метод поиска леммы
-    public Optional<Lemma> findLemmaByTextAndSite(String lemmaText, Site site) {
-        return lemmaRepository.findByLemmaAndSite(lemmaText, site);
-    }
-
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class LemmaService {
-    private static final Logger logger = LoggerFactory.getLogger(LemmaService.class);
+    public static final Logger logger = LoggerFactory.getLogger(LemmaService.class);
     private final LemmaRepository lemmaRepository;
 
     public LemmaService(LemmaRepository lemmaRepository) {

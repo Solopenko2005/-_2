@@ -1,7 +1,5 @@
 package searchengine.services;
 
-import lombok.SneakyThrows;
-import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import searchengine.config.IndexingState;
 import searchengine.model.*;
 import searchengine.repository.IndexRepository;
 import searchengine.repository.LemmaRepository;
@@ -23,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 
 @Service
 public class PageProcessor {
@@ -40,12 +40,16 @@ public class PageProcessor {
 
     @Autowired
     private SiteRepository siteRepository;
-
     @Autowired
-    private RussianLuceneMorphology luceneMorphology;
+    private Lemmatizer lemmatizer;
+    private final IndexingState indexingState;
 
     private final AtomicBoolean isIndexingStopped = new AtomicBoolean(false);
     private final int delayBetweenRequests = 500; // Задержка между запросами в миллисекундах
+
+    public PageProcessor(IndexingState indexingState) {
+        this.indexingState = indexingState;
+    }
 
     /**
      * Метод для индексации сайта
@@ -84,37 +88,50 @@ public class PageProcessor {
         if (isIndexingStopped.get()) {
             throw new InterruptedException("Индексация остановлена");
         }
-        if (depth > 10) {
-            logger.warn("Достигнута максимальная глубина рекурсии для URL: {}", url);
-            return;
-        }
-        if (pageRepository.existsBySiteAndPath(site, url)) {
-            logger.info("Страница уже проиндексирована: {}", url);
-            return; // Страница уже проиндексирована
-        }
 
-        Connection connection = Jsoup.connect(url)
-                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-                .referrer("https://www.google.com")
-                .ignoreContentType(true);
-        Connection.Response response = connection.execute();
-        String contentType = response.contentType();
+        try {
+            String path = url.replace(site.getUrl(), "");
+            if (path.isEmpty()) path = "/";
 
-        if (contentType != null && (contentType.startsWith("text/") || contentType.contains("xml"))) {
+            // Проверка существования страницы
+            Optional<Page> existingPage = pageRepository.findBySiteAndPath(site.getId(), path);
+            existingPage.ifPresent(this::deletePageInfo);
+
+            // Проверка уникальности URL
+            if (pageRepository.existsBySiteAndPath(site, url.replace(site.getUrl(), ""))) {
+                logger.warn("Страница уже существует: {}", url);
+                return;
+            }
+
+            Connection connection = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0")
+                    .referrer("https://www.google.com")
+                    .ignoreContentType(true);
+
+            Connection.Response response = connection.execute();
+            int statusCode = response.statusCode();
+
+            if (statusCode >= 400) {
+                logger.warn("Ошибка HTTP {}: {}", statusCode, url);
+                return;
+            }
+
+            String contentType = response.contentType();
+            if (contentType == null || !(contentType.startsWith("text/") || contentType.contains("xml"))) {
+                logger.warn("Неподдерживаемый тип содержимого: {}", contentType);
+                return;
+            }
+
             Document doc = response.parse();
             Page page = savePage(site, url, doc);
-            // После обработки страницы обновляем время последнего изменения записи сайта
-            site.setStatusTime(LocalDateTime.now());
-            siteRepository.save(site);
-            indexPageContent(site, page); // Вызов метода для обработки содержимого страницы
-            processLinks(site, doc, depth + 1);
-        } else {
-            logger.warn("Неподдерживаемый тип содержимого: {} для URL: {}", contentType, url);
+            indexPageContent(site, page);
+            processLinks(site, doc, depth);
+
+        } catch (Exception e) {
+            logger.error("Ошибка при индексации страницы {}: {}", url, e.getMessage());
+            throw e; // Пробрасываем исключение дальше, чтобы оно могло быть обработано на уровне выше
         }
-
-        TimeUnit.MILLISECONDS.sleep(delayBetweenRequests);
     }
-
     /**
      * Метод для обработки ссылок на странице
      *
@@ -164,31 +181,28 @@ public class PageProcessor {
      */
     private void indexPageContent(Site site, Page page) {
         String text = Jsoup.parse(page.getContent()).text();
+        // Вызываем через экземпляр
+        Map<String, Integer> lemmas = lemmatizer.extractLemmasWithRank(text);
 
-        // Лемматизация текста
-        Map<String, Integer> lemmas = searchingLemmasAndTheirCount(text);
+        // Пакетная вставка с проверкой прерывания
+        List<Lemma> lemmaList = new ArrayList<>();
+        List<SearchIndex> indexList = new ArrayList<>();
 
-        // Сохранение лемм и индексов
-        for (Map.Entry<String, Integer> entry : lemmas.entrySet()) {
-            String lemmaText = entry.getKey();
-            int rank = entry.getValue();
-
-            // Поиск или создание леммы
+        lemmas.forEach((lemmaText, rank) -> {
+            if (indexingState.isStopRequested()) return;
             Lemma lemma = findOrCreateLemma(site, lemmaText);
-
-            // Увеличиваем частоту леммы
             lemma.setFrequency(lemma.getFrequency() + 1);
-            lemmaRepository.save(lemma);
+            lemmaList.add(lemma);
 
-            // Создание и сохранение индекса
             SearchIndex index = new SearchIndex();
             index.setPage(page);
             index.setLemma(lemma);
-            index.setRanking((float) rank);
-            indexRepository.save(index);
+            index.setRanking(rank);
+            indexList.add(index);
+        });
 
-            logger.info("Лемма '{}' добавлена для страницы {}", lemmaText, page.getPath());
-        }
+        lemmaRepository.saveAll(lemmaList);
+        indexRepository.saveAll(indexList);
     }
 
     /**
@@ -198,42 +212,18 @@ public class PageProcessor {
      * @param lemmaText Текст леммы
      * @return Лемма
      */
+    // В PageProcessor.java
+    @Transactional
     private Lemma findOrCreateLemma(Site site, String lemmaText) {
-        Optional<Lemma> lemmaOptional = lemmaRepository.findByLemmaAndSite(lemmaText, site);
-        if (lemmaOptional.isPresent()) {
-            return lemmaOptional.get(); // Возвращаем найденную лемму
-        } else {
-            Lemma newLemma = new Lemma();
-            newLemma.setSite(site);
-            newLemma.setLemma(lemmaText);
-            newLemma.setFrequency(0);
-            return lemmaRepository.save(newLemma);
-        }
+        return lemmaRepository.findUniqueLemma(lemmaText, site.getId())
+                .orElseGet(() -> {
+                    Lemma newLemma = new Lemma();
+                    newLemma.setSite(site);
+                    newLemma.setLemma(lemmaText);
+                    newLemma.setFrequency(0);
+                    return lemmaRepository.save(newLemma);
+                });
     }
-
-    /**
-     * Метод поиска лемм и их количества в тексте
-     */
-    @SneakyThrows
-    public Map<String, Integer> searchingLemmasAndTheirCount(String text) {
-        Map<String, Integer> lemmasMap = new HashMap<>();
-        String[] arrayWords = convertingTextToArray(text);
-
-        for (String word : arrayWords) {
-            if (word.isBlank()) continue;
-
-            List<String> wordBaseForms = luceneMorphology.getMorphInfo(word);
-            if (checkComplianceWordToParticlesNames(wordBaseForms)) continue;
-
-            List<String> wordNormalFormList = luceneMorphology.getNormalForms(word);
-            if (!wordNormalFormList.isEmpty()) {
-                String wordInNormalForm = wordNormalFormList.get(0); // Берем первую нормальную форму
-                lemmasMap.put(wordInNormalForm, lemmasMap.getOrDefault(wordInNormalForm, 0) + 1);
-            }
-        }
-        return lemmasMap;
-    }
-
     /**
      * Метод для преобразования текста в массив слов
      */
@@ -300,5 +290,13 @@ public class PageProcessor {
         pageRepository.deleteBySite(site);
 
         logger.info("Все данные сайта {} удалены", site.getUrl());
+    }
+    @Transactional
+    public void deletePageInfoIfExists(Site site, String url) {
+        String path = url.replace(site.getUrl(), "");
+        if (path.isEmpty()) path = "/";
+
+        Optional<Page> existingPage = pageRepository.findBySiteAndPath(site.getId(), path);
+        existingPage.ifPresent(this::deletePageInfo);
     }
 }

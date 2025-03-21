@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import searchengine.config.IndexingState;
 import searchengine.dto.response.SearchResponse;
 import searchengine.dto.response.SearchResult;
 import searchengine.model.*;
@@ -13,8 +14,12 @@ import searchengine.repository.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import java.util.concurrent.Semaphore;
+
 @Service
 public class SearchService {
+    @Autowired
+    private Lemmatizer lemmatizer; // Внедряем бин
 
     private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
 
@@ -22,23 +27,35 @@ public class SearchService {
     private final IndexRepository indexRepository;
     private final PageRepository pageRepository;
     private final SiteRepository siteRepository;
-    private final Lemmatizer lemmatizer;
+    private final IndexingState indexingState;
+
+    // Семафор для ограничения количества одновременных запросов
+    private final Semaphore databaseSemaphore = new Semaphore(5); // Ограничение до 5 одновременных запросов
 
     @Autowired
     public SearchService(LemmaRepository lemmaRepository, IndexRepository indexRepository,
-                         PageRepository pageRepository, SiteRepository siteRepository, Lemmatizer lemmatizer) {
+                         PageRepository pageRepository, SiteRepository siteRepository, IndexingState indexingState) {
         this.lemmaRepository = lemmaRepository;
         this.indexRepository = indexRepository;
         this.pageRepository = pageRepository;
         this.siteRepository = siteRepository;
-        this.lemmatizer = lemmatizer;
+        this.indexingState = indexingState;
     }
 
     public SearchResponse search(String query, String siteUrl, int offset, int limit) {
+
         SearchResponse response = new SearchResponse();
         List<SearchResult> results = new ArrayList<>();
 
         try {
+
+            databaseSemaphore.acquire(); // Захват семафора перед выполнением запросов
+            if (indexingState.isStopRequested()) {
+                response.setResult(false);
+                response.setError("Поиск прерван из-за остановки индексации");
+                return response;
+            }
+
             if (query == null || query.trim().isEmpty()) {
                 response.setResult(false);
                 response.setError("Задан пустой поисковый запрос");
@@ -60,7 +77,7 @@ public class SearchService {
                 logger.info("Поиск по всем сайтам");
             }
 
-            Map<String, Integer> lemmasMap = Lemmatizer.getLemmas(query);
+            Map<String, Integer> lemmasMap = lemmatizer.getLemmas(query);
             List<String> queryLemmas = new ArrayList<>(lemmasMap.keySet());
             if (queryLemmas.isEmpty()) {
                 response.setResult(true);
@@ -71,7 +88,6 @@ public class SearchService {
             }
             logger.info("Леммы из запроса: {}", queryLemmas);
 
-            // Фильтрация лемм только для выбранного сайта
             List<Lemma> filteredLemmas = filterCommonLemmas(site, queryLemmas);
             if (filteredLemmas.isEmpty()) {
                 response.setResult(true);
@@ -85,7 +101,6 @@ public class SearchService {
             filteredLemmas.sort(Comparator.comparingInt(Lemma::getFrequency));
             logger.info("Леммы после сортировки: {}", filteredLemmas.stream().map(Lemma::getLemma).collect(Collectors.toList()));
 
-            // Поиск страниц только для выбранного сайта
             List<Page> pages = findPagesByLemmasAndSite(filteredLemmas, site);
             if (pages.isEmpty()) {
                 response.setResult(true);
@@ -96,7 +111,6 @@ public class SearchService {
             }
             logger.info("Найдено страниц: {}", pages.size());
 
-            // Расчет релевантности только для выбранного сайта
             Map<Page, Double> relevanceMap = calculateRelevance(pages, filteredLemmas);
             logger.info("Релевантность страниц: {}", relevanceMap);
 
@@ -128,6 +142,8 @@ public class SearchService {
             response.setResult(false);
             response.setError("Ошибка поиска: " + e.getMessage());
             logger.error("Ошибка при выполнении поиска: {}", e.getMessage(), e);
+        } finally {
+            databaseSemaphore.release(); // Освобождение семафора
         }
 
         return response;
