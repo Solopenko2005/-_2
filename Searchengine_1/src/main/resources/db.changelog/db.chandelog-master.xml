@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="1" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="site"/>
+            </not>
+        </preConditions>
+        <createTable tableName="site">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_error" type="TEXT"/>
+            <column name="url" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <!-- Создание таблицы Lemma -->
+    <changeSet id="2" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="lemma"/>
+            </not>
+        </preConditions>
+        <createTable tableName="lemma" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="site_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_lemma_site" references="site(id)"/>
+            </column>
+            <column name="lemma" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="frequency" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="lemma" columnNames="lemma, site_id" constraintName="uc_lemma_site"/>
+    </changeSet>
+
+    <!-- Создание таблицы Page -->
+    <changeSet id="3" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="page"/>
+            </not>
+        </preConditions>
+        <createTable tableName="page" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="site_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_page_site" references="site(id)"/>
+            </column>
+            <column name="path" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="page" indexName="idx_path">
+            <column name="path"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- Создание таблицы SearchIndex -->
+    <changeSet id="4" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="search_index"/>
+            </not>
+        </preConditions>
+        <createTable tableName="search_index" schemaName="public">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="page_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_searchindex_page" references="page(id)"/>
+            </column>
+            <column name="lemma_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_searchindex_lemma" references="lemma(id)"/>
+            </column>
+            <column name="ranking" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="developer">
+        <addUniqueConstraint
+                tableName="lemma"
+                columnNames="lemma, site_id"
+                constraintName="uc_lemma_site"/>
+        <addUniqueConstraint
+                tableName="page"
+                columnNames="site_id, path"
+                constraintName="uc_page_site_path"/>
+    </changeSet>
+
+</databaseChangeLog>
