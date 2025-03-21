@@ -17,14 +17,6 @@ public interface IndexRepository extends JpaRepository<SearchIndex, Long> {
     @Query("SELECT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas")
     List<Page> findPagesByLemmas(@Param("lemmas") List<String> lemmas);
 
-    @Query("SELECT SUM(si.ranking) FROM SearchIndex si WHERE si.page = :page AND si.lemma.lemma IN :lemmas")
-    Float getRelevanceForPage(@Param("page") Page page, @Param("lemmas") List<String> lemmas);
-
-    @Query("SELECT si FROM SearchIndex si WHERE si.page = :page AND si.lemma.lemma IN :lemmas")
-    List<SearchIndex> findIndexesForPageAndLemmas(@Param("page") Page page, @Param("lemmas") Set<String> lemmas);
-
-    List<Page> findPagesByLemma(Lemma s);
-
     @Query("SELECT si.ranking FROM SearchIndex si WHERE si.page = :page AND si.lemma = :lemma")
     Float findRankByPageAndLemma(@Param("page") Page page, @Param("lemma") Lemma lemma);
 

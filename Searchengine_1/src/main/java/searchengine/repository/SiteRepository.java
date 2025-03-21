@@ -17,11 +17,9 @@ import java.util.Optional;
 public interface SiteRepository extends JpaRepository<Site, Integer> {
 
     List<Site> findByStatus(Status status);
-    @Modifying
-    @Transactional
-    @Query("UPDATE Site s SET s.status = :status, s.statusTime = :statusTime, s.lastError = :lastError WHERE s.id = :id")
-    void updateSiteStatus(@Param("id") int id, @Param("status") Status status, @Param("statusTime") LocalDateTime statusTime, @Param("lastError") String lastError);
+
     Site findSiteByUrl(String url);
 
     Optional<Site> findByUrl(String siteUrl);
+
 }

@@ -12,10 +12,14 @@ import java.util.Optional;
 
 @Repository
 public interface PageRepository extends JpaRepository<Page, Long> {
-    Optional<Page> findByPathAndSite(String path, Site site);
+
     int countBySite(Site site);
+
     boolean existsBySiteAndPath(Site site, String path);
-    Page findBySiteAndPath(Site site, String replace);
+
+    @Query("SELECT p FROM Page p WHERE p.site.id = :siteId AND p.path = :path")
+    Optional<Page> findBySiteAndPath(@Param("siteId") int siteId, @Param("path") String path);
+
     @Modifying
     @Query("DELETE FROM Page p WHERE p.site = :site")
     void deleteBySite(@Param("site") Site site);

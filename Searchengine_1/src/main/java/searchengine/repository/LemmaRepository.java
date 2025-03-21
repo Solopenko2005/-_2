@@ -23,8 +23,6 @@ public interface LemmaRepository extends JpaRepository<Lemma, Long> {
             nativeQuery = true)
     int upsertLemma(@Param("lemma") String lemma, @Param("siteId") Integer siteId);
 
-    Optional<Lemma> findByLemma(String lemma);
-
     Optional<Lemma> findByLemmaAndSite(String lemma, Site site);
 
     @Query("SELECT l FROM Lemma l WHERE l.lemma = :lemma")
@@ -34,7 +32,15 @@ public interface LemmaRepository extends JpaRepository<Lemma, Long> {
     List<Lemma> findAllByLemmaAndSite(@Param("lemma") String lemma, @Param("site") Site site);
 
     int countBySite(Site site);
+
     @Modifying
     @Query("DELETE FROM Lemma l WHERE l.site = :site")
     void deleteBySite(@Param("site") Site site);
+
+    @Query("SELECT l FROM Lemma l WHERE l.lemma = :lemma AND l.site.id = :siteId")
+    Optional<Lemma> findUniqueLemma(@Param("lemma") String lemma, @Param("siteId") int siteId);
+
+    @Query("SELECT SUM(l.frequency) FROM Lemma l WHERE l.lemma = :lemma")
+    Optional<Integer> getTotalFrequency(@Param("lemma") String lemma);
+
 }
