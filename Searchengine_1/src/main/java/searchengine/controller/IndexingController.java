@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import searchengine.config.IndexingSettings;
+import searchengine.config.IndexingState;
 import searchengine.dto.response.IndexingResponse;
 import searchengine.model.Page;
 import searchengine.model.Site;
@@ -19,7 +21,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api")
@@ -38,22 +40,33 @@ public class IndexingController {
 
     @Autowired
     private PageRepository pageRepository;
+    @Autowired
+    private IndexingSettings indexingSettings;
+    @Autowired
+    private IndexingState indexingState;
+
+    private final SiteIndexingService service;
+
+    public IndexingController(SiteIndexingService service) {
+        this.service = service;
+    }
 
     /**
-     * Запуск индексации всех сайтов
+     * Запуск полной индексации всех сайтов
      *
      * @return Ответ с результатом запуска индексации
      */
     @GetMapping("/startIndexing")
     public ResponseEntity<Map<String, Object>> startIndexing() {
-        logger.info("Запрос на запуск индексации...");
-        boolean started = siteIndexingService.startIndexing();
-        if (started) {
-            logger.info("Индексация успешно запущена.");
-            return ResponseEntity.ok(Map.of("result", true, "message", "Индексация запущена"));
-        } else {
-            logger.warn("Индексация уже запущена.");
-            return ResponseEntity.badRequest().body(Map.of("result", false, "error", "Индексация уже запущена"));
+        try {
+            Map<String, Object> response = service.startIndexing();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("Ошибка в контроллере", e);
+            return ResponseEntity.status(500).body(Map.of(
+                    "result", false,
+                    "error", "Internal Server Error"
+            ));
         }
     }
 
@@ -63,15 +76,20 @@ public class IndexingController {
      * @return Ответ с результатом остановки индексации
      */
     @GetMapping("/stopIndexing")
-    public ResponseEntity<Map<String, Object>> stopIndexing() {
+    public ResponseEntity<IndexingResponse> stopIndexing() {
         logger.info("Запрос на остановку индексации...");
-        boolean stopped = siteIndexingService.stopIndexing();
-        if (stopped) {
-            logger.info("Индексация успешно остановлена.");
-            return ResponseEntity.ok(Map.of("result", true, "message", "Индексация остановлена"));
-        } else {
-            logger.warn("Индексация не запущена.");
-            return ResponseEntity.badRequest().body(Map.of("result", false, "error", "Индексация не запущена"));
+        try {
+            boolean stopped = siteIndexingService.stopIndexing();
+            if (stopped) {
+                logger.info("Индексация успешно остановлена.");
+                return ResponseEntity.ok(new IndexingResponse(true, "Индексация остановлена"));
+            } else {
+                logger.warn("Индексация не запущена.");
+                return ResponseEntity.badRequest().body(new IndexingResponse(false, "Индексация не запущена"));
+            }
+        } catch (Exception e) {
+            logger.error("Ошибка при остановке индексации: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(new IndexingResponse(false, "Ошибка при остановке индексации"));
         }
     }
 
@@ -82,46 +100,66 @@ public class IndexingController {
      * @return Ответ с результатом индексации
      */
     @PostMapping("/indexPage")
-    public ResponseEntity<IndexingResponse> indexPage(@RequestParam String url) {
+    public ResponseEntity<Map<String, Object>> indexPage(@RequestParam String url) {
+        if (indexingState.isIndexingInProgress()) {
+            return ResponseEntity.status(500).body(Map.of(
+                    "result", false,
+                    "error", "Индексация уже запущена"
+            ));
+        }
 
-        logger.info("Запрос на индексацию страницы: {}", url);
-
-        // Проверка корректности URL
+        // Проверяем, что URL корректный
         if (!isValidUrl(url)) {
-            logger.warn("Некорректный URL: {}", url);
-            return ResponseEntity.badRequest().body(new IndexingResponse(false, "Некорректный URL"));
+            return ResponseEntity.status(400).body(Map.of(
+                    "result", false,
+                    "error", "Некорректный URL"
+            ));
+        }
+
+        // Находим сайт, к которому принадлежит страница
+        Site site = getSiteByUrl(url);
+        if (site == null) {
+            return ResponseEntity.status(400).body(Map.of(
+                    "result", false,
+                    "error", "Страница не принадлежит ни одному из разрешенных сайтов"
+            ));
         }
 
         try {
-            // Проверка, принадлежит ли страница одному из сайтов из конфигурации
-            Site site = findSiteByUrl(url);
-            if (site == null) {
-                logger.warn("Страница находится за пределами сайтов, указанных в конфигурации: {}", url);
-                return ResponseEntity.badRequest().body(new IndexingResponse(false, "Данная страница находится за пределами сайтов, указанных в конфигурации"));
-            }
+            // Устанавливаем статус индексации
+            indexingState.setIndexingInProgress(true);
 
-            // Устанавливаем статус сайта в "INDEXING"
-            site.setStatus(Status.INDEXING);
-            site.setLastError(null);
-            site.setStatusTime(LocalDateTime.now());
-            siteRepository.save(site);
+            // Удаляем предыдущие данные о странице
+            pageProcessor.deletePageInfoIfExists(site, url);
 
-            // Возвращаем ответ сразу, не дожидаясь завершения индексации
-            logger.info("Сайт {} поставлен в очередь на индексацию", site.getUrl());
-            return ResponseEntity.ok(new IndexingResponse(true, "Сайт поставлен в очередь на индексацию"));
+            // Запускаем индексацию страницы
+            pageProcessor.indexPage(site, url, 0);
 
-            // Запуск индексации в отдельном потоке (асинхронно)
-
+            return ResponseEntity.ok(Map.of("result", true));
         } catch (Exception e) {
-            logger.error("Ошибка при постановке сайта в очередь на индексацию: {}", e.getMessage());
-            return ResponseEntity.badRequest().body(new IndexingResponse(false, "Ошибка при постановке сайта в очередь на индексацию: " + e.getMessage()));
+            return ResponseEntity.status(500).body(Map.of(
+                    "result", false,
+                    "error", "Ошибка индексации: " + e.getMessage()
+            ));
+        } finally {
+            // Сбрасываем статус индексации
+            indexingState.setIndexingInProgress(false);
         }
-
     }
-
-    /**
-     * Проверка корректности URL
-     */
+    private Site getSiteByUrl(String url) {
+        return indexingSettings.getSites().stream()
+                .map(siteConfig -> siteRepository.findByUrl(siteConfig.getUrl())
+                        .orElseGet(() -> {
+                            Site newSite = new Site();
+                            newSite.setUrl(siteConfig.getUrl());
+                            newSite.setName(siteConfig.getName());
+                            newSite.setStatus(Status.INDEXING);
+                            return newSite;
+                        }))
+                .filter(s -> url.startsWith(s.getUrl()))
+                .findFirst()
+                .orElse(null);
+    }
     private boolean isValidUrl(String url) {
         try {
             new URL(url);
@@ -129,26 +167,5 @@ public class IndexingController {
         } catch (MalformedURLException e) {
             return false;
         }
-    }
-
-    /**
-     * Поиск сайта по URL страницы
-     */
-    private Site findSiteByUrl(String url) {
-        List<Site> sites = siteRepository.findAll();
-        for (Site site : sites) {
-            if (url.startsWith(site.getUrl())) {
-                return site;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Получение пути страницы относительно сайта
-     */
-    private String getPagePath(String url, Site site) {
-        String path = url.replace(site.getUrl(), "");
-        return path.isEmpty() ? "/" : path;
     }
 }
