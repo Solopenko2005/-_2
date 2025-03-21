@@ -1,18 +1,27 @@
 package searchengine.dto.response;
 
-import lombok.Data;
-
-@Data
 public class IndexingResponse {
     private boolean result;
-    private String error;
+    private String message;
 
-    public IndexingResponse(boolean result) {
+    public IndexingResponse(boolean result, String message) {
+        this.result = result;
+        this.message = message;
+    }
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
         this.result = result;
     }
 
-    public IndexingResponse(boolean result, String error) {
-        this.result = result;
-        this.error = error;
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
