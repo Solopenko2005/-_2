@@ -32,7 +32,7 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/searchengine
     username: postgres
     password: testTest
     driver-class-name: org.postgresql.Driver

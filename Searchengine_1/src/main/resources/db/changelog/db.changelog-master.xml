@@ -104,15 +104,5 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="5" author="developer">
-        <addUniqueConstraint
-                tableName="lemma"
-                columnNames="lemma, site_id"
-                constraintName="uc_lemma_site"/>
-        <addUniqueConstraint
-                tableName="page"
-                columnNames="site_id, path"
-                constraintName="uc_page_site_path"/>
-    </changeSet>
 
 </databaseChangeLog>

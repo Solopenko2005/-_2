@@ -46,7 +46,7 @@ public class SiteIndexingService {
     private ForkJoinPool pool;
     private final Set<String> visitedUrls = ConcurrentHashMap.newKeySet();
     private static final int MAX_RETRIES = 3;
-    private static final int TIMEOUT = 10000;
+    private static final int TIMEOUT = 10000; // Таймаут для HTTP-запросов
     private final AtomicBoolean stopRequested = new AtomicBoolean(false);
     private final List<Future<?>> indexingTasks = new CopyOnWriteArrayList<>();
 
@@ -107,16 +107,12 @@ public class SiteIndexingService {
         if (!indexingInProgress.get()) return false;
 
         stopRequested.set(true); // Устанавливаем флаг остановки
-        pool.shutdownNow(); // Принудительно останавливаем все потоки
+        pool.shutdown(); // Ждем завершения текущих задач
 
         new Thread(() -> {
             try {
-                if (!pool.awaitTermination(5, TimeUnit.SECONDS)) {
-                    pool.shutdownNow().forEach(task -> {
-                        if (task instanceof Future) {
-                            ((Future<?>) task).cancel(true); // Отменяем все задачи
-                        }
-                    });
+                if (!pool.awaitTermination(10, TimeUnit.SECONDS)) {
+                    logger.warn("Не все задачи завершились за отведенное время");
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -146,11 +142,18 @@ public class SiteIndexingService {
         int retries = 0;
         while (retries < MAX_RETRIES && !stopRequested.get()) {
             try {
+                if (stopRequested.get()) {
+                    throw new IOException("Задача прервана");
+                }
+
                 Thread.sleep(500); // Задержка между запросами
+                long startTime = System.currentTimeMillis();
                 Connection.Response response = Jsoup.connect(url)
                         .userAgent("HeliontSearchBot")
                         .timeout(TIMEOUT)
                         .execute();
+
+                logger.info("Запрос к {} выполнен за {} мс", url, System.currentTimeMillis() - startTime);
 
                 if (response.statusCode() >= 400) {
                     logger.warn("HTTP-ошибка {}: {}", response.statusCode(), url);
@@ -162,7 +165,7 @@ public class SiteIndexingService {
                 retries++;
                 logger.warn("Таймаут подключения к {}. Попытка {}/{}", url, retries, MAX_RETRIES);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                Thread.currentThread().interrupt(); // Восстановление флага прерывания
                 throw new IOException("Задача прервана", e);
             }
         }
@@ -182,17 +185,18 @@ public class SiteIndexingService {
 
         @Override
         protected Void compute() {
-            if (stopRequested.get() || !visitedUrls.add(url)) {
-                return null;
-            }
-
             try {
+                if (stopRequested.get() || !visitedUrls.add(url)) {
+                    return null;
+                }
+
                 Document document = fetchDocumentWithRetries(url);
-                if (stopRequested.get()) return null;
+                if (document == null || stopRequested.get()) {
+                    return null;
+                }
 
                 savePageAndLemmas(site, url, document);
 
-                // Увеличиваем глубину обхода (например, до 10)
                 if (depth < 10) {
                     Elements links = document.select("a[href]");
                     List<SiteIndexingTask> subTasks = links.stream()
@@ -203,10 +207,12 @@ public class SiteIndexingService {
 
                     invokeAll(subTasks);
                 }
+            } catch (CancellationException e) {
+                logger.warn("Задача была отменена для URL: {}", url);
             } catch (Exception e) {
                 logger.error("Ошибка обработки {}: {}", url, e.getMessage(), e);
             } finally {
-                entityManager.clear();
+                entityManager.clear(); // Очистка контекста EntityManager
             }
             return null;
         }
@@ -221,41 +227,42 @@ public class SiteIndexingService {
         }
     }
 
-        @Transactional(rollbackFor = Exception.class, timeout = 30)
-        private void savePageAndLemmas(Site site, String url, Document document) {
-            if (stopRequested.get()) {
-                throw new RuntimeException("Индексация прервана");
+    @Transactional(rollbackFor = Exception.class, timeout = 30)
+    private void savePageAndLemmas(Site site, String url, Document document) {
+        if (stopRequested.get()) {
+            logger.info("Индексация прервана пользователем для URL: {}", url);
+            throw new RuntimeException("Индексация прервана");
+        }
+
+        Page page = createPage(site, url, document);
+        String content = document.body().text();
+
+        Map<String, Integer> lemmaMap = lemmatizer.extractLemmasWithRank(content);
+        databaseService.savePage(page);
+
+        lemmaMap.forEach((lemmaText, rank) -> {
+            if (stopRequested.get()) return;
+            Lemma savedLemma = databaseService.saveLemma(lemmaText, site);
+            if (savedLemma != null) {
+                saveSearchIndex(page, savedLemma, rank);
             }
-
-            Page page = createPage(site, url, document);
-            String content = document.body().text();
-
-            Map<String, Integer> lemmaMap = lemmatizer.extractLemmasWithRank(content);
-            databaseService.savePage(page);
-
-            lemmaMap.forEach((lemmaText, rank) -> {
-                if (stopRequested.get()) return;
-                Lemma savedLemma = databaseService.saveLemma(lemmaText, site);
-                if (savedLemma != null) {
-                    saveSearchIndex(page, savedLemma, rank);
-                }
-            });
-        }
-
-        private Page createPage(Site site, String url, Document document) {
-            Page page = new Page();
-            page.setSite(site);
-            page.setPath(url.replace(site.getUrl(), ""));
-            page.setCode(document.connection().response().statusCode());
-            page.setContent(document.outerHtml());
-            return page;
-        }
-
-        private void saveSearchIndex(Page page, Lemma lemma, int rank) {
-            SearchIndex index = new SearchIndex();
-            index.setPage(page);
-            index.setLemma(lemma);
-            index.setRanking(rank);
-            databaseService.saveSearchIndex(index);
-        }
+        });
     }
+
+    private Page createPage(Site site, String url, Document document) {
+        Page page = new Page();
+        page.setSite(site);
+        page.setPath(url.replace(site.getUrl(), ""));
+        page.setCode(document.connection().response().statusCode());
+        page.setContent(document.outerHtml());
+        return page;
+    }
+
+    private void saveSearchIndex(Page page, Lemma lemma, int rank) {
+        SearchIndex index = new SearchIndex();
+        index.setPage(page);
+        index.setLemma(lemma);
+        index.setRanking(rank);
+        databaseService.saveSearchIndex(index);
+    }
+}
