@@ -1,11 +1,11 @@
 package searchengine.services;
 
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import searchengine.config.IndexingState;
 import searchengine.model.*;
@@ -20,63 +20,22 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
+@RequiredArgsConstructor
 @Service
 public class PageProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(PageProcessor.class);
 
-    @Autowired
-    private PageRepository pageRepository;
-
-    @Autowired
-    private LemmaRepository lemmaRepository;
-
-    @Autowired
-    private IndexRepository indexRepository;
-
-    @Autowired
-    private SiteRepository siteRepository;
-    @Autowired
-    private Lemmatizer lemmatizer;
+    private final PageRepository pageRepository;
+    private final LemmaRepository lemmaRepository;
+    private final IndexRepository indexRepository;
+    private final SiteRepository siteRepository;
+    private final Lemmatizer lemmatizer;
     private final IndexingState indexingState;
 
     private final AtomicBoolean isIndexingStopped = new AtomicBoolean(false);
-    private final int delayBetweenRequests = 500; // Задержка между запросами в миллисекундах
-
-    public PageProcessor(IndexingState indexingState) {
-        this.indexingState = indexingState;
-    }
-
-    /**
-     * Метод для индексации сайта
-     *
-     * @param site Сайт для индексации
-     */
-    public void indexSite(Site site) {
-        try {
-            // Удаление старых данных сайта
-            deleteSiteData(site);
-
-            // Начало индексации с главной страницы
-            indexPage(site, site.getUrl(), 0);
-
-            // Обновление статуса сайта
-            site.setStatus(Status.INDEXED);
-            site.setLastError(null);
-        } catch (Exception e) {
-            site.setStatus(Status.FAILED);
-            site.setLastError("Ошибка индексации: " + e.getMessage());
-            logger.error("Ошибка индексации сайта {}: {}", site.getUrl(), e.getMessage());
-        } finally {
-            site.setStatusTime(LocalDateTime.now());
-            siteRepository.save(site);
-        }
-    }
-
     /**
      * Метод для индексации отдельной страницы
      *
@@ -93,11 +52,9 @@ public class PageProcessor {
             String path = url.replace(site.getUrl(), "");
             if (path.isEmpty()) path = "/";
 
-            // Проверка существования страницы
             Optional<Page> existingPage = pageRepository.findBySiteAndPath(site.getId(), path);
             existingPage.ifPresent(this::deletePageInfo);
 
-            // Проверка уникальности URL
             if (pageRepository.existsBySiteAndPath(site, url.replace(site.getUrl(), ""))) {
                 logger.warn("Страница уже существует: {}", url);
                 return;
@@ -129,7 +86,7 @@ public class PageProcessor {
 
         } catch (Exception e) {
             logger.error("Ошибка при индексации страницы {}: {}", url, e.getMessage());
-            throw e; // Пробрасываем исключение дальше, чтобы оно могло быть обработано на уровне выше
+            throw e;
         }
     }
     /**
@@ -181,10 +138,8 @@ public class PageProcessor {
      */
     private void indexPageContent(Site site, Page page) {
         String text = Jsoup.parse(page.getContent()).text();
-        // Вызываем через экземпляр
         Map<String, Integer> lemmas = lemmatizer.extractLemmasWithRank(text);
 
-        // Пакетная вставка с проверкой прерывания
         List<Lemma> lemmaList = new ArrayList<>();
         List<SearchIndex> indexList = new ArrayList<>();
 
@@ -212,35 +167,16 @@ public class PageProcessor {
      * @param lemmaText Текст леммы
      * @return Лемма
      */
-    // В PageProcessor.java
     @Transactional
     private Lemma findOrCreateLemma(Site site, String lemmaText) {
-        return lemmaRepository.findUniqueLemma(lemmaText, site.getId())
+        return lemmaRepository.findByLemmaAndSiteId(lemmaText, site.getId())
                 .orElseGet(() -> {
                     Lemma newLemma = new Lemma();
                     newLemma.setSite(site);
                     newLemma.setLemma(lemmaText);
-                    newLemma.setFrequency(0);
+                    newLemma.setFrequency(1);
                     return lemmaRepository.save(newLemma);
                 });
-    }
-    /**
-     * Метод для преобразования текста в массив слов
-     */
-    private String[] convertingTextToArray(String text) {
-        return text.toLowerCase().replaceAll("[^а-яё]", " ").split("\\s+");
-    }
-
-    /**
-     * Проверка соответствия слова стоп-словам или частицам
-     */
-    private boolean checkComplianceWordToParticlesNames(List<String> wordBaseForms) {
-        for (String form : wordBaseForms) {
-            if (form.contains("МЕЖД") || form.contains("ПРЕДЛ") || form.contains("ЧАСТ")) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -250,47 +186,25 @@ public class PageProcessor {
      */
     @Transactional
     public void deletePageInfo(Page page) {
-        // Получаем все индексы, связанные с данной страницей
-        List<SearchIndex> indexes = indexRepository.findByPage(page);
 
-        // Удаляем индексы и обновляем частоту лемм
+        List<SearchIndex> indexes = indexRepository.findByPage(page);
         for (SearchIndex index : indexes) {
             Lemma lemma = index.getLemma();
-
-            // Уменьшаем частоту леммы на 1
             lemma.setFrequency(lemma.getFrequency() - 1);
-
             if (lemma.getFrequency() == 0) {
-                // Если frequency стало 0, удаляем лемму
                 lemmaRepository.delete(lemma);
             } else {
-                // Иначе обновляем лемму
                 lemmaRepository.save(lemma);
             }
 
-            // Удаляем запись из таблицы index
             indexRepository.delete(index);
         }
 
-        // Удаляем страницу из таблицы page
         pageRepository.delete(page);
 
         logger.info("Информация о странице удалена: {}", page.getPath());
     }
 
-    @Transactional
-    public void deleteSiteData(Site site) {
-        // Удаление индексов, связанных с данным сайтом
-        indexRepository.deleteByPage_Site(site.getId());
-
-        // Удаление лемм, связанных с данным сайтом
-        lemmaRepository.deleteBySite(site);
-
-        // Удаление страниц, связанных с данным сайтом
-        pageRepository.deleteBySite(site);
-
-        logger.info("Все данные сайта {} удалены", site.getUrl());
-    }
     @Transactional
     public void deletePageInfoIfExists(Site site, String url) {
         String path = url.replace(site.getUrl(), "");

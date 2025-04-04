@@ -1,6 +1,11 @@
 package searchengine.services;
 
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +17,15 @@ import searchengine.model.*;
 import searchengine.repository.*;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import java.util.concurrent.Semaphore;
-
+@RequiredArgsConstructor
 @Service
 public class SearchService {
-    @Autowired
-    private Lemmatizer lemmatizer; // Внедряем бин
+    private final Lemmatizer lemmatizer; // Внедряем бин
 
     private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
 
@@ -29,19 +35,7 @@ public class SearchService {
     private final SiteRepository siteRepository;
     private final IndexingState indexingState;
 
-    // Семафор для ограничения количества одновременных запросов
-    private final Semaphore databaseSemaphore = new Semaphore(5); // Ограничение до 5 одновременных запросов
-
-    @Autowired
-    public SearchService(LemmaRepository lemmaRepository, IndexRepository indexRepository,
-                         PageRepository pageRepository, SiteRepository siteRepository, IndexingState indexingState) {
-        this.lemmaRepository = lemmaRepository;
-        this.indexRepository = indexRepository;
-        this.pageRepository = pageRepository;
-        this.siteRepository = siteRepository;
-        this.indexingState = indexingState;
-    }
-
+    private final Semaphore databaseSemaphore = new Semaphore(5);
     public SearchResponse search(String query, String siteUrl, int offset, int limit) {
 
         SearchResponse response = new SearchResponse();
@@ -49,7 +43,7 @@ public class SearchService {
 
         try {
 
-            databaseSemaphore.acquire(); // Захват семафора перед выполнением запросов
+            databaseSemaphore.acquire();
             if (indexingState.isStopRequested()) {
                 response.setResult(false);
                 response.setError("Поиск прерван из-за остановки индексации");
@@ -183,12 +177,12 @@ public class SearchService {
 
     private List<Page> findPagesByLemmasAndSite(List<Lemma> lemmas, Site site) {
         if (site == null) {
-            // Если сайт не указан, ищем страницы по всем сайтам
+
             return indexRepository.findPagesByLemmas(lemmas.stream()
                     .map(Lemma::getLemma)
                     .collect(Collectors.toList()));
         } else {
-            // Если сайт указан, ищем страницы только для этого сайта
+
             return indexRepository.findPagesByLemmasAndSite(lemmas.stream()
                     .map(Lemma::getLemma)
                     .collect(Collectors.toList()), site);
@@ -213,7 +207,6 @@ public class SearchService {
             }
         }
 
-        // Нормализация релевантности
         if (maxRelevance > 0) {
             for (Map.Entry<Page, Double> entry : relevanceMap.entrySet()) {
                 entry.setValue(entry.getValue() / maxRelevance);
@@ -222,22 +215,83 @@ public class SearchService {
 
         return relevanceMap;
     }
-
-    private String createSnippet(Page page, List<String> lemmas) {
+    private String createSnippet(Page page, List<String> queryLemmas) {
         String content = Jsoup.parse(page.getContent()).text();
-        StringBuilder snippet = new StringBuilder();
+        List<WordInfo> foundWords = new ArrayList<>();
+        Map<String, Set<String>> lemmaFormsMap = new HashMap<>();
 
-        for (String lemma : lemmas) {
-            int index = content.toLowerCase().indexOf(lemma.toLowerCase());
-            if (index != -1) {
-                int start = Math.max(0, index - 50);
-                int end = Math.min(content.length(), index + 50);
-                String fragment = content.substring(start, end);
-                fragment = fragment.replaceAll("(?i)" + lemma, "<b>" + lemma + "</b>");
-                snippet.append(fragment).append("... ");
+        queryLemmas.forEach(lemma -> lemmaFormsMap.put(lemma, new HashSet<>()));
+
+        String[] words = content.split("\\s+");
+        for (int i = 0; i < words.length; i++) {
+            String word = cleanWord(words[i]);
+            if (word.isEmpty()) continue;
+
+            List<String> wordLemmas = lemmatizer.getWordLemmas(word);
+            for (String lemma : wordLemmas) {
+                if (lemmaFormsMap.containsKey(lemma)) {
+                    lemmaFormsMap.get(lemma).add(word.toLowerCase());
+                    foundWords.add(new WordInfo(i, word, lemma));
+                }
             }
         }
 
-        return snippet.toString();
+        foundWords.sort(Comparator.comparingInt(w -> w.position));
+
+        return buildSnippet(words, foundWords, lemmaFormsMap);
+    }
+
+    private String buildSnippet(String[] words, List<WordInfo> foundWords, Map<String, Set<String>> lemmaFormsMap) {
+        StringBuilder snippet = new StringBuilder();
+        int lastAddedPos = -2;
+        int snippetLength = 0;
+        final int MAX_SNIPPET_LENGTH = 300;
+
+        for (WordInfo wordInfo : foundWords) {
+            if (snippetLength >= MAX_SNIPPET_LENGTH) break;
+            if (wordInfo.position <= lastAddedPos) continue;
+
+            int start = Math.max(0, wordInfo.position - 5);
+            int end = Math.min(words.length, wordInfo.position + 5);
+            lastAddedPos = end;
+
+            StringBuilder fragment = new StringBuilder();
+            for (int i = start; i < end; i++) {
+                String word = words[i];
+                String cleanWord = cleanWord(word).toLowerCase();
+
+                boolean isMatch = lemmaFormsMap.values().stream()
+                        .anyMatch(forms -> forms.contains(cleanWord));
+
+                fragment.append(isMatch ? "<b>" + word + "</b>" : word)
+                        .append(" ");
+            }
+
+            String fragText = fragment.toString().trim() + "... ";
+            if (snippetLength + fragText.length() > MAX_SNIPPET_LENGTH) {
+                fragText = fragText.substring(0, MAX_SNIPPET_LENGTH - snippetLength) + "... ";
+            }
+
+            snippet.append(fragText);
+            snippetLength += fragText.length();
+        }
+
+        return snippet.toString().trim();
+    }
+
+    private String cleanWord(String word) {
+        return word.replaceAll("[^\\p{L}\\d]", "").trim();
+    }
+
+    private static class WordInfo {
+        int position;
+        String originalWord;
+        String lemma;
+
+        WordInfo(int position, String originalWord, String lemma) {
+            this.position = position;
+            this.originalWord = originalWord;
+            this.lemma = lemma;
+        }
     }
 }

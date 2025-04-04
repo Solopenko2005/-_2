@@ -1,4 +1,4 @@
-package searchengine.controllers;
+package searchengine.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +8,7 @@ public class DefaultController {
 
     /**
      * Метод формирует страницу из HTML-файла index.html,
-     * который находится в папке resources/templates.
+     * который находится в папке resorces/templates.
      * Это делает библиотека Thymeleaf.
      */
     @RequestMapping("/")

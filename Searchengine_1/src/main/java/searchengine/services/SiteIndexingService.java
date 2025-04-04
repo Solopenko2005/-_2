@@ -1,22 +1,26 @@
 package searchengine.services;
 
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import searchengine.config.IndexingSettings;
+import searchengine.dto.response.IndexingResponse;
 import searchengine.model.*;
 import searchengine.repository.SiteRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
@@ -24,48 +28,55 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class SiteIndexingService {
-    @PersistenceContext
-    private EntityManager entityManager;
 
-    @Autowired
-    private Lemmatizer lemmatizer;
+    @PersistenceContext
+    private final EntityManager entityManager;
+    private final Lemmatizer lemmatizer;
+    private final DatabaseService databaseService;
+    private final IndexingSettings indexingSettings;
+    private final SiteRepository siteRepository;
+    private final PageProcessor pageProcessor;
 
     private static final Logger logger = LoggerFactory.getLogger(SiteIndexingService.class);
-
-    @Autowired
-    private DatabaseService databaseService;
-
-    @Autowired
-    private IndexingSettings indexingSettings;
-
-    @Autowired
-    private SiteRepository siteRepository;
-
     private final AtomicBoolean indexingInProgress = new AtomicBoolean(false);
     private ForkJoinPool pool;
     private final Set<String> visitedUrls = ConcurrentHashMap.newKeySet();
     private static final int MAX_RETRIES = 3;
-    private static final int TIMEOUT = 10000; // Таймаут для HTTP-запросов
+    private static final int TIMEOUT = 10000;
     private final AtomicBoolean stopRequested = new AtomicBoolean(false);
-    private final List<Future<?>> indexingTasks = new CopyOnWriteArrayList<>();
 
-    public Map<String, Object> startIndexing() {
-        if (!indexingInProgress.compareAndSet(false, true)) {
-            return Map.of("result", false, "error", "Индексация уже запущена");
+    public ResponseEntity<Map<String, Object>> startIndexing() {
+        try {
+            if (!indexingInProgress.compareAndSet(false, true)) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "result", false,
+                        "error", "Индексация уже запущена"
+                ));
+            }
+
+            databaseService.truncateAllTables();
+            visitedUrls.clear();
+
+            pool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+
+            for (IndexingSettings.SiteConfig siteConfig : indexingSettings.getSites()) {
+                if (stopRequested.get()) break;
+                CompletableFuture.runAsync(() -> processSite(siteConfig), pool);
+            }
+
+            return ResponseEntity.ok(Map.of(
+                    "result", true,
+                    "message", "Индексация запущена"
+            ));
+        } catch (Exception e) {
+            logger.error("Ошибка при запуске индексации", e);
+            return ResponseEntity.internalServerError().body(Map.of(
+                    "result", false,
+                    "error", "Internal Server Error"
+            ));
         }
-
-        databaseService.truncateAllTables();
-        visitedUrls.clear();
-
-        pool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
-
-        for (IndexingSettings.SiteConfig siteConfig : indexingSettings.getSites()) {
-            if (stopRequested.get()) break;
-            CompletableFuture.runAsync(() -> processSite(siteConfig), pool);
-        }
-
-        return Map.of("result", true, "message", "Индексация запущена");
     }
 
     private void processSite(IndexingSettings.SiteConfig siteConfig) {
@@ -103,34 +114,113 @@ public class SiteIndexingService {
         logger.error("Ошибка индексации {}: {}", site.getUrl(), e.getMessage(), e);
     }
 
-    public boolean stopIndexing() {
-        if (!indexingInProgress.get()) return false;
+    public ResponseEntity<IndexingResponse> stopIndexing() {
+        logger.info("Запрос на остановку индексации...");
+        try {
+            if (!indexingInProgress.get()) {
+                return ResponseEntity.badRequest().body(
+                        new IndexingResponse(false, "Индексация не запущена")
+                );
+            }
 
-        stopRequested.set(true); // Устанавливаем флаг остановки
-        pool.shutdown(); // Ждем завершения текущих задач
+            stopRequested.set(true);
+            pool.shutdown();
 
-        new Thread(() -> {
-            try {
-                if (!pool.awaitTermination(10, TimeUnit.SECONDS)) {
-                    logger.warn("Не все задачи завершились за отведенное время");
+            new Thread(() -> {
+                try {
+                    if (!pool.awaitTermination(10, TimeUnit.SECONDS)) {
+                        logger.warn("Не все задачи завершились за отведенное время");
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    indexingInProgress.set(false);
+                    updateSiteStatusesOnStop();
+                    logger.info("Индексация остановлена");
                 }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+            }).start();
+
+            return ResponseEntity.ok(
+                    new IndexingResponse(true, "Индексация остановлена")
+            );
+        } catch (Exception e) {
+            logger.error("Ошибка при остановке индексации", e);
+            return ResponseEntity.internalServerError().body(
+                    new IndexingResponse(false, "Ошибка при остановке индексации")
+            );
+        }
+    }
+    public ResponseEntity<Map<String, Object>> indexPage(String url) {
+        try {
+            if (indexingInProgress.get()) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "result", false,
+                        "error", "Индексация уже запущена"
+                ));
+            }
+
+            if (!isValidUrl(url)) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "result", false,
+                        "error", "Некорректный URL"
+                ));
+            }
+
+            Site site = getSiteByUrl(url);
+            if (site == null) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "result", false,
+                        "error", "Страница не принадлежит ни одному из разрешенных сайтов"
+                ));
+            }
+
+            indexingInProgress.set(true);
+            try {
+                pageProcessor.deletePageInfoIfExists(site, url);
+                pageProcessor.indexPage(site, url, 0);
+                return ResponseEntity.ok(Map.of("result", true));
             } finally {
                 indexingInProgress.set(false);
-                updateSiteStatusesOnStop(); // Обновляем статусы сайтов
-                logger.info("Индексация остановлена");
             }
-        }).start();
 
-        return true;
+        } catch (Exception e) {
+            logger.error("Ошибка индексации страницы", e);
+            return ResponseEntity.internalServerError().body(Map.of(
+                    "result", false,
+                    "error", "Ошибка индексации: " + e.getMessage()
+            ));
+        }
+    }
+
+    private Site getSiteByUrl(String url) {
+        return indexingSettings.getSites().stream()
+                .map(siteConfig -> siteRepository.findByUrl(siteConfig.getUrl())
+                        .orElseGet(() -> {
+                            Site newSite = new Site();
+                            newSite.setUrl(siteConfig.getUrl());
+                            newSite.setName(siteConfig.getName());
+                            newSite.setStatus(Status.INDEXING);
+                            return newSite;
+                        }))
+                .filter(s -> url.startsWith(s.getUrl()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private boolean isValidUrl(String url) {
+        try {
+            new URL(url);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        }
     }
 
     private void updateSiteStatusesOnStop() {
         for (IndexingSettings.SiteConfig siteConfig : indexingSettings.getSites()) {
             Site site = siteRepository.findByUrl(siteConfig.getUrl()).orElse(null);
             if (site != null && site.getStatus() == Status.INDEXING) {
-                site.setStatus(Status.INDEXED);
+                site.setStatus(Status.FAILED);
                 site.setLastError("Индексация остановлена пользователем");
                 site.setStatusTime(LocalDateTime.now());
                 databaseService.saveSite(site);
@@ -146,7 +236,7 @@ public class SiteIndexingService {
                     throw new IOException("Задача прервана");
                 }
 
-                Thread.sleep(500); // Задержка между запросами
+                Thread.sleep(500);
                 long startTime = System.currentTimeMillis();
                 Connection.Response response = Jsoup.connect(url)
                         .userAgent("HeliontSearchBot")
@@ -165,7 +255,7 @@ public class SiteIndexingService {
                 retries++;
                 logger.warn("Таймаут подключения к {}. Попытка {}/{}", url, retries, MAX_RETRIES);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Восстановление флага прерывания
+                Thread.currentThread().interrupt();
                 throw new IOException("Задача прервана", e);
             }
         }
@@ -212,7 +302,7 @@ public class SiteIndexingService {
             } catch (Exception e) {
                 logger.error("Ошибка обработки {}: {}", url, e.getMessage(), e);
             } finally {
-                entityManager.clear(); // Очистка контекста EntityManager
+                entityManager.clear();
             }
             return null;
         }

@@ -1,4 +1,4 @@
-package searchengine.controllers;
+package searchengine.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -2,16 +2,9 @@ package searchengine.services;
 
 import org.apache.lucene.morphology.LuceneMorphology;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
-import org.jsoup.Jsoup;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import searchengine.config.IndexingState;
 import searchengine.repository.LemmaRepository;
-import searchengine.repository.SiteRepository;
-import searchengine.utils.HibernateUtil;
 
 import java.io.IOException;
 import java.util.*;
@@ -19,61 +12,78 @@ import java.util.*;
 @Service
 public class Lemmatizer {
 
-    private static final LuceneMorphology luceneMorph;
-    private final IndexingState indexingState; // Убран static
+    private static final List<String> STOP_WORDS = Arrays.asList(
+            "и", "в", "на", "с", "по", "за", "из", "у", "для"
+    );
+
+    private final LuceneMorphology luceneMorph;
+    private final IndexingState indexingState;
     private final LemmaRepository lemmaRepository;
 
-    static {
-        try {
-            luceneMorph = new RussianLuceneMorphology();
-        } catch (IOException e) {
-            throw new RuntimeException("Ошибка инициализации морфологии", e);
-        }
-    }
-
-    @Autowired
-    public Lemmatizer(IndexingState indexingState, LemmaRepository lemmaRepository) {
+    public Lemmatizer(IndexingState indexingState, LemmaRepository lemmaRepository) throws IOException {
+        this.luceneMorph = new RussianLuceneMorphology();
         this.indexingState = indexingState;
         this.lemmaRepository = lemmaRepository;
     }
 
-    // Убран static, добавлена проверка состояния
-    public Map<String, Integer> getLemmas(String text) {
-        if (indexingState.isStopRequested()) return Collections.emptyMap();
+    public Map<String, Integer> getQueryLemmas(String text) {
+        if (shouldInterrupt()) return Collections.emptyMap();
 
-        if (text == null || text.isEmpty()) {
-            return Collections.emptyMap();
-        }
-        text = text.toLowerCase().replaceAll("[^а-яё ]", "");
         Map<String, Integer> lemmas = new HashMap<>();
+        processText(text, lemmas);
+        return lemmas;
+    }
+    @Deprecated
+    public Map<String, Integer> getLemmas(String text) {
+        return getQueryLemmas(text);
+    }
 
-        try {
-            for (String word : text.split("\\s+")) {
-                if (indexingState.isStopRequested()) break;
-                if (word.isEmpty()) continue;
-                List<String> normalForms = luceneMorph.getNormalForms(word);
-                if (!normalForms.isEmpty()) {
-                    String lemma = normalForms.get(0);
-                    if (!isStopWord(lemma)) {
-                        lemmas.put(lemma, lemmas.getOrDefault(lemma, 0) + 1);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Ошибка при обработке текста: " + e.getMessage());
-        }
+    public List<String> getWordLemmas(String word) {
+        if (shouldInterrupt() || word == null || word.isEmpty()) return Collections.emptyList();
 
+        word = word.toLowerCase().replaceAll("[^а-яё]", "");
+        return getNormalForms(word);
+    }
+
+
+    public Map<String, Integer> extractLemmasWithRank(String text) {
+        if (shouldInterrupt()) return Collections.emptyMap();
+
+        Map<String, Integer> lemmas = new HashMap<>();
+        processText(text, lemmas);
         return lemmas;
     }
 
-    public Map<String, Integer> extractLemmasWithRank(String text) {
-        if (indexingState.isStopRequested()) return Collections.emptyMap();
-        return getLemmas(text);
+    private void processText(String text, Map<String, Integer> lemmas) {
+        Arrays.stream(text.toLowerCase().split("\\s+"))
+                .map(this::cleanWord)
+                .filter(word -> !word.isEmpty())
+                .forEach(word -> processWord(word, lemmas));
     }
 
-    private boolean isStopWord(String word) {
-        List<String> stopWords = Arrays.asList("и", "в", "на", "с", "по", "за", "из", "у", "для");
-        return stopWords.contains(word);
+    private void processWord(String word, Map<String, Integer> lemmas) {
+        getNormalForms(word).stream()
+                .filter(lemma -> !isStopWord(lemma))
+                .forEach(lemma -> lemmas.merge(lemma, 1, Integer::sum));
     }
 
+    private List<String> getNormalForms(String word) {
+        try {
+            return luceneMorph.getNormalForms(word);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
+    private String cleanWord(String word) {
+        return word.replaceAll("[^а-яё]", "").trim();
+    }
+
+    private boolean isStopWord(String lemma) {
+        return STOP_WORDS.contains(lemma);
+    }
+
+    private boolean shouldInterrupt() {
+        return indexingState.isStopRequested();
+    }
 }

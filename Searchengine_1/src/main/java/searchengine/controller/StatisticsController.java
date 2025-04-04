@@ -1,4 +1,4 @@
-package searchengine.controllers;
+package searchengine.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +11,12 @@ import searchengine.services.StatisticsService;
 @RestController
 @RequestMapping("/api")
 public class StatisticsController {
-    @Autowired
-    private StatisticsService statisticsService;
+
+    private final StatisticsService statisticsService;
+
+    public StatisticsController(StatisticsService statisticsService) {
+        this.statisticsService = statisticsService;
+    }
 
     @GetMapping("/statistics")
     public ResponseEntity<StatisticsResponse> getStatistics() {

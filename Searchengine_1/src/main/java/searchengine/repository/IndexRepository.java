@@ -10,10 +10,8 @@ import searchengine.model.SearchIndex;
 import searchengine.model.Site;
 
 import java.util.List;
-import java.util.Set;
 
 public interface IndexRepository extends JpaRepository<SearchIndex, Long> {
-
     @Query("SELECT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas")
     List<Page> findPagesByLemmas(@Param("lemmas") List<String> lemmas);
 
@@ -21,9 +19,8 @@ public interface IndexRepository extends JpaRepository<SearchIndex, Long> {
     Float findRankByPageAndLemma(@Param("page") Page page, @Param("lemma") Lemma lemma);
 
     List<SearchIndex> findByPage(Page page);
-    @Modifying
-    @Query(value = "DELETE FROM search_index si USING page p WHERE si.page_id = p.id AND p.site_id = :siteId", nativeQuery = true)
-    void deleteByPage_Site(@Param("siteId") Integer siteId);
+
+    void deleteByPage_Site(int site);
 
     @Query("SELECT DISTINCT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas AND si.page.site = :site")
     List<Page> findPagesByLemmasAndSite(@Param("lemmas") List<String> lemmas, @Param("site") Site site);

@@ -36,7 +36,7 @@
                 <tableExists tableName="lemma"/>
             </not>
         </preConditions>
-        <createTable tableName="lemma" schemaName="public">
+        <createTable tableName="lemma">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -60,7 +60,7 @@
                 <tableExists tableName="page"/>
             </not>
         </preConditions>
-        <createTable tableName="page" schemaName="public">
+        <createTable tableName="page">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -89,7 +89,7 @@
                 <tableExists tableName="search_index"/>
             </not>
         </preConditions>
-        <createTable tableName="search_index" schemaName="public">
+        <createTable tableName="search_index">
             <column name="id" type="SERIAL">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -104,5 +104,4 @@
             </column>
         </createTable>
     </changeSet>
-
 </databaseChangeLog>
