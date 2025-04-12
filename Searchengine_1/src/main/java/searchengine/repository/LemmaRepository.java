@@ -19,8 +19,6 @@ public interface LemmaRepository extends JpaRepository<Lemma, Long> {
     List<Lemma> findAllByLemmaAndSite(String lemma, Site site);
     List<Lemma> findAllByLemma(String lemma);
 
-    void deleteBySite(Site site); // Убираем @Query, используем стандартный метод
-
     @Modifying
     @Query(value = "INSERT INTO lemma (lemma, site_id, frequency) VALUES (:lemma, :siteId, 1) " +
             "ON CONFLICT (lemma, site_id) DO UPDATE " +

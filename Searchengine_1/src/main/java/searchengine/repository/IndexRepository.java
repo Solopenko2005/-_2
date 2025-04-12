@@ -20,8 +20,6 @@ public interface IndexRepository extends JpaRepository<SearchIndex, Long> {
 
     List<SearchIndex> findByPage(Page page);
 
-    void deleteByPage_Site(int site);
-
     @Query("SELECT DISTINCT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas AND si.page.site = :site")
     List<Page> findPagesByLemmasAndSite(@Param("lemmas") List<String> lemmas, @Param("site") Site site);
 }

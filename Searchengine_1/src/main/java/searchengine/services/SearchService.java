@@ -2,13 +2,8 @@ package searchengine.services;
 
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attribute;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import searchengine.config.IndexingState;
 import searchengine.dto.response.SearchResponse;
@@ -17,15 +12,13 @@ import searchengine.model.*;
 import searchengine.repository.*;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import java.util.concurrent.Semaphore;
 @RequiredArgsConstructor
 @Service
 public class SearchService {
-    private final Lemmatizer lemmatizer; // Внедряем бин
+    private final Lemmatizer lemmatizer;
 
     private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
 
@@ -39,6 +32,22 @@ public class SearchService {
     public SearchResponse search(String query, String siteUrl, int offset, int limit) {
 
         SearchResponse response = new SearchResponse();
+        if (query == null || query.trim().isEmpty()) {
+            response.setResult(false);
+            response.setError("Задан пустой поисковый запрос");
+            return response;
+        }
+
+        Site site = null;
+        if (siteUrl != null && !siteUrl.isEmpty()) {
+            site = siteRepository.findSiteByUrl(siteUrl);
+            if (site == null) {
+                response.setResult(false);
+                response.setError("Сайт не найден");
+                return response;
+            }
+        }
+
         List<SearchResult> results = new ArrayList<>();
 
         try {
@@ -57,7 +66,6 @@ public class SearchService {
                 return response;
             }
 
-            Site site = null;
             if (siteUrl != null && !siteUrl.isEmpty()) {
                 site = siteRepository.findSiteByUrl(siteUrl);
                 if (site == null) {
@@ -137,7 +145,7 @@ public class SearchService {
             response.setError("Ошибка поиска: " + e.getMessage());
             logger.error("Ошибка при выполнении поиска: {}", e.getMessage(), e);
         } finally {
-            databaseSemaphore.release(); // Освобождение семафора
+            databaseSemaphore.release();
         }
 
         return response;

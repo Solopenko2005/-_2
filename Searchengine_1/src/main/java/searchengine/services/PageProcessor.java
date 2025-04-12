@@ -31,7 +31,6 @@ public class PageProcessor {
     private final PageRepository pageRepository;
     private final LemmaRepository lemmaRepository;
     private final IndexRepository indexRepository;
-    private final SiteRepository siteRepository;
     private final Lemmatizer lemmatizer;
     private final IndexingState indexingState;
 

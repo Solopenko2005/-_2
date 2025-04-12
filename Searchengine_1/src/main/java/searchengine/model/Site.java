@@ -47,7 +47,7 @@ public class Site {
     private String lastError;
 
     @OneToMany(mappedBy = "site", orphanRemoval = true)
-    @Cascade({}) // Убираем CascadeType.ALL
+    @Cascade({})
     private Set<Page> pages = new HashSet<>();
 
 

@@ -1,23 +1,21 @@
 package searchengine.services;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import searchengine.model.Lemma;
+
 import searchengine.model.Site;
 import searchengine.repository.LemmaRepository;
 
-import java.util.Optional;
+
 
 @Service
+@RequiredArgsConstructor
 public class LemmaService {
     public static final Logger logger = LoggerFactory.getLogger(LemmaService.class);
     private final LemmaRepository lemmaRepository;
-
-    public LemmaService(LemmaRepository lemmaRepository) {
-        this.lemmaRepository = lemmaRepository;
-    }
 
     @Transactional
     public void saveOrUpdateLemma(String lemmaText, Site site) {

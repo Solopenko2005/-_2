@@ -1,5 +1,6 @@
 package searchengine.services;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.lucene.morphology.LuceneMorphology;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class Lemmatizer {
 
     private static final List<String> STOP_WORDS = Arrays.asList(
@@ -18,13 +20,6 @@ public class Lemmatizer {
 
     private final LuceneMorphology luceneMorph;
     private final IndexingState indexingState;
-    private final LemmaRepository lemmaRepository;
-
-    public Lemmatizer(IndexingState indexingState, LemmaRepository lemmaRepository) throws IOException {
-        this.luceneMorph = new RussianLuceneMorphology();
-        this.indexingState = indexingState;
-        this.lemmaRepository = lemmaRepository;
-    }
 
     public Map<String, Integer> getQueryLemmas(String text) {
         if (shouldInterrupt()) return Collections.emptyMap();

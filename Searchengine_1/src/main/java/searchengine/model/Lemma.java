@@ -5,7 +5,6 @@ import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,7 +35,7 @@ public class Lemma {
     @Column(nullable = false)
     private int frequency;
     @OneToMany(mappedBy = "lemma", orphanRemoval = true)
-    @Cascade({}) // Убираем CascadeType.ALL
+    @Cascade({})
     private Set<SearchIndex> searchIndexes = new HashSet<>();
 
     public Lemma(String lemma, Site site, int frequency) {

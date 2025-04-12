@@ -35,7 +35,6 @@ public class Page {
     }
 
     public Page() {
-
     }
 
     public void setUrl(String url) {
