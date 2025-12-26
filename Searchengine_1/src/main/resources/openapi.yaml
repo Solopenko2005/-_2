@@ -14,6 +14,10 @@ servers:
 tags:
   - name: "Индексация"
     description: "Отвечает за индексирование источников информации"
+  - name: "Веб-страница"
+    description: "Отвечает за индексирование отдельной веб-страницы"
+  - name: "Статистика"
+    description: "Отвечает за статистику/результат индексации"
 
 paths:
   /api/startIndexing:
@@ -155,4 +159,72 @@ paths:
                     type: string
                     example: "Данная страница находится за пределами сайтов, указанных в конфигурационном файле"
 
+  /api/statistics:
+    get:
+      tags:
+        - "Статистика"
+      summary: "Возвращает статистику и результат индексации"
+      description: "Метод возвращает статистику и другую служебную информацию о
+  состоянии поисковых индексов и самого движка.
+
+  * Если ошибок индексации того или иного сайта нет, задавать ключ error не
+  нужно."
+
+      responses:
+        '200':
+          description: "Успешное выполнение запроса"
+          content:
+            text/plain:
+              schema:
+                type: boolean
+                example: true
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    example: true
+                  statistics:
+                    type: object
+                    properties:
+                      total:
+                        type: object
+                        properties:
+                          sites:
+                            type: integer
+                            example: 10
+                          pages:
+                            type: integer
+                            example: 1734057
+                          lemmas:
+                            type: integer
+                            example: 512980
+                          indexing:
+                            type: boolean
+                            example: true
+                      detailed:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                            example: "http://www.site.com"
+                          name:
+                            type: string
+                            example: "Имя сайта"
+                          status:
+                            type: string
+                            example: INDEXED
+                          statusTime:
+                            type: integer
+                            example: 1600160357
+                          error:
+                            type: string
+                            example: "Ошибка индексации: главная страница сайта недоступна"
+                          pages:
+                            type: integer
+                            example: 5678
+                          lemmas:
+                            type: integer
+                            example: 679597
 
