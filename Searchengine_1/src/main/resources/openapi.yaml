@@ -18,6 +18,8 @@ tags:
     description: "Отвечает за индексирование отдельной веб-страницы"
   - name: "Статистика"
     description: "Отвечает за статистику/результат индексации"
+  - name: "Поисковый запрос"
+    description: "Отвечает за поисковые запросы"
 
 paths:
   /api/startIndexing:
@@ -227,4 +229,99 @@ paths:
                           lemmas:
                             type: integer
                             example: 679597
+  /api/search:
+    get:
+      tags:
+        - "Поисковый запрос"
+      summary: "Получение данных по поисковому запросу"
+      description: "Метод осуществляет поиск страниц по переданному поисковому запросу (параметр query). Чтобы выводить результаты порционно, также можно задать параметры offset (сдвиг от начала списка результатов) и limit (количество результатов, которое необходимо вывести). В ответе выводится общее количество результатов (count), не зависящее от значений параметров offset и limit, и массив data с результатами поиска. Каждый результат — это объект, содержащий свойства результата поиска (см. ниже структуру и описание каждого свойства). Если поисковый запрос не задан или ещё нет готового индекса (сайт, по которому ищем, или все сайты сразу не проиндексированы), метод должен вернуть соответствующую ошибку (см. ниже пример). Тексты ошибок должны быть понятными и отражать суть ошибок"
+
+      parameters:
+
+        - name: query
+          in: query
+          description: 'query — поисковый запрос'
+          required: false
+          schema:
+            type: string
+
+        - name: site
+          in: query
+          description: 'site — сайт, по которому осуществлять поиск (если не задан, поиск должен происходить по всем проиндексированным сайтам); задаётся в формате адреса, например: http://www.site.com'
+          required: false
+          schema:
+            type: string
+
+        - name: offset
+          in: query
+          description: 'offset — сдвиг от 0 для постраничного вывода (параметр необязательный; если не установлен, то значение по  умолчанию равно нулю)'
+          required: false
+          schema:
+            type: integer
+
+        - name: limit
+          in: query
+          description: ' limit — количество результатов, которое необходимо вывести (параметр необязательный; если не установлен, то значение по умолчанию равно 20).'
+          required: false
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: "Успешное выполнение запроса"
+          content:
+            text/plain:
+              schema:
+                type: boolean
+                example: true
+
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    example: true
+                  count:
+                    type: integer
+                    example: 574
+                  data:
+                    type: object
+                    properties:
+                      site:
+                        type: string
+                        example: "http://www.site.com"
+                      siteName:
+                        type: string
+                        example: "Имя сайта"
+                      uri:
+                        type: string
+                        example: "/path/to/page/6784"
+                      title:
+                        type: string
+                        example: "Заголовок страницы, которую выводим"
+                      snippet:
+                        type: string
+                        example: "Фрагмент текста, в которой найдены совпадения, <b> выделенные жирным </b>, в формате HTML"
+                      relevance:
+                        type: number
+                        example: 0.94637
+
+        '400':
+          description: "Ошибка в выполнении запроса (Bad Request)"
+          content:
+            text/plain:
+              schema:
+                type: boolean
+                example: false
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Задан пустой поисковый запрос"
 
