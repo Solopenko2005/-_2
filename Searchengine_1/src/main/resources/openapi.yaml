@@ -1,0 +1,327 @@
+openapi: 3.0.3
+info:
+  title: G⌬RBE API
+  description: "Public API hosted by G⌬RBE"
+  contact:
+    email: daniel@gorbe.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1
+
+servers:
+  - url: https://gorbe.io/api
+tags:
+  - name: ip
+    description: Work with IP addresses
+  - name: crypto
+    description: Cryptographic helper functions
+paths:
+  /ip:
+    get:
+      tags:
+        - ip
+      summary: Returns your public IP
+      description: Returns your public IP
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '502':
+          description: Upstream failed
+
+  /ip/random:
+    get:
+      tags:
+        - ip
+      summary: Returns a random IP address
+      description: |
+        Returns a random IP address.
+        
+        
+        If `version` parameter is unset, the returned IP **can be** IPv4 or IPv6.
+        
+        
+        If `reserved` is set to `true`, the returned IP address can be in the reserved address space.
+      parameters:
+        - name: version
+          in: query
+          description: >
+            Specify the version of the returned IP address.
+            Must be `4` or `6`.
+          required: false
+          schema:
+            type: integer
+        - name: reserved
+          in: query
+          description: The returned IP can be reserved. Defaults to `false`.
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '1.1.1.1'
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Invalid Version"
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '502':
+          description: Upstream failed
+
+  /ip/location:
+    get:
+      tags:
+        - ip
+      summary: Returns GeoIP data
+      description: >
+        Returns GeoIP data using [MaxMind's GeoLite2 City](https://www.maxmind.com/en/geoip-databases) database.
+        
+        
+        If `ip` parameter is not set, use the client's IP address.
+      parameters:
+        - name: ip
+          in: query
+          description: Specify IP address
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  continent:
+                    type: string
+                  continent_code:
+                    type: string
+                  country:
+                    type: string
+                  country_code:
+                    type: string
+                  region:
+                    type: string
+                  city:
+                    type: string
+                  zip:
+                    type: string
+                  timezone:
+                    type: string
+                  latitude:
+                    type: integer
+                  longitude:
+                    type: integer
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+        '502':
+          description: Upstream failed
+
+  /ip/isp:
+    get:
+      tags:
+        - ip
+      summary: Returns IP ISP data
+      description: >
+        Returns IP's ISP data using [MaxMind's GeoLite2 ASN](https://www.maxmind.com/en/geoip-databases) database.
+        
+        
+        If `ip` parameter is not set, use the client's IP address.
+      parameters:
+        - name: ip
+          in: query
+          description: Specify IP address
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  organization:
+                    type: string
+                  number:
+                    type: integer
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '502':
+          description: Upstream failed
+
+  /crypto/password:
+    get:
+      tags:
+        - crypto
+      summary: Generate password
+      description: >
+        aa
+        aa
+      parameters:
+        - name: length
+          in: query
+          description: 'Number of characters (default: 20)'
+          required: false
+          schema:
+            type: integer
+        - name: digits
+          in: query
+          description: 'Number of digits in the password (default: 3)'
+          required: false
+          schema:
+            type: integer
+        - name: symbols
+          in: query
+          description: 'Number of special character in the password (default: 3)'
+          required: false
+          schema:
+            type: integer
+        - name: upper
+          in: query
+          description: 'Password can contain uppercase character (default: true)'
+          required: false
+          schema:
+            type: boolean
+        - name: repeat
+          in: query
+          description: 'Characters can repeat in the password (default: true)'
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '502':
+          description: Upstream failed
+
+  /health:
+    get:
+      summary: Endpoint for active health checks
+      description:  Endpoint for active health checks
+      responses:
+        '200':
+          description: Successful operation
+
