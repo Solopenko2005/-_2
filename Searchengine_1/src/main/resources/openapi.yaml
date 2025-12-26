@@ -59,6 +59,48 @@ paths:
                   error:
                     type: string
                     example: "Индексация уже запущена"
+  /api/stopIndexing:
+    get:
+      tags:
+        - "Индексация"
+      summary: "Остановка текущей индексации"
+      description: "Метод останавливает текущий процесс индексации (переиндексации).
+
+  * Если в настоящий момент индексация или переиндексация не происходит,
+  метод возвращает соответствующее сообщение об ошибке."
+
+      responses:
+        '200':
+          description: "Успешное выполнение запроса"
+          content:
+            text/plain:
+              schema:
+                type: boolean
+                example: true
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    example: true
+        '400':
+          description: "Ошибка в выполнении запроса (Bad Request)"
+          content:
+            text/plain:
+              schema:
+                type: boolean
+                example: false
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Индексация не запущена"
 
   /ip/random:
     get:
