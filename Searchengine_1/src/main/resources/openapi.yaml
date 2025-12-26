@@ -1,7 +1,6 @@
 openapi: 3.0.3
 info:
-  title: G⌬RBE API
-  description: "Public API hosted by G⌬RBE"
+  title: Спецификация API
   contact:
     email: daniel@gorbe.io
   license:
@@ -10,46 +9,56 @@ info:
   version: 0.0.1
 
 servers:
-  - url: https://gorbe.io/api
+  - url: https://localhost:8080
+
 tags:
-  - name: ip
-    description: Work with IP addresses
-  - name: crypto
-    description: Cryptographic helper functions
+  - name: "Индексация"
+    description: "Отвечает за индексирование источников информации"
+
 paths:
-  /ip:
+  /api/startIndexing:
     get:
       tags:
-        - ip
-      summary: Returns your public IP
-      description: Returns your public IP
+        - "Индексация"
+      summary: "Запуск полной индексации"
+      description: "Метод запускает полную индексацию всех сайтов или полную
+переиндексацию, если они уже проиндексированы.
+
+* Если в настоящий момент индексация или переиндексация уже
+запущена, метод возвращает соответствующее сообщение об ошибке."
+
       responses:
         '200':
-          description: Successful operation
+          description: "Успешное выполнение запроса"
           content:
             text/plain:
               schema:
-                type: string
+                type: boolean
+                example: true
             application/json:
               schema:
                 type: object
                 properties:
                   result:
-                    type: string
-        '500':
-          description: Internal Server Error
+                    type: boolean
+                    example: true
+        '400':
+          description: "Ошибка в выполнении запроса (Bad Request)"
           content:
             text/plain:
               schema:
-                type: string
+                type: boolean
+                example: false
             application/json:
               schema:
                 type: object
                 properties:
+                  result:
+                    type: boolean
+                    example: false
                   error:
                     type: string
-        '502':
-          description: Upstream failed
+                    example: "Индексация уже запущена"
 
   /ip/random:
     get:
