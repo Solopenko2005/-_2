@@ -102,277 +102,57 @@ paths:
                     type: string
                     example: "Индексация не запущена"
 
-  /ip/random:
-    get:
+  /api/indexPage:
+    post:
       tags:
-        - ip
-      summary: Returns a random IP address
-      description: |
-        Returns a random IP address.
-        
-        
-        If `version` parameter is unset, the returned IP **can be** IPv4 or IPv6.
-        
-        
-        If `reserved` is set to `true`, the returned IP address can be in the reserved address space.
+        - "Веб-страница"
+      summary: "Добавление или обновление отдельной страницы"
+      description: "Метод добавляет в индекс или обновляет отдельную страницу, адрес
+  которой передан в параметре.
+
+  * Если адрес страницы передан неверно, метод должен вернуть
+  соответствующую ошибку."
+
       parameters:
-        - name: version
+        - name: url
           in: query
-          description: >
-            Specify the version of the returned IP address.
-            Must be `4` or `6`.
+          description: "url — адрес страницы, которую нужно переиндексировать."
           required: false
           schema:
-            type: integer
-        - name: reserved
-          in: query
-          description: The returned IP can be reserved. Defaults to `false`.
-          required: false
-          schema:
-            type: boolean
+            type: string
+
       responses:
         '200':
-          description: Successful operation
+          description: "Успешное выполнение запроса"
           content:
             text/plain:
               schema:
-                type: string
-                example: '1.1.1.1'
+                type: boolean
+                example: true
             application/json:
               schema:
                 type: object
                 properties:
                   result:
-                    type: string
+                    type: boolean
+                    example: true
 
         '400':
-          description: Bad Request
+          description: "Ошибка в выполнении запроса (Bad Request)"
           content:
             text/plain:
               schema:
-                type: string
-                example: "Invalid Version"
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-        '502':
-          description: Upstream failed
-
-  /ip/location:
-    get:
-      tags:
-        - ip
-      summary: Returns GeoIP data
-      description: >
-        Returns GeoIP data using [MaxMind's GeoLite2 City](https://www.maxmind.com/en/geoip-databases) database.
-        
-        
-        If `ip` parameter is not set, use the client's IP address.
-      parameters:
-        - name: ip
-          in: query
-          description: Specify IP address
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: object
-                properties:
-                  continent:
-                    type: string
-                  continent_code:
-                    type: string
-                  country:
-                    type: string
-                  country_code:
-                    type: string
-                  region:
-                    type: string
-                  city:
-                    type: string
-                  zip:
-                    type: string
-                  timezone:
-                    type: string
-                  latitude:
-                    type: integer
-                  longitude:
-                    type: integer
-        '400':
-          description: Bad Request
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-        '500':
-          description: Internal Server Error
-          content:
-            text/plain:
-              schema:
-                type: string
-        '502':
-          description: Upstream failed
-
-  /ip/isp:
-    get:
-      tags:
-        - ip
-      summary: Returns IP ISP data
-      description: >
-        Returns IP's ISP data using [MaxMind's GeoLite2 ASN](https://www.maxmind.com/en/geoip-databases) database.
-        
-        
-        If `ip` parameter is not set, use the client's IP address.
-      parameters:
-        - name: ip
-          in: query
-          description: Specify IP address
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: object
-                properties:
-                  organization:
-                    type: string
-                  number:
-                    type: integer
-        '400':
-          description: Bad Request
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-        '500':
-          description: Internal Server Error
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-        '502':
-          description: Upstream failed
-
-  /crypto/password:
-    get:
-      tags:
-        - crypto
-      summary: Generate password
-      description: >
-        aa
-        aa
-      parameters:
-        - name: length
-          in: query
-          description: 'Number of characters (default: 20)'
-          required: false
-          schema:
-            type: integer
-        - name: digits
-          in: query
-          description: 'Number of digits in the password (default: 3)'
-          required: false
-          schema:
-            type: integer
-        - name: symbols
-          in: query
-          description: 'Number of special character in the password (default: 3)'
-          required: false
-          schema:
-            type: integer
-        - name: upper
-          in: query
-          description: 'Password can contain uppercase character (default: true)'
-          required: false
-          schema:
-            type: boolean
-        - name: repeat
-          in: query
-          description: 'Characters can repeat in the password (default: true)'
-          required: false
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            text/plain:
-              schema:
-                type: string
+                type: boolean
+                example: false
             application/json:
               schema:
                 type: object
                 properties:
                   result:
-                    type: string
-        '400':
-          description: Bad Request
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: object
-                properties:
+                    type: boolean
+                    example: false
                   error:
                     type: string
-        '500':
-          description: Internal Server Error
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-        '502':
-          description: Upstream failed
+                    example: "Данная страница находится за пределами сайтов, указанных в конфигурационном файле"
 
-  /health:
-    get:
-      summary: Endpoint for active health checks
-      description:  Endpoint for active health checks
-      responses:
-        '200':
-          description: Successful operation
 
