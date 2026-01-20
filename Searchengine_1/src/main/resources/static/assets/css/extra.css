@@ -1142,3 +1142,206 @@
   bottom: 0rem;
   right: 0;
 }
+/* ===== Стили для вкладки Topics ===== */
+
+/* Контейнер темы */
+.Topics-container {
+    margin-top: 20px;
+}
+
+/* Таблица тем */
+.Topics-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+.Topics-table th {
+    background-color: #f5f5f5;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+    color: #333;
+}
+
+.Topics-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.Topics-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.Topics-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+/* Ранг */
+.Topics-table td:first-child {
+    font-weight: bold;
+    color: #666;
+    width: 60px;
+}
+
+/* Лемма */
+.Topics-table td:nth-child(2) {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+/* Частота */
+.Topics-table td:nth-child(3) {
+    font-weight: bold;
+    color: #e74c3c;
+    text-align: center;
+}
+
+/* Страницы и сайты */
+.Topics-table td:nth-child(4),
+.Topics-table td:nth-child(5) {
+    text-align: center;
+    color: #3498db;
+}
+
+/* Среднее значение */
+.Topics-table td:nth-child(6) {
+    text-align: center;
+    color: #27ae60;
+    font-size: 13px;
+}
+
+/* Заголовок таблицы */
+.Topics-table th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 10;
+}
+
+/* Контейнер таблицы с прокруткой */
+.Topics-tableContainer {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Фильтры */
+.Topics-filter {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.Topics-filter .form-group_row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.Topics-filter .form-selectWrap {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Статистика тем */
+.Statistics_topics {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Кнопки экспорта */
+.Topics-export {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+/* Загрузка */
+.Topics-loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* Сообщение об отсутствии данных */
+.Topics-emptyRow td {
+    text-align: center;
+    padding: 40px !important;
+    color: #999;
+    font-style: italic;
+}
+
+/* График */
+.Topics-chart {
+    height: 300px;
+    margin: 20px 0;
+    position: relative;
+}
+
+/* Легенда */
+.Topics-legend {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.Topics-legend li {
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.Topics-legend li:last-child {
+    border-bottom: none;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .Topics-filter .form-group_row {
+        flex-direction: column;
+    }
+
+    .Topics-filter .form-selectWrap {
+        width: 100%;
+    }
+
+    .Topics-tableContainer {
+        font-size: 12px;
+    }
+
+    .Topics-table th,
+    .Topics-table td {
+        padding: 8px 10px;
+    }
+
+    .Topics-export {
+        flex-direction: column;
+    }
+}
+
+/* Цветовые коды для рейтингов */
+.rank-1 { background-color: #fff9e6; }
+.rank-2 { background-color: #fff3cc; }
+.rank-3 { background-color: #ffedb3; }
+
+/* Анимация загрузки */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.Topics-loading {
+    animation: pulse 1.5s infinite;
+}

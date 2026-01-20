@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- ... существующие изменения ... -->
+
+    <changeSet id="1" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="site"/>
+            </not>
+        </preConditions>
+        <createTable tableName="site">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_error" type="TEXT"/>
+            <column name="url" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание таблицы Lemma -->
+    <changeSet id="2" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="lemma"/>
+            </not>
+        </preConditions>
+        <createTable tableName="lemma">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="site_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_lemma_site" references="site(id)"/>
+            </column>
+            <column name="lemma" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="frequency" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="lemma" columnNames="lemma, site_id" constraintName="uc_lemma_site"/>
+    </changeSet>
+
+    <!-- Создание таблицы Page -->
+    <changeSet id="3" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="page"/>
+            </not>
+        </preConditions>
+        <createTable tableName="page">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="site_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_page_site" references="site(id)"/>
+            </column>
+            <column name="path" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="page" indexName="idx_path">
+            <column name="path"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- Создание таблицы SearchIndex -->
+    <changeSet id="4" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="search_index"/>
+            </not>
+        </preConditions>
+        <createTable tableName="search_index">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="page_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_searchindex_page" references="page(id)"/>
+            </column>
+            <column name="lemma_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_searchindex_lemma" references="lemma(id)"/>
+            </column>
+            <column name="ranking" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание таблицы Topic -->
+    <changeSet id="5" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="topic"/>
+            </not>
+        </preConditions>
+        <createTable tableName="topic">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="page_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_topic_page" references="page(id)"/>
+            </column>
+            <column name="site_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_topic_site" references="site(id)"/>
+            </column>
+            <column name="title" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_num" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lemma_count" type="INT" defaultValue="0">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Индексы для таблицы topic -->
+        <createIndex tableName="topic" indexName="idx_topic_site_id">
+            <column name="site_id"/>
+        </createIndex>
+
+        <createIndex tableName="topic" indexName="idx_topic_page_id_order">
+            <column name="page_id"/>
+            <column name="order_num"/>
+        </createIndex>
+
+        <createIndex tableName="topic" indexName="idx_topic_lemma_count">
+            <column name="lemma_count" descending="true"/>
+        </createIndex>
+
+        <comment>Создание таблицы topic для хранения извлеченных тем/разделов с веб-страниц</comment>
+    </changeSet>
+
+    <!-- Добавление поля topic_count в таблицу page (опционально, для статистики) -->
+    <changeSet id="6" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="page"/>
+            <not>
+                <columnExists tableName="page" columnName="topic_count"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="page">
+            <column name="topic_count" type="INT" defaultValue="0">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <comment>Добавление счетчика тем в таблицу page для быстрого доступа к статистике</comment>
+    </changeSet>
+
+    <!-- Создание таблицы для связи тем с леммами (опционально, для улучшенного поиска) -->
+    <changeSet id="7" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="topic_lemma"/>
+            </not>
+        </preConditions>
+        <createTable tableName="topic_lemma">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="topic_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_topiclemma_topic" references="topic(id)"/>
+            </column>
+            <column name="lemma_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_topiclemma_lemma" references="lemma(id)"/>
+            </column>
+            <column name="frequency" type="INT" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="topic_lemma" indexName="idx_topiclemma_topic">
+            <column name="topic_id"/>
+        </createIndex>
+
+        <createIndex tableName="topic_lemma" indexName="idx_topiclemma_lemma">
+            <column name="lemma_id"/>
+        </createIndex>
+
+        <addUniqueConstraint
+                tableName="topic_lemma"
+                columnNames="topic_id, lemma_id"
+                constraintName="uc_topiclemma_unique"/>
+
+        <comment>Создание таблицы для связи тем с леммами для улучшенного поиска по темам</comment>
+    </changeSet>
+
+    <changeSet id="8" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="topic_group"/>
+            </not>
+        </preConditions>
+        <createTable tableName="topic_group">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_summary" type="TEXT"/>
+            <column name="frequency" type="INT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="site_count" type="INT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="topic_group" indexName="idx_topicgroup_frequency">
+            <column name="frequency" descending="true"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="9" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="topic"/>
+            <not>
+                <columnExists tableName="topic" columnName="topic_group_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="topic">
+            <column name="topic_group_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_topic_topicgroup"
+                             referencedTableName="topic_group" referencedColumnNames="id"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="10" author="developer">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="topic_group_key_lemmas"/>
+            </not>
+        </preConditions>
+        <createTable tableName="topic_group_key_lemmas">
+            <column name="topic_group_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_topicgrouplemmas_group"
+                             referencedTableName="topic_group" referencedColumnNames="id"/>
+            </column>
+            <column name="lemma" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="topic_group_key_lemmas" indexName="idx_topicgrouplemmas_lemma">
+            <column name="lemma"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

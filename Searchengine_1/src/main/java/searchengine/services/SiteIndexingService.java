@@ -14,6 +14,7 @@ import searchengine.config.IndexingSettings;
 import searchengine.dto.response.IndexingResponse;
 import searchengine.model.*;
 import searchengine.repository.SiteRepository;
+import searchengine.repository.TopicRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -46,6 +47,8 @@ public class SiteIndexingService {
     private static final int MAX_RETRIES = 3;
     private static final int TIMEOUT = 10000;
     private final AtomicBoolean stopRequested = new AtomicBoolean(false);
+    private final TopicExtractorService topicExtractorService; // ДОБАВЛЕНО
+    private final TopicRepository topicRepository; // ДОБАВЛЕНО
 
     public ResponseEntity<Map<String, Object>> startIndexing() {
         try {
@@ -326,10 +329,17 @@ public class SiteIndexingService {
 
         Page page = createPage(site, url, document);
         String content = document.body().text();
+        String htmlContent = document.outerHtml(); // ДОБАВЛЕНО для извлечения тем
 
-        Map<String, Integer> lemmaMap = lemmatizer.extractLemmasWithRank(content);
+
+        // Сохраняем страницу
         databaseService.savePage(page);
 
+        // ИЗВЛЕКАЕМ И СОХРАНЯЕМ ТЕМЫ
+        extractAndSaveTopics(page, htmlContent);
+
+        // Сохраняем леммы (существующий код)
+        Map<String, Integer> lemmaMap = lemmatizer.extractLemmasWithRank(content);
         lemmaMap.forEach((lemmaText, rank) -> {
             if (stopRequested.get()) return;
             Lemma savedLemma = databaseService.saveLemma(lemmaText, site);
@@ -337,14 +347,56 @@ public class SiteIndexingService {
                 saveSearchIndex(page, savedLemma, rank);
             }
         });
+
+        logger.debug("Страница {} проиндексирована с {} темами", url, page.getTopics().size());
+    }
+    private void extractAndSaveTopics(Page page, String htmlContent) {
+        try {
+            // Удаляем старые темы для этой страницы
+            topicRepository.deleteByPageId(page.getId());
+
+            // Извлекаем новые темы
+            List<Topic> topics = topicExtractorService.extractTopics(page, htmlContent);
+
+            if (!topics.isEmpty()) {
+                // Сохраняем темы
+                for (Topic topic : topics) {
+                    topic.setPage(page);
+                    topic.setSite(page.getSite());
+                    topic.setLemmaCount(calculateLemmaCount(topic.getContent()));
+                    topicRepository.save(topic);
+                }
+
+                // Обновляем счетчик тем на странице
+                page.setTopicCount(topics.size());
+                databaseService.savePage(page);
+
+                logger.debug("Извлечено {} тем для страницы {}", topics.size(), page.getPath());
+            }
+        } catch (Exception e) {
+            logger.error("Ошибка при извлечении тем для страницы {}: {}",
+                    page.getPath(), e.getMessage());
+            // Не прерываем процесс индексации из-за ошибки извлечения тем
+        }
     }
 
+    // Метод для подсчета лемм в теме
+    private int calculateLemmaCount(String content) {
+        if (content == null || content.trim().isEmpty()) {
+            return 0;
+        }
+        Map<String, Integer> lemmas = lemmatizer.extractLemmasWithRank(content);
+        return lemmas.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    // Обновляем метод createPage для инициализации списка тем
     private Page createPage(Site site, String url, Document document) {
         Page page = new Page();
         page.setSite(site);
         page.setPath(url.replace(site.getUrl(), ""));
         page.setCode(document.connection().response().statusCode());
         page.setContent(document.outerHtml());
+        page.setTopicCount(0); // Инициализируем счетчик
         return page;
     }
 

@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.persistence.Index;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,5 +40,18 @@ public class Page {
     }
 
     public void setUrl(String url) {
+    }
+    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Topic> topics = new ArrayList<>();
+
+    @Column(name = "topic_count")
+    private Integer topicCount = 0;
+
+    // Добавьте метод для добавления темы
+    public void addTopic(Topic topic) {
+        topics.add(topic);
+        topic.setPage(this);
+        topic.setSite(this.getSite());
+        topicCount = topics.size();
     }
 }

@@ -17,4 +17,5 @@ public interface PageRepository extends JpaRepository<Page, Long> {
 
     @Query("SELECT p FROM Page p WHERE p.site.id = :siteId AND p.path = :path")
     Optional<Page> findBySiteAndPath(@Param("siteId") int siteId, @Param("path") String path);
+
 }
