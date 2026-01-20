@@ -17,12 +17,11 @@ public class IndexingSettings {
     private String userAgent;
     private String referer;
 
-
     @Getter
     @Setter
     public static class Site {
-        private String url; // URL сайта
-        private String name; // Название сайта
+        private String url;
+        private String name;
     }
     public List<SiteConfig> getSites() {
         return sites;

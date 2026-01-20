@@ -12,7 +12,6 @@ import searchengine.services.StatisticsService;
 @RequestMapping("/api")
 public class StatisticsController {
     private final StatisticsService statisticsService;
-
     @GetMapping("/statistics")
     public StatisticsResponse getStatistics() {
         return statisticsService.getStatistics();
