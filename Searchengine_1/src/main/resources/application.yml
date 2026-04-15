@@ -71,16 +71,70 @@ scientific:
   sources:
     scopus:
       api-key: ${SCOPUS_API_KEY:"58851ba253d4cc247cdd64fbcf8c4bcc"}
-      base-url: https://api.elsevier.com/content/search/scopus
+      base-url: https://api.elsevier.com
       max-results: 100
-    #wos:
-     # api-key: ${WOS_API_KEY:your_wos_api_key_here}
+      #wos:
+      # api-key: ${WOS_API_KEY:your_wos_api_key_here}
       #base-url: https://api.clarivate.com/api/wos
       #max-results: 100
-    #elibrary:
+      #elibrary:
       #api-key: ${ELIBRARY_API_KEY:your_elibrary_api_key_here}
       #base-url: https://elibrary.ru/query_api.asp
       #max-results: 100
+    # Темы для автоматического поиска статей по семеноводству и селекции
+    seed-breeding-topics:
+      # Ключевые слова на английском языке для поиска в Scopus
+      keywords-en:
+        - seed breeding
+        - plant breeding
+        - crop improvement
+        - seed production
+        - seed quality
+        - germination
+        - hybrid seeds
+        - seed treatment
+        - molecular breeding
+        - genetic improvement
+        - seed technology
+        - plant genetics
+        - seed storage
+        - seed certification
+        - conventional breeding
+      # Ключевые слова на русском языке для поиска в eLibrary
+      keywords-ru:
+        - семеноводство
+        - селекция растений
+        - производство семян
+        - качество семян
+        - всхожесть семян
+        - гибридные семена
+        - обработка семян
+        - молекулярная селекция
+        - генетическое улучшение
+        - технология семян
+        - генетика растений
+        - хранение семян
+        - сертификация семян
+        - традиционная селекция
+      # Предопределённые поисковые запросы для Scopus (автоматический поиск)
+      search-queries-en:
+        - "seed breeding AND genetics"
+        - "plant breeding AND seed production"
+        - "crop improvement AND seed technology"
+        - "seed quality AND germination"
+        - "hybrid seed production"
+        - "seed treatment AND protection"
+        - "molecular breeding AND seeds"
+        - "seed storage AND preservation"
+        - "seed certification AND standards"
+        - "conventional breeding AND modern varieties"
+      # Предопределённые поисковые запросы для eLibrary (автоматический поиск)
+      search-queries-ru:
+        - "семеноводство И селекция"
+        - "производство семян И качество"
+        - "селекция растений И генетика"
+        - "гибридные семена И технология"
+        - "хранение семян И сохранность"
 
 # Настройки для извлечения технологий
 technology-extraction:

@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Контроллер для работы с научными статьями и экспорта результатов
+ * Автоматический поиск статей по темам семеноводства и селекции из Scopus
  */
 @Slf4j
 @RestController
@@ -36,7 +37,21 @@ public class ScientificArticlesController {
     }
 
     /**
-     * Поиск статей в Scopus и извлечение технологий
+     * Автоматический поиск статей по темам семеноводства и селекции в Scopus
+     * Использует предопределённые поисковые запросы из конфигурации
+     * @return Список статей с выявленными технологиями, темами, ключевыми словами и аннотациями
+     */
+    @GetMapping("/scopus/search-auto")
+    public ResponseEntity<List<ScientificArticle>> searchSeedBreedingArticles() {
+        log.info("Automatically searching Scopus articles for seed breeding topics");
+
+        List<ScientificArticle> articles = scopusApiService.searchSeedBreedingArticles();
+
+        return ResponseEntity.ok(articles);
+    }
+
+    /**
+     * Поиск статей в Scopus по пользовательскому запросу
      * @param query Поисковый запрос
      * @return Список статей с выявленными технологиями
      */
@@ -44,11 +59,65 @@ public class ScientificArticlesController {
     public ResponseEntity<List<ScientificArticle>> searchScopusArticles(
             @RequestParam String query) {
 
-        log.info("Searching Scopus articles with query: {}", query);
+        log.info("Searching Scopus articles with custom query: {}", query);
 
         List<ScientificArticle> articles = scopusApiService.searchArticles(query);
 
         return ResponseEntity.ok(articles);
+    }
+
+    /**
+     * Экспорт результатов анализа в Word файл (Темы + технологии)
+     * Автоматический поиск по темам семеноводства и селекции
+     * @return Word документ
+     */
+    @GetMapping("/scopus/export-topics-auto")
+    public ResponseEntity<byte[]> exportTopicsFileAuto() {
+        log.info("Exporting topics file for seed breeding topics automatically");
+
+        List<ScientificArticle> articles = scopusApiService.searchSeedBreedingArticles();
+
+        if (articles.isEmpty()) {
+            return ResponseEntity.badRequest().body("No articles found".getBytes());
+        }
+
+        byte[] documentBytes = wordExportService.createTechnologiesAndTopicsFile(articles);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "topics_technologies.docx");
+        headers.setContentLength(documentBytes.length);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(documentBytes);
+    }
+
+    /**
+     * Экспорт результатов анализа в Word файл (Аннотации + ключевые слова + технологии)
+     * Автоматический поиск по темам семеноводства и селекции
+     * @return Word документ
+     */
+    @GetMapping("/scopus/export-abstracts-auto")
+    public ResponseEntity<byte[]> exportAbstractsFileAuto() {
+        log.info("Exporting abstracts file for seed breeding topics automatically");
+
+        List<ScientificArticle> articles = scopusApiService.searchSeedBreedingArticles();
+
+        if (articles.isEmpty()) {
+            return ResponseEntity.badRequest().body("No articles found".getBytes());
+        }
+
+        byte[] documentBytes = wordExportService.createAbstractsKeywordsFile(articles);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "abstracts_keywords_technologies.docx");
+        headers.setContentLength(documentBytes.length);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(documentBytes);
     }
 
     /**

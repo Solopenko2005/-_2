@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Конфигурация для подключения к внешним API
  */
@@ -27,6 +29,11 @@ public class ScientificSourcesConfig {
      */
     private ElibraryConfig elibrary = new ElibraryConfig();
 
+    /**
+     * Темы для поиска статей по семеноводству и селекции
+     */
+    private SeedBreedingTopics seedBreedingTopics = new SeedBreedingTopics();
+
     @Data
     public static class ScopusConfig {
         private String apiKey;
@@ -46,5 +53,31 @@ public class ScientificSourcesConfig {
         private String apiKey;
         private String baseUrl = "https://elibrary.ru/query_api.asp";
         private int maxResults = 100;
+    }
+
+    /**
+     * Конфигурация тем для поиска статей по семеноводству и селекции
+     */
+    @Data
+    public static class SeedBreedingTopics {
+        /**
+         * Ключевые слова на английском языке для поиска в Scopus
+         */
+        private List<String> keywordsEn;
+
+        /**
+         * Ключевые слова на русском языке для поиска в eLibrary
+         */
+        private List<String> keywordsRu;
+
+        /**
+         * Предопределённые поисковые запросы для Scopus
+         */
+        private List<String> searchQueriesEn;
+
+        /**
+         * Предопределённые поисковые запросы для eLibrary
+         */
+        private List<String> searchQueriesRu;
     }
 }
