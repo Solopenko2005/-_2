@@ -1,70 +1,40 @@
 package searchengine.model.scopus;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * Модель статьи из научной базы данных (Scopus, WoS, eLibrary)
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScientificArticle {
 
-    /**
-     * Уникальный идентификатор статьи в источнике
-     */
-    private String sourceId;
+    // Базовые идентификаторы
+    private String sourceId;           // dc:identifier
+    private String sourceName;         // "SCOPUS"
+    private String doi;                // prism:doi
 
-    /**
-     * Название источника (SCOPUS, WOS, ELIBRARY)
-     */
-    private String sourceName;
+    // Метаданные статьи
+    private String title;              // dc:title
+    private String abstractText;       // dc:description
+    private List<String> keywords;     // authkeywords
+    private String language;           // language
+    private Integer publicationYear;   // из prism:coverDate
+    private List<String> authors;      // author
 
-    /**
-     * Заголовок/тема статьи
-     */
-    private String title;
+    // Информация о публикации
+    private String publicationName;    // prism:publicationName
+    private String publisher;          // dc:publisher
+    private String documentType;       // subtypeDescription
+    private String openAccess;         // openaccess
+    private Integer citedByCount;      // citedby-count
+    private String link;               // link/href
 
-    /**
-     * Аннотация статьи
-     */
-    private String abstractText;
-
-    /**
-     * Ключевые слова статьи
-     */
-    private List<String> keywords;
-
-    /**
-     * Извлеченные технологии с частотой упоминания
-     * Ключ - название технологии, Значение - количество упоминаний
-     */
+    // Извлеченные технологии
     private Map<String, Integer> extractedTechnologies;
-
-    /**
-     * Язык статьи (en, ru)
-     */
-    private String language;
-
-    /**
-     * Год публикации
-     */
-    private Integer publicationYear;
-
-    /**
-     * Авторы статьи
-     */
-    private List<String> authors;
-
-    /**
-     * DOI статьи
-     */
-    private String doi;
 }
