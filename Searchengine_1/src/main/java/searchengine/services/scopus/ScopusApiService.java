@@ -33,10 +33,16 @@ public class ScopusApiService {
             TechnologyExtractionService extractionService) {
         this.config = config;
         this.extractionService = extractionService;
+
+        String apiKey = config.getScopus().getApiKey();
+        log.info("Initializing Scopus WebClient with base URL: {} and API key (first 8 chars): {}",
+                config.getScopus().getBaseUrl(),
+                apiKey != null && !apiKey.isBlank() ? apiKey.substring(0, Math.min(8, apiKey.length())) : "MISSING");
+
         this.webClient = WebClient.builder()
                 .baseUrl(config.getScopus().getBaseUrl())
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader("X-ELS-APIKey", config.getScopus().getApiKey())
+                .defaultHeader("X-ELS-APIKey", apiKey != null ? apiKey : "")
                 .build();
         this.objectMapper = new ObjectMapper();
     }
@@ -90,7 +96,11 @@ public class ScopusApiService {
             return Collections.emptyList();
         }
 
+        log.info("Using API key (first 8 chars): {}", apiKey.substring(0, Math.min(8, apiKey.length())));
+        log.info("Base URL from config: {}", config.getScopus().getBaseUrl());
+
         try {
+            // Scopus API требует только заголовок X-ELS-APIKey
             String response = webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/content/search/scopus")
@@ -98,6 +108,7 @@ public class ScopusApiService {
                             .queryParam("count", config.getScopus().getMaxResults())
                             .queryParam("start", 0)
                             .build())
+                    .header("X-ELS-APIKey", apiKey)
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
