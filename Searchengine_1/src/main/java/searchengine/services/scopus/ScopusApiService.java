@@ -85,7 +85,7 @@ public class ScopusApiService {
         log.info("Searching Scopus articles with query: {}", query);
 
         String apiKey = config.getScopus().getApiKey();
-        if (apiKey == null || apiKey.equals("your_scopus_api_key_here")) {
+        if (apiKey == null || apiKey.equals("58851ba253d4cc247cdd64fbcf8c4bcc") || apiKey.isBlank()) {
             log.error("Scopus API key is not configured. Please set SCOPUS_API_KEY environment variable.");
             return Collections.emptyList();
         }

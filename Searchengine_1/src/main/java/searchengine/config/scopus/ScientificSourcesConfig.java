@@ -37,7 +37,7 @@ public class ScientificSourcesConfig {
     @Data
     public static class ScopusConfig {
         private String apiKey;
-        private String baseUrl = "https://api.elsevier.com/content/search/scopus";
+        private String baseUrl = "https://api.elsevier.com";
         private int maxResults = 100;
     }
 
