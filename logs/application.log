@@ -1,850 +1,968 @@
-2026-01-19 23:40:11 - Starting Application using Java 17.0.17 on DESKTOP-STM7KQV with PID 14716 (C:\Users\User\IdeaProjects\-_2\Searchengine_1\target\classes started by User in C:\Users\User\IdeaProjects\-_2)
-2026-01-19 23:40:11 - No active profile set, falling back to 1 default profile: "default"
-2026-01-19 23:40:12 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-01-19 23:40:12 - Finished Spring Data repository scanning in 103 ms. Found 7 JPA repository interfaces.
-2026-01-19 23:40:13 - Tomcat initialized with port(s): 8080 (http)
-2026-01-19 23:40:13 - Starting service [Tomcat]
-2026-01-19 23:40:13 - Starting Servlet engine: [Apache Tomcat/9.0.64]
-2026-01-19 23:40:13 - Initializing Spring embedded WebApplicationContext
-2026-01-19 23:40:13 - Root WebApplicationContext: initialization completed in 2152 ms
-2026-01-19 23:40:13 - Driver class org.postgresql.Driver found in Thread context class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1d44bcfa
-2026-01-19 23:40:13 - HikariPool-1 - configuration:
-2026-01-19 23:40:13 - allowPoolSuspension................................false
-2026-01-19 23:40:13 - autoCommit................................true
-2026-01-19 23:40:13 - catalog................................none
-2026-01-19 23:40:13 - connectionInitSql................................none
-2026-01-19 23:40:13 - connectionTestQuery................................none
-2026-01-19 23:40:13 - connectionTimeout................................30000
-2026-01-19 23:40:13 - dataSource................................none
-2026-01-19 23:40:13 - dataSourceClassName................................none
-2026-01-19 23:40:13 - dataSourceJNDI................................none
-2026-01-19 23:40:13 - dataSourceProperties................................{password=<masked>}
-2026-01-19 23:40:13 - driverClassName................................"org.postgresql.Driver"
-2026-01-19 23:40:13 - exceptionOverrideClassName................................none
-2026-01-19 23:40:13 - healthCheckProperties................................{}
-2026-01-19 23:40:13 - healthCheckRegistry................................none
-2026-01-19 23:40:13 - idleTimeout................................600000
-2026-01-19 23:40:13 - initializationFailTimeout................................1
-2026-01-19 23:40:13 - isolateInternalQueries................................false
-2026-01-19 23:40:13 - jdbcUrl................................jdbc:postgresql://localhost:5432/postgres
-2026-01-19 23:40:13 - keepaliveTime................................0
-2026-01-19 23:40:13 - leakDetectionThreshold................................0
-2026-01-19 23:40:13 - maxLifetime................................1800000
-2026-01-19 23:40:13 - maximumPoolSize................................10
-2026-01-19 23:40:13 - metricRegistry................................none
-2026-01-19 23:40:13 - metricsTrackerFactory................................none
-2026-01-19 23:40:13 - minimumIdle................................10
-2026-01-19 23:40:13 - password................................<masked>
-2026-01-19 23:40:13 - poolName................................"HikariPool-1"
-2026-01-19 23:40:13 - readOnly................................false
-2026-01-19 23:40:13 - registerMbeans................................false
-2026-01-19 23:40:13 - scheduledExecutor................................none
-2026-01-19 23:40:13 - schema................................none
-2026-01-19 23:40:13 - threadFactory................................internal
-2026-01-19 23:40:13 - transactionIsolation................................default
-2026-01-19 23:40:13 - username................................"postgres"
-2026-01-19 23:40:13 - validationTimeout................................5000
-2026-01-19 23:40:13 - HikariPool-1 - Starting...
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2a8b33ba
-2026-01-19 23:40:14 - HikariPool-1 - Start completed.
-2026-01-19 23:40:14 - HikariPool-1 - Pool stats (total=1, active=1, idle=0, waiting=0)
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3ca43f21
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@79a6a6d1
-2026-01-19 23:40:14 - Set default schema name to public
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@55d5fddb
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1989599e
-2026-01-19 23:40:14 - Successfully acquired change log lock
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5097d61c
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3490d927
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4ed1d14b
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1dc724a6
-2026-01-19 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@730e2634
-2026-01-19 23:40:14 - HikariPool-1 - After adding stats (total=10, active=1, idle=9, waiting=0)
-2026-01-19 23:40:15 - Reading from public.databasechangelog
-2026-01-19 23:40:15 - Successfully released change log lock
-2026-01-19 23:40:15 - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-01-19 23:40:15 - HHH000412: Hibernate ORM core version 5.6.9.Final
-2026-01-19 23:40:15 - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2026-01-19 23:40:15 - Database ->
+2026-04-14 23:40:11 - Starting Application using Java 17.0.17 on DESKTOP-STM7KQV with PID 13596 (C:\Users\User\IdeaProjects\themes\Searchengine_1\target\classes started by User in C:\Users\User\IdeaProjects\themes)
+2026-04-14 23:40:11 - No active profile set, falling back to 1 default profile: "default"
+2026-04-14 23:40:12 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-14 23:40:12 - Finished Spring Data repository scanning in 82 ms. Found 7 JPA repository interfaces.
+2026-04-14 23:40:13 - Tomcat initialized with port(s): 8080 (http)
+2026-04-14 23:40:13 - Starting service [Tomcat]
+2026-04-14 23:40:13 - Starting Servlet engine: [Apache Tomcat/9.0.64]
+2026-04-14 23:40:13 - Initializing Spring embedded WebApplicationContext
+2026-04-14 23:40:13 - Root WebApplicationContext: initialization completed in 2022 ms
+2026-04-14 23:40:13 - Driver class org.postgresql.Driver found in Thread context class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1d44bcfa
+2026-04-14 23:40:13 - HikariPool-1 - configuration:
+2026-04-14 23:40:13 - allowPoolSuspension................................false
+2026-04-14 23:40:13 - autoCommit................................true
+2026-04-14 23:40:13 - catalog................................none
+2026-04-14 23:40:13 - connectionInitSql................................none
+2026-04-14 23:40:13 - connectionTestQuery................................none
+2026-04-14 23:40:13 - connectionTimeout................................30000
+2026-04-14 23:40:13 - dataSource................................none
+2026-04-14 23:40:13 - dataSourceClassName................................none
+2026-04-14 23:40:13 - dataSourceJNDI................................none
+2026-04-14 23:40:13 - dataSourceProperties................................{password=<masked>}
+2026-04-14 23:40:13 - driverClassName................................"org.postgresql.Driver"
+2026-04-14 23:40:13 - exceptionOverrideClassName................................none
+2026-04-14 23:40:13 - healthCheckProperties................................{}
+2026-04-14 23:40:13 - healthCheckRegistry................................none
+2026-04-14 23:40:13 - idleTimeout................................600000
+2026-04-14 23:40:13 - initializationFailTimeout................................1
+2026-04-14 23:40:13 - isolateInternalQueries................................false
+2026-04-14 23:40:13 - jdbcUrl................................jdbc:postgresql://localhost:5432/postgres
+2026-04-14 23:40:13 - keepaliveTime................................0
+2026-04-14 23:40:13 - leakDetectionThreshold................................0
+2026-04-14 23:40:13 - maxLifetime................................1800000
+2026-04-14 23:40:13 - maximumPoolSize................................10
+2026-04-14 23:40:13 - metricRegistry................................none
+2026-04-14 23:40:13 - metricsTrackerFactory................................none
+2026-04-14 23:40:13 - minimumIdle................................10
+2026-04-14 23:40:13 - password................................<masked>
+2026-04-14 23:40:13 - poolName................................"HikariPool-1"
+2026-04-14 23:40:13 - readOnly................................false
+2026-04-14 23:40:13 - registerMbeans................................false
+2026-04-14 23:40:13 - scheduledExecutor................................none
+2026-04-14 23:40:13 - schema................................none
+2026-04-14 23:40:13 - threadFactory................................internal
+2026-04-14 23:40:13 - transactionIsolation................................default
+2026-04-14 23:40:13 - username................................"postgres"
+2026-04-14 23:40:13 - validationTimeout................................5000
+2026-04-14 23:40:13 - HikariPool-1 - Starting...
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@77724cbe
+2026-04-14 23:40:14 - HikariPool-1 - Start completed.
+2026-04-14 23:40:14 - HikariPool-1 - Pool stats (total=1, active=1, idle=0, waiting=0)
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6b6cc5e2
+2026-04-14 23:40:14 - Set default schema name to public
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2e6e46eb
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1244ec19
+2026-04-14 23:40:14 - Successfully acquired change log lock
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4e41b9a4
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@70594b2b
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3cd100fe
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@9400759
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4a0f034c
+2026-04-14 23:40:14 - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@70351935
+2026-04-14 23:40:14 - HikariPool-1 - After adding stats (total=10, active=1, idle=9, waiting=0)
+2026-04-14 23:40:15 - Reading from public.databasechangelog
+2026-04-14 23:40:15 - Successfully released change log lock
+2026-04-14 23:40:15 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-14 23:40:15 - HHH000412: Hibernate ORM core version 5.6.9.Final
+2026-04-14 23:40:15 - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-04-14 23:40:15 - Database ->
        name : PostgreSQL
     version : 18.1
       major : 18
       minor : 1
-2026-01-19 23:40:15 - Driver ->
+2026-04-14 23:40:15 - Driver ->
        name : PostgreSQL JDBC Driver
     version : 42.3.6
       major : 42
       minor : 3
-2026-01-19 23:40:15 - JDBC version : 4.2
-2026-01-19 23:40:15 - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
-2026-01-19 23:40:15 - JDBC driver metadata reported database stores quoted identifiers in neither upper, lower nor mixed case
-2026-01-19 23:40:15 - Normalizing identifier quoting [postgres]
-2026-01-19 23:40:15 - Normalizing identifier quoting [public]
-2026-01-19 23:40:15 - Normalizing identifier quoting [DTYPE]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [frequency]
-2026-01-19 23:40:15 - Normalizing identifier quoting [frequency]
-2026-01-19 23:40:15 - Normalizing identifier quoting [frequency]
-2026-01-19 23:40:15 - Normalizing identifier quoting [frequency]
-2026-01-19 23:40:15 - Normalizing identifier quoting [frequency]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [searchIndexes]
-2026-01-19 23:40:15 - Normalizing identifier quoting [searchIndexes]
-2026-01-19 23:40:15 - Normalizing identifier quoting [element]
-2026-01-19 23:40:15 - Normalizing identifier quoting [element]
-2026-01-19 23:40:15 - Normalizing identifier quoting [searchIndexes_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [searchIndexes_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site]
-2026-01-19 23:40:15 - Normalizing identifier quoting [DTYPE]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [code]
-2026-01-19 23:40:15 - Normalizing identifier quoting [code]
-2026-01-19 23:40:15 - Normalizing identifier quoting [code]
-2026-01-19 23:40:15 - Normalizing identifier quoting [code]
-2026-01-19 23:40:15 - Normalizing identifier quoting [code]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content]
-2026-01-19 23:40:15 - Normalizing identifier quoting [path]
-2026-01-19 23:40:15 - Normalizing identifier quoting [path]
-2026-01-19 23:40:15 - Normalizing identifier quoting [path]
-2026-01-19 23:40:15 - Normalizing identifier quoting [path]
-2026-01-19 23:40:15 - Normalizing identifier quoting [path]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_count]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_count]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_count]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topics]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topics]
-2026-01-19 23:40:15 - Normalizing identifier quoting [element]
-2026-01-19 23:40:15 - Normalizing identifier quoting [element]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topics_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topics_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [DTYPE]
-2026-01-19 23:40:15 - Normalizing identifier quoting [search_index]
-2026-01-19 23:40:15 - Normalizing identifier quoting [search_index]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page]
-2026-01-19 23:40:15 - Normalizing identifier quoting [ranking]
-2026-01-19 23:40:15 - Normalizing identifier quoting [ranking]
-2026-01-19 23:40:15 - Normalizing identifier quoting [ranking]
-2026-01-19 23:40:15 - Normalizing identifier quoting [ranking]
-2026-01-19 23:40:15 - Normalizing identifier quoting [ranking]
-2026-01-19 23:40:15 - Normalizing identifier quoting [DTYPE]
-2026-01-19 23:40:15 - Normalizing identifier quoting [Site]
-2026-01-19 23:40:15 - Normalizing identifier quoting [Site]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lastError]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lastError]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lastError]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lastError]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lastError]
-2026-01-19 23:40:15 - Normalizing identifier quoting [name]
-2026-01-19 23:40:15 - Normalizing identifier quoting [name]
-2026-01-19 23:40:15 - Normalizing identifier quoting [name]
-2026-01-19 23:40:15 - Normalizing identifier quoting [name]
-2026-01-19 23:40:15 - Normalizing identifier quoting [name]
-2026-01-19 23:40:15 - Normalizing identifier quoting [pages]
-2026-01-19 23:40:15 - Normalizing identifier quoting [pages]
-2026-01-19 23:40:15 - Normalizing identifier quoting [element]
-2026-01-19 23:40:15 - Normalizing identifier quoting [element]
-2026-01-19 23:40:15 - Normalizing identifier quoting [pages_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [pages_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [status]
-2026-01-19 23:40:15 - Normalizing identifier quoting [status]
-2026-01-19 23:40:15 - Normalizing identifier quoting [status]
-2026-01-19 23:40:15 - Normalizing identifier quoting [status]
-2026-01-19 23:40:15 - Normalizing identifier quoting [status]
-2026-01-19 23:40:15 - Normalizing identifier quoting [statusTime]
-2026-01-19 23:40:15 - Normalizing identifier quoting [statusTime]
-2026-01-19 23:40:15 - Normalizing identifier quoting [statusTime]
-2026-01-19 23:40:15 - Normalizing identifier quoting [statusTime]
-2026-01-19 23:40:15 - Normalizing identifier quoting [statusTime]
-2026-01-19 23:40:15 - Normalizing identifier quoting [url]
-2026-01-19 23:40:15 - Normalizing identifier quoting [url]
-2026-01-19 23:40:15 - Normalizing identifier quoting [url]
-2026-01-19 23:40:15 - Normalizing identifier quoting [url]
-2026-01-19 23:40:15 - Normalizing identifier quoting [url]
-2026-01-19 23:40:15 - Normalizing identifier quoting [DTYPE]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content]
-2026-01-19 23:40:15 - Normalizing identifier quoting [created_at]
-2026-01-19 23:40:15 - Normalizing identifier quoting [created_at]
-2026-01-19 23:40:15 - Normalizing identifier quoting [created_at]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma_count]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma_count]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma_count]
-2026-01-19 23:40:15 - Normalizing identifier quoting [order_num]
-2026-01-19 23:40:15 - Normalizing identifier quoting [order_num]
-2026-01-19 23:40:15 - Normalizing identifier quoting [order_num]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site]
-2026-01-19 23:40:15 - Normalizing identifier quoting [title]
-2026-01-19 23:40:15 - Normalizing identifier quoting [title]
-2026-01-19 23:40:15 - Normalizing identifier quoting [title]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topicGroup]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topicGroup]
-2026-01-19 23:40:15 - Normalizing identifier quoting [DTYPE]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content_summary]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content_summary]
-2026-01-19 23:40:15 - Normalizing identifier quoting [content_summary]
-2026-01-19 23:40:15 - Normalizing identifier quoting [frequency]
-2026-01-19 23:40:15 - Normalizing identifier quoting [frequency]
-2026-01-19 23:40:15 - Normalizing identifier quoting [frequency]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [keyLemmas_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [keyLemmas_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_count]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_count]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_count]
-2026-01-19 23:40:15 - Normalizing identifier quoting [title]
-2026-01-19 23:40:15 - Normalizing identifier quoting [title]
-2026-01-19 23:40:15 - Normalizing identifier quoting [title]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topics]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topics]
-2026-01-19 23:40:15 - Normalizing identifier quoting [element]
-2026-01-19 23:40:15 - Normalizing identifier quoting [element]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topics_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topics_KEY]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [null]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [null]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [null]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [null]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [null]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [null]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [null]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [null]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_key_lemmas]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_key_lemmas]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [null]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [FKj2jx0gqa4h7wg8ls0k3y221h2]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [FKn7ndggxsrpg4j41c1ak3qaemc]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [FKiqwaooudm7lmmj97li1y42l5r]
-2026-01-19 23:40:15 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:15 - Normalizing identifier quoting [FKm7pwxka586fwpcpn6jv7ajp92]
-2026-01-19 23:40:15 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:15 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [lemma]
-2026-01-19 23:40:16 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [UK7ogalxpu2t6pogbj8sbbpk0of]
-2026-01-19 23:40:16 - Normalizing identifier quoting [path]
-2026-01-19 23:40:16 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [lemma_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [page_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [site_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [topic_group_id]
-2026-01-19 23:40:16 - Normalizing identifier quoting [path]
-2026-01-19 23:40:16 - Normalizing identifier quoting [null]
-2026-01-19 23:40:16 - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2026-01-19 23:40:16 - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-01-19 23:40:16 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5c46a957]
-2026-01-19 23:40:16 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7a2ffb0b]
-2026-01-19 23:40:16 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6689bf04]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@34cb1310]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@da4c5cb]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t WHERE t.topicGroup IS NULL)
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@11678469]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3e5ed0d4]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3cf7433e]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@32b8992e]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3ef7fb04]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5b4880b3]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5ae67f05]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3fb42ec7]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4c941d19]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@751b901a]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5a20f793]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@c3c63c1]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5e75cf7a]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t JOIN t.topicGroup g WHERE g.id = :groupId)
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@684bfba9]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6f9b5f01]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6859bbd4]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t WHERE t.topicGroup.id = :groupId)
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@530a46f4]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3180131e]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@62376bdd]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t ORDER BY t.lemmaCount DESC)
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@397f925e]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6ba02f70]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2e88ad38]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t.title, COUNT(t) as frequency, COUNT(DISTINCT t.site.id) as siteCount FROM Topic t GROUP BY t.title HAVING COUNT(t) > 1 ORDER BY frequency DESC)
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@429dde4d]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7a1878d]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2b625e82]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT COUNT(t) as topicCount, COALESCE(SUM(t.lemmaCount), 0) as totalLemmas FROM Topic t WHERE t.site.id = :siteId)
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@63d14dbf]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@67521a79]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@73839f22]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@55a5eea3]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@e21d73]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t WHERE t.site.id = :siteId AND LOWER(t.title) LIKE LOWER(CONCAT('%', :query, '%')))
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@600b3bee]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@129348e8]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4db45d]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@42684d86]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@74ed7111]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t WHERE t.site.id = :siteId ORDER BY t.lemmaCount DESC)
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3314f179]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@565030b7]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@73753326]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@423d662a]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5d56c2d2]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT tg FROM TopicGroup tg ORDER BY tg.frequency DESC, tg.siteCount DESC)
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@ebbbe20]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7156f8cf]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@22349ad3]
-2026-01-19 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT tg FROM TopicGroup tg JOIN tg.keyLemmas kl WHERE kl IN :lemmas GROUP BY tg HAVING COUNT(DISTINCT kl) >= :minMatch)
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3dd27116]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@63218586]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@341c0dfc]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1fe37d27]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@535b4dbf]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@48d14ea0]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@21251e43]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@66c32e15]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6d387e9b]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@533a27f8]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7dd847a2]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@33997e07]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@639bf405]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@71c69628]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4dc16fc9]
-2026-01-19 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@27422187]
-2026-01-19 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@14b4b25e]
-2026-01-19 23:40:18 - LuceneMorphology bean успешно создан
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@cce672c]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@69c263f8]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@198a0416]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1f207142]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@742aa00a]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2be208db]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3b62c51e]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7db679]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1c618295]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4bba2704]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@39179470]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3ef04239]
-2026-01-19 23:40:18 - Unable to locate HQL query plan in cache; generating (SELECT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas)
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@178c4480]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@40da1644]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5980e29f]
-2026-01-19 23:40:18 - Unable to locate HQL query plan in cache; generating (SELECT si.ranking FROM SearchIndex si WHERE si.page = :page AND si.lemma = :lemma)
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@487bc2fe]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@58038583]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6491006]
-2026-01-19 23:40:18 - Unable to locate HQL query plan in cache; generating (SELECT DISTINCT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas AND si.page.site = :site)
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1a67bde5]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5c648e38]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6bc8d8bd]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@30259c61]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@33d08a24]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@11c40a65]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@68c3aa38]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@175c26ff]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@623bdc46]
-2026-01-19 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2df24f19]
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@c76762]
-2026-01-19 23:40:18 - Unable to locate HQL query plan in cache; generating (SELECT p FROM Page p WHERE p.site.id = :siteId AND p.path = :path)
-2026-01-19 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2db82155]
-2026-01-19 23:40:18 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-01-19 23:40:18 - Adding welcome page template: index
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@401b7226]
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1b62ad1e]
-2026-01-19 23:40:19 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7ec729be]
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4f7da3a2]
-2026-01-19 23:40:19 - Unable to locate HQL query plan in cache; generating (SELECT DISTINCT t FROM Topic t JOIN t.topicGroup g WHERE EXISTS (  SELECT 1 FROM g.keyLemmas kl   WHERE kl IN :lemmas))
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4c5e123d]
-2026-01-19 23:40:19 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@69542112]
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@35a81281]
-2026-01-19 23:40:19 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t JOIN FETCH t.site JOIN FETCH t.page WHERE t.topicGroup.id = :groupId ORDER BY t.site.name, t.createdAt DESC)
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@20e73e41]
-2026-01-19 23:40:19 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4a15d5f5]
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5319efc0]
-2026-01-19 23:40:19 - Unable to locate HQL query plan in cache; generating (SELECT g.id, g.title, COUNT(t) as topicCount, COUNT(DISTINCT t.site.id) as siteCount FROM TopicGroup g LEFT JOIN g.topics t GROUP BY g.id, g.title HAVING COUNT(t) >= :minFrequency ORDER BY siteCount DESC, topicCount DESC)
-2026-01-19 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@52c68925]
-2026-01-19 23:40:19 - Tomcat started on port(s): 8080 (http) with context path ''
-2026-01-19 23:40:19 - Started Application in 8.903 seconds (JVM running for 9.369)
-2026-01-19 23:40:30 - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-01-19 23:40:30 - Initializing Servlet 'dispatcherServlet'
-2026-01-19 23:40:30 - Completed initialization in 2 ms
-2026-01-19 23:40:30 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1a9baac2]
-2026-01-19 23:40:30 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@65aa0ff8]
-2026-01-19 23:40:30 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6c834981]
-2026-01-19 23:40:30 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@710c81c2]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1b67156a]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@18784e74]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3ab655f6]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@17b7a0ef]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@fc6661b]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@63e769dc]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@47ee1805]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@542fbf6d]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4f56e222]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7fcb7193]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@38c578d4]
-2026-01-19 23:40:31 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
-2026-01-19 23:40:31 - begin
-2026-01-19 23:40:31 - Unable to locate HQL query plan in cache; generating (select count(*) from Site x)
-2026-01-19 23:40:31 - Find: select count(*) from Site x
-2026-01-19 23:40:31 - Named parameters: {}
-2026-01-19 23:40:31 - select count(*) as col_0_0_ from site site0_
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@80504430 wrapping select count(*) as col_0_0_ from site site0_]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - committing
-2026-01-19 23:40:31 - begin
-2026-01-19 23:40:31 - Unable to locate HQL query plan in cache; generating (select count(*) from Page x)
-2026-01-19 23:40:31 - Find: select count(*) from Page x
-2026-01-19 23:40:31 - Named parameters: {}
-2026-01-19 23:40:31 - select count(*) as col_0_0_ from page page0_
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1999194962 wrapping select count(*) as col_0_0_ from page page0_]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - committing
-2026-01-19 23:40:31 - begin
-2026-01-19 23:40:31 - Unable to locate HQL query plan in cache; generating (select count(*) from Lemma x)
-2026-01-19 23:40:31 - Find: select count(*) from Lemma x
-2026-01-19 23:40:31 - Named parameters: {}
-2026-01-19 23:40:31 - select count(*) as col_0_0_ from lemma lemma0_
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1113767014 wrapping select count(*) as col_0_0_ from lemma lemma0_]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - committing
-2026-01-19 23:40:31 - Unable to locate HQL query plan in cache; generating (select generatedAlias0 from Site as generatedAlias0 where generatedAlias0.status=:param0)
-2026-01-19 23:40:31 - Find: select generatedAlias0 from Site as generatedAlias0 where generatedAlias0.status=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=INDEXED}
-2026-01-19 23:40:31 - select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_ where site0_.status=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@418630086 wrapping select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_ where site0_.status=?]
-2026-01-19 23:40:31 - binding parameter [1] as [VARCHAR] - [INDEXED]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - begin
-2026-01-19 23:40:31 - Unable to locate HQL query plan in cache; generating (select generatedAlias0 from Site as generatedAlias0)
-2026-01-19 23:40:31 - Find: select generatedAlias0 from Site as generatedAlias0
-2026-01-19 23:40:31 - Named parameters: {}
-2026-01-19 23:40:31 - select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@226264693 wrapping select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_]
-2026-01-19 23:40:31 - Resolving attributes for [searchengine.model.Site#66]
-2026-01-19 23:40:31 - Processing attribute `lastError` : value = null
-2026-01-19 23:40:31 - Attribute (`lastError`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `name` : value = Журнал Экономика сельского хозяйства России
-2026-01-19 23:40:31 - Attribute (`name`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `pages` : value = NOT NULL COLLECTION
-2026-01-19 23:40:31 - Attribute (`pages`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `status` : value = INDEXING
-2026-01-19 23:40:31 - Attribute (`status`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `statusTime` : value = 2026-01-09T15:40:19.406098
-2026-01-19 23:40:31 - Attribute (`statusTime`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `url` : value = http://esxr.ru/
-2026-01-19 23:40:31 - Attribute (`url`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Done materializing entity [searchengine.model.Site#66]
-2026-01-19 23:40:31 - Resolving attributes for [searchengine.model.Site#70]
-2026-01-19 23:40:31 - Processing attribute `lastError` : value = null
-2026-01-19 23:40:31 - Attribute (`lastError`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `name` : value = Агроинвестор
-2026-01-19 23:40:31 - Attribute (`name`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `pages` : value = NOT NULL COLLECTION
-2026-01-19 23:40:31 - Attribute (`pages`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `status` : value = INDEXING
-2026-01-19 23:40:31 - Attribute (`status`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `statusTime` : value = 2026-01-09T15:40:19.559192
-2026-01-19 23:40:31 - Attribute (`statusTime`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `url` : value = https://www.agroinvestor.ru
-2026-01-19 23:40:31 - Attribute (`url`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Done materializing entity [searchengine.model.Site#70]
-2026-01-19 23:40:31 - Resolving attributes for [searchengine.model.Site#71]
-2026-01-19 23:40:31 - Processing attribute `lastError` : value = null
-2026-01-19 23:40:31 - Attribute (`lastError`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `name` : value = АПК: Экономика и управление
-2026-01-19 23:40:31 - Attribute (`name`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `pages` : value = NOT NULL COLLECTION
-2026-01-19 23:40:31 - Attribute (`pages`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `status` : value = INDEXING
-2026-01-19 23:40:31 - Attribute (`status`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `statusTime` : value = 2026-01-09T15:40:19.414102
-2026-01-19 23:40:31 - Attribute (`statusTime`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `url` : value = http://apk-eu.ru/
-2026-01-19 23:40:31 - Attribute (`url`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Done materializing entity [searchengine.model.Site#71]
-2026-01-19 23:40:31 - Resolving attributes for [searchengine.model.Site#72]
-2026-01-19 23:40:31 - Processing attribute `lastError` : value = null
-2026-01-19 23:40:31 - Attribute (`lastError`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `name` : value = Агроинвестор
-2026-01-19 23:40:31 - Attribute (`name`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `pages` : value = NOT NULL COLLECTION
-2026-01-19 23:40:31 - Attribute (`pages`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `status` : value = INDEXING
-2026-01-19 23:40:31 - Attribute (`status`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `statusTime` : value = 2026-01-09T15:40:19.425112
-2026-01-19 23:40:31 - Attribute (`statusTime`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `url` : value = https://www.agroinvestor.ru/
-2026-01-19 23:40:31 - Attribute (`url`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Done materializing entity [searchengine.model.Site#72]
-2026-01-19 23:40:31 - Resolving attributes for [searchengine.model.Site#69]
-2026-01-19 23:40:31 - Processing attribute `lastError` : value = null
-2026-01-19 23:40:31 - Attribute (`lastError`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `name` : value = Журнал Экономика сельскохозяйственных и перерабатывающих предприятий
-2026-01-19 23:40:31 - Attribute (`name`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `pages` : value = NOT NULL COLLECTION
-2026-01-19 23:40:31 - Attribute (`pages`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `status` : value = INDEXING
-2026-01-19 23:40:31 - Attribute (`status`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `statusTime` : value = 2026-01-09T15:40:19.482102
-2026-01-19 23:40:31 - Attribute (`statusTime`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `url` : value = https://eshpp.ru/
-2026-01-19 23:40:31 - Attribute (`url`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Done materializing entity [searchengine.model.Site#69]
-2026-01-19 23:40:31 - Resolving attributes for [searchengine.model.Site#68]
-2026-01-19 23:40:31 - Processing attribute `lastError` : value = null
-2026-01-19 23:40:31 - Attribute (`lastError`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `name` : value = Ежедневное аграрное обозрение
-2026-01-19 23:40:31 - Attribute (`name`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `pages` : value = NOT NULL COLLECTION
-2026-01-19 23:40:31 - Attribute (`pages`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `status` : value = INDEXING
-2026-01-19 23:40:31 - Attribute (`status`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `statusTime` : value = 2026-01-09T15:40:19.410105
-2026-01-19 23:40:31 - Attribute (`statusTime`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `url` : value = https://agroobzor.ru/
-2026-01-19 23:40:31 - Attribute (`url`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Done materializing entity [searchengine.model.Site#68]
-2026-01-19 23:40:31 - Resolving attributes for [searchengine.model.Site#67]
-2026-01-19 23:40:31 - Processing attribute `lastError` : value = null
-2026-01-19 23:40:31 - Attribute (`lastError`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `name` : value = Журнал: Аграрная наука
-2026-01-19 23:40:31 - Attribute (`name`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `pages` : value = NOT NULL COLLECTION
-2026-01-19 23:40:31 - Attribute (`pages`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `status` : value = INDEXING
-2026-01-19 23:40:31 - Attribute (`status`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `statusTime` : value = 2026-01-09T15:40:19.418100
-2026-01-19 23:40:31 - Attribute (`statusTime`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Processing attribute `url` : value = https://www.vetpress.ru/jour
-2026-01-19 23:40:31 - Attribute (`url`)  - enhanced for lazy-loading? - false
-2026-01-19 23:40:31 - Done materializing entity [searchengine.model.Site#67]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - committing
-2026-01-19 23:40:31 - Unable to locate HQL query plan in cache; generating (select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#66}
-2026-01-19 23:40:31 - select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1621432502 wrapping select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [66]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Unable to locate HQL query plan in cache; generating (select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#66}
-2026-01-19 23:40:31 - select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@2033331929 wrapping select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [66]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Unable to locate HQL query plan in cache; generating (select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=66}
-2026-01-19 23:40:31 - select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@701024885 wrapping select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [66]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6d172aa3]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1d04b89a]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2617ba1]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#70}
-2026-01-19 23:40:31 - select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@121832663 wrapping select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [70]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#70}
-2026-01-19 23:40:31 - select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1228007526 wrapping select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [70]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=70}
-2026-01-19 23:40:31 - select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@816363980 wrapping select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [70]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#71}
-2026-01-19 23:40:31 - select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@2042097236 wrapping select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [71]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#71}
-2026-01-19 23:40:31 - select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@449030073 wrapping select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [71]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=71}
-2026-01-19 23:40:31 - select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@2049130062 wrapping select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [71]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#72}
-2026-01-19 23:40:31 - select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@307195289 wrapping select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [72]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#72}
-2026-01-19 23:40:31 - select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1215492442 wrapping select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [72]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=72}
-2026-01-19 23:40:31 - select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@56333541 wrapping select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [72]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#69}
-2026-01-19 23:40:31 - select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1959635665 wrapping select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [69]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#69}
-2026-01-19 23:40:31 - select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@835045152 wrapping select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [69]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=69}
-2026-01-19 23:40:31 - select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1631919398 wrapping select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [69]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#68}
-2026-01-19 23:40:31 - select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1392121390 wrapping select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [68]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#68}
-2026-01-19 23:40:31 - select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@612763970 wrapping select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [68]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=68}
-2026-01-19 23:40:31 - select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@20960124 wrapping select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [68]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#67}
-2026-01-19 23:40:31 - select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1928635378 wrapping select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [67]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=searchengine.model.Site#67}
-2026-01-19 23:40:31 - select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@966756559 wrapping select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [67]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Located HQL query plan in cache (select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0)
-2026-01-19 23:40:31 - Find: select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0
-2026-01-19 23:40:31 - Named parameters: {param0=67}
-2026-01-19 23:40:31 - select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?
-2026-01-19 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@1801041351 wrapping select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?]
-2026-01-19 23:40:31 - binding parameter [1] as [INTEGER] - [67]
-2026-01-19 23:40:31 - Starting after statement execution processing [ON_CLOSE]
-2026-01-19 23:40:31 - Initializing non-lazy collections
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3dddc5e9]
-2026-01-19 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3cf11939]
-2026-01-19 23:40:44 - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
-2026-01-19 23:40:44 - HikariPool-1 - Fill pool skipped, pool is at sufficient level.
-2026-01-19 23:40:46 - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-01-19 23:40:46 - Cleaning QueryPlan Cache
-2026-01-19 23:40:46 - HikariPool-1 - Shutdown initiated...
-2026-01-19 23:40:46 - HikariPool-1 - Before shutdown stats (total=10, active=0, idle=10, waiting=0)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@2a8b33ba: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@3ca43f21: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@79a6a6d1: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@55d5fddb: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@1989599e: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@5097d61c: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@3490d927: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@4ed1d14b: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@1dc724a6: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@730e2634: (connection evicted)
-2026-01-19 23:40:46 - HikariPool-1 - After shutdown stats (total=0, active=0, idle=0, waiting=0)
-2026-01-19 23:40:46 - HikariPool-1 - Shutdown completed.
+2026-04-14 23:40:15 - JDBC version : 4.2
+2026-04-14 23:40:15 - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2026-04-14 23:40:15 - JDBC driver metadata reported database stores quoted identifiers in neither upper, lower nor mixed case
+2026-04-14 23:40:15 - Normalizing identifier quoting [postgres]
+2026-04-14 23:40:15 - Normalizing identifier quoting [public]
+2026-04-14 23:40:16 - Normalizing identifier quoting [DTYPE]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [frequency]
+2026-04-14 23:40:16 - Normalizing identifier quoting [frequency]
+2026-04-14 23:40:16 - Normalizing identifier quoting [frequency]
+2026-04-14 23:40:16 - Normalizing identifier quoting [frequency]
+2026-04-14 23:40:16 - Normalizing identifier quoting [frequency]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [searchIndexes]
+2026-04-14 23:40:16 - Normalizing identifier quoting [searchIndexes]
+2026-04-14 23:40:16 - Normalizing identifier quoting [element]
+2026-04-14 23:40:16 - Normalizing identifier quoting [element]
+2026-04-14 23:40:16 - Normalizing identifier quoting [searchIndexes_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [searchIndexes_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site]
+2026-04-14 23:40:16 - Normalizing identifier quoting [DTYPE]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [code]
+2026-04-14 23:40:16 - Normalizing identifier quoting [code]
+2026-04-14 23:40:16 - Normalizing identifier quoting [code]
+2026-04-14 23:40:16 - Normalizing identifier quoting [code]
+2026-04-14 23:40:16 - Normalizing identifier quoting [code]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content]
+2026-04-14 23:40:16 - Normalizing identifier quoting [path]
+2026-04-14 23:40:16 - Normalizing identifier quoting [path]
+2026-04-14 23:40:16 - Normalizing identifier quoting [path]
+2026-04-14 23:40:16 - Normalizing identifier quoting [path]
+2026-04-14 23:40:16 - Normalizing identifier quoting [path]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_count]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_count]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_count]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topics]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topics]
+2026-04-14 23:40:16 - Normalizing identifier quoting [element]
+2026-04-14 23:40:16 - Normalizing identifier quoting [element]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topics_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topics_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [DTYPE]
+2026-04-14 23:40:16 - Normalizing identifier quoting [search_index]
+2026-04-14 23:40:16 - Normalizing identifier quoting [search_index]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page]
+2026-04-14 23:40:16 - Normalizing identifier quoting [ranking]
+2026-04-14 23:40:16 - Normalizing identifier quoting [ranking]
+2026-04-14 23:40:16 - Normalizing identifier quoting [ranking]
+2026-04-14 23:40:16 - Normalizing identifier quoting [ranking]
+2026-04-14 23:40:16 - Normalizing identifier quoting [ranking]
+2026-04-14 23:40:16 - Normalizing identifier quoting [DTYPE]
+2026-04-14 23:40:16 - Normalizing identifier quoting [Site]
+2026-04-14 23:40:16 - Normalizing identifier quoting [Site]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lastError]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lastError]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lastError]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lastError]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lastError]
+2026-04-14 23:40:16 - Normalizing identifier quoting [name]
+2026-04-14 23:40:16 - Normalizing identifier quoting [name]
+2026-04-14 23:40:16 - Normalizing identifier quoting [name]
+2026-04-14 23:40:16 - Normalizing identifier quoting [name]
+2026-04-14 23:40:16 - Normalizing identifier quoting [name]
+2026-04-14 23:40:16 - Normalizing identifier quoting [pages]
+2026-04-14 23:40:16 - Normalizing identifier quoting [pages]
+2026-04-14 23:40:16 - Normalizing identifier quoting [element]
+2026-04-14 23:40:16 - Normalizing identifier quoting [element]
+2026-04-14 23:40:16 - Normalizing identifier quoting [pages_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [pages_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [status]
+2026-04-14 23:40:16 - Normalizing identifier quoting [status]
+2026-04-14 23:40:16 - Normalizing identifier quoting [status]
+2026-04-14 23:40:16 - Normalizing identifier quoting [status]
+2026-04-14 23:40:16 - Normalizing identifier quoting [status]
+2026-04-14 23:40:16 - Normalizing identifier quoting [statusTime]
+2026-04-14 23:40:16 - Normalizing identifier quoting [statusTime]
+2026-04-14 23:40:16 - Normalizing identifier quoting [statusTime]
+2026-04-14 23:40:16 - Normalizing identifier quoting [statusTime]
+2026-04-14 23:40:16 - Normalizing identifier quoting [statusTime]
+2026-04-14 23:40:16 - Normalizing identifier quoting [url]
+2026-04-14 23:40:16 - Normalizing identifier quoting [url]
+2026-04-14 23:40:16 - Normalizing identifier quoting [url]
+2026-04-14 23:40:16 - Normalizing identifier quoting [url]
+2026-04-14 23:40:16 - Normalizing identifier quoting [url]
+2026-04-14 23:40:16 - Normalizing identifier quoting [DTYPE]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content]
+2026-04-14 23:40:16 - Normalizing identifier quoting [created_at]
+2026-04-14 23:40:16 - Normalizing identifier quoting [created_at]
+2026-04-14 23:40:16 - Normalizing identifier quoting [created_at]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma_count]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma_count]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma_count]
+2026-04-14 23:40:16 - Normalizing identifier quoting [order_num]
+2026-04-14 23:40:16 - Normalizing identifier quoting [order_num]
+2026-04-14 23:40:16 - Normalizing identifier quoting [order_num]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site]
+2026-04-14 23:40:16 - Normalizing identifier quoting [title]
+2026-04-14 23:40:16 - Normalizing identifier quoting [title]
+2026-04-14 23:40:16 - Normalizing identifier quoting [title]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topicGroup]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topicGroup]
+2026-04-14 23:40:16 - Normalizing identifier quoting [DTYPE]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content_summary]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content_summary]
+2026-04-14 23:40:16 - Normalizing identifier quoting [content_summary]
+2026-04-14 23:40:16 - Normalizing identifier quoting [frequency]
+2026-04-14 23:40:16 - Normalizing identifier quoting [frequency]
+2026-04-14 23:40:16 - Normalizing identifier quoting [frequency]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [keyLemmas_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [keyLemmas_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_count]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_count]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_count]
+2026-04-14 23:40:16 - Normalizing identifier quoting [title]
+2026-04-14 23:40:16 - Normalizing identifier quoting [title]
+2026-04-14 23:40:16 - Normalizing identifier quoting [title]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topics]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topics]
+2026-04-14 23:40:16 - Normalizing identifier quoting [element]
+2026-04-14 23:40:16 - Normalizing identifier quoting [element]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topics_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topics_KEY]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_key_lemmas]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_key_lemmas]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [FKj2jx0gqa4h7wg8ls0k3y221h2]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [FKn7ndggxsrpg4j41c1ak3qaemc]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [FKiqwaooudm7lmmj97li1y42l5r]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [FKm7pwxka586fwpcpn6jv7ajp92]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [UK7ogalxpu2t6pogbj8sbbpk0of]
+2026-04-14 23:40:16 - Normalizing identifier quoting [path]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [lemma_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [page_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [site_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [topic_group_id]
+2026-04-14 23:40:16 - Normalizing identifier quoting [path]
+2026-04-14 23:40:16 - Normalizing identifier quoting [null]
+2026-04-14 23:40:16 - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-04-14 23:40:16 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-14 23:40:16 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3bd79444]
+2026-04-14 23:40:16 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4b4bc73d]
+2026-04-14 23:40:16 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@78f1d29]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@16f62062]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@220e1b7b]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t WHERE t.topicGroup IS NULL)
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@41831611]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3ec98000]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@60739eca]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@11ec2b2f]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@a70daf4]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@a7fd77f]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@49faf815]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@aca2a0b]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@62ba3045]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4936fbc6]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6a906078]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@32b8992e]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3ef7fb04]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t WHERE t.topicGroup.id = :groupId)
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5e75cf7a]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@12c30824]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7d0e43d6]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t ORDER BY t.lemmaCount DESC)
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@309d54ac]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@390978]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@561c031]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t JOIN t.topicGroup g WHERE g.id = :groupId)
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@725490dd]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7e24a2e2]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@38318d67]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t.title, COUNT(t) as frequency, COUNT(DISTINCT t.site.id) as siteCount FROM Topic t GROUP BY t.title HAVING COUNT(t) > 1 ORDER BY frequency DESC)
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@16269ff4]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6859bbd4]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4a225014]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT COUNT(t) as topicCount, COALESCE(SUM(t.lemmaCount), 0) as totalLemmas FROM Topic t WHERE t.site.id = :siteId)
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@63c66980]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@8cce9ad]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6dc5e857]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@429dde4d]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7a1878d]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t WHERE t.site.id = :siteId AND LOWER(t.title) LIKE LOWER(CONCAT('%', :query, '%')))
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@22657db1]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@58b30e3e]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@630bd5e7]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5e8a678a]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@f5b4ca6]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t WHERE t.site.id = :siteId ORDER BY t.lemmaCount DESC)
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2566247d]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@39a03ccc]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4db45d]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@981d9d2]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@ad6448e]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT tg FROM TopicGroup tg ORDER BY tg.frequency DESC, tg.siteCount DESC)
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@42684d86]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@74691677]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3314f179]
+2026-04-14 23:40:17 - Unable to locate HQL query plan in cache; generating (SELECT tg FROM TopicGroup tg JOIN tg.keyLemmas kl WHERE kl IN :lemmas GROUP BY tg HAVING COUNT(DISTINCT kl) >= :minMatch)
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@260fffec]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@743f58c3]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4d359c69]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5d56c2d2]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7e0b68e5]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6164b3a2]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@345af277]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1016b44e]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6c6c93f8]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1fe37d27]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1718de70]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1da61a29]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@47cf922d]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6e475994]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@55a2f08b]
+2026-04-14 23:40:17 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2433bcd4]
+2026-04-14 23:40:17 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@63e40188]
+2026-04-14 23:40:18 - LuceneMorphology bean успешно создан
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@30cb489a]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1c76b2fe]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@14af57c3]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@795949fb]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@75caecf7]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@62b0792]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3013e1e8]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6e5a77ef]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6e627ab8]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@f31b991]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5183131d]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@6b3da23f]
+2026-04-14 23:40:18 - Unable to locate HQL query plan in cache; generating (SELECT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas)
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@723f8990]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7a57c5d9]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@742aa00a]
+2026-04-14 23:40:18 - Unable to locate HQL query plan in cache; generating (SELECT si.ranking FROM SearchIndex si WHERE si.page = :page AND si.lemma = :lemma)
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5ed463b7]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1ae90cb9]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3b62c51e]
+2026-04-14 23:40:18 - Unable to locate HQL query plan in cache; generating (SELECT DISTINCT si.page FROM SearchIndex si WHERE si.lemma.lemma IN :lemmas AND si.page.site = :site)
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5f8a29ca]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4f93a8f6]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@492d38a2]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@395c21ee]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@141c66db]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@76876421]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@c3836b6]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5d200dce]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1a59500b]
+2026-04-14 23:40:18 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@784c74e]
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5fee3c9c]
+2026-04-14 23:40:18 - Unable to locate HQL query plan in cache; generating (SELECT p FROM Page p WHERE p.site.id = :siteId AND p.path = :path)
+2026-04-14 23:40:18 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@11a0c708]
+2026-04-14 23:40:18 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-14 23:40:18 - Adding welcome page template: index
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@79169472]
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@19f9404d]
+2026-04-14 23:40:19 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1784fcab]
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@63e4bbf9]
+2026-04-14 23:40:19 - Unable to locate HQL query plan in cache; generating (SELECT DISTINCT t FROM Topic t JOIN t.topicGroup g WHERE EXISTS (  SELECT 1 FROM g.keyLemmas kl   WHERE kl IN :lemmas))
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7c35d7d]
+2026-04-14 23:40:19 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@24ccc91b]
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@d0538b3]
+2026-04-14 23:40:19 - Unable to locate HQL query plan in cache; generating (SELECT t FROM Topic t JOIN FETCH t.site JOIN FETCH t.page WHERE t.topicGroup.id = :groupId ORDER BY t.site.name, t.createdAt DESC)
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@52a3eba3]
+2026-04-14 23:40:19 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@4f7da3a2]
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@24ea71d]
+2026-04-14 23:40:19 - Unable to locate HQL query plan in cache; generating (SELECT g.id, g.title, COUNT(t) as topicCount, COUNT(DISTINCT t.site.id) as siteCount FROM TopicGroup g LEFT JOIN g.topics t GROUP BY g.id, g.title HAVING COUNT(t) >= :minFrequency ORDER BY siteCount DESC, topicCount DESC)
+2026-04-14 23:40:19 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@130ad58d]
+2026-04-14 23:40:19 - Tomcat started on port(s): 8080 (http) with context path ''
+2026-04-14 23:40:19 - Started Application in 8.776 seconds (JVM running for 9.259)
+2026-04-14 23:40:25 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-14 23:40:25 - Initializing Servlet 'dispatcherServlet'
+2026-04-14 23:40:25 - Completed initialization in 1 ms
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@365ad62d]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@313ae85d]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7423609f]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@3739f086]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@25b6a118]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@480aa0c]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@72acf327]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@45e7f7e9]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2fe89814]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@77a1c8ea]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@32d1b5c4]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1d854ce0]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@12ee017e]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7b5187a2]
+2026-04-14 23:40:26 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:26 - begin
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7e350ecb]
+2026-04-14 23:40:26 - Unable to locate HQL query plan in cache; generating (select count(*) from Site x)
+2026-04-14 23:40:26 - Find: select count(*) from Site x
+2026-04-14 23:40:26 - Named parameters: {}
+2026-04-14 23:40:26 - select count(*) as col_0_0_ from site site0_
+2026-04-14 23:40:26 - Registering last query statement [HikariProxyPreparedStatement@1299816631 wrapping select count(*) as col_0_0_ from site site0_]
+2026-04-14 23:40:26 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:26 - Initializing non-lazy collections
+2026-04-14 23:40:26 - committing
+2026-04-14 23:40:26 - begin
+2026-04-14 23:40:26 - Unable to locate HQL query plan in cache; generating (select count(*) from Page x)
+2026-04-14 23:40:26 - Find: select count(*) from Page x
+2026-04-14 23:40:26 - Named parameters: {}
+2026-04-14 23:40:26 - select count(*) as col_0_0_ from page page0_
+2026-04-14 23:40:26 - Registering last query statement [HikariProxyPreparedStatement@1305365526 wrapping select count(*) as col_0_0_ from page page0_]
+2026-04-14 23:40:26 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:26 - Initializing non-lazy collections
+2026-04-14 23:40:26 - committing
+2026-04-14 23:40:26 - begin
+2026-04-14 23:40:26 - Unable to locate HQL query plan in cache; generating (select count(*) from Lemma x)
+2026-04-14 23:40:26 - Find: select count(*) from Lemma x
+2026-04-14 23:40:26 - Named parameters: {}
+2026-04-14 23:40:26 - select count(*) as col_0_0_ from lemma lemma0_
+2026-04-14 23:40:26 - Registering last query statement [HikariProxyPreparedStatement@686412861 wrapping select count(*) as col_0_0_ from lemma lemma0_]
+2026-04-14 23:40:26 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:26 - Initializing non-lazy collections
+2026-04-14 23:40:26 - committing
+2026-04-14 23:40:26 - Unable to locate HQL query plan in cache; generating (select generatedAlias0 from Site as generatedAlias0 where generatedAlias0.status=:param0)
+2026-04-14 23:40:26 - Find: select generatedAlias0 from Site as generatedAlias0 where generatedAlias0.status=:param0
+2026-04-14 23:40:26 - Named parameters: {param0=INDEXED}
+2026-04-14 23:40:26 - select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_ where site0_.status=?
+2026-04-14 23:40:26 - Registering last query statement [HikariProxyPreparedStatement@1816004935 wrapping select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_ where site0_.status=?]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@47038cda]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@75fcc9e7]
+2026-04-14 23:40:26 - binding parameter [1] as [VARCHAR] - [INDEXED]
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@68f25079]
+2026-04-14 23:40:26 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:26 - Initializing non-lazy collections
+2026-04-14 23:40:26 - begin
+2026-04-14 23:40:26 - Unable to locate HQL query plan in cache; generating (select generatedAlias0 from Site as generatedAlias0)
+2026-04-14 23:40:26 - Find: select generatedAlias0 from Site as generatedAlias0
+2026-04-14 23:40:26 - Named parameters: {}
+2026-04-14 23:40:26 - select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_
+2026-04-14 23:40:26 - Registering last query statement [HikariProxyPreparedStatement@584977281 wrapping select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_]
+2026-04-14 23:40:26 - Resolving attributes for [searchengine.model.Site#77]
+2026-04-14 23:40:26 - Processing attribute `lastError` : value = null
+2026-04-14 23:40:26 - Attribute (`lastError`)  - enhanced for lazy-loading? - false
+2026-04-14 23:40:26 - Processing attribute `name` : value = elibrary
+2026-04-14 23:40:26 - Attribute (`name`)  - enhanced for lazy-loading? - false
+2026-04-14 23:40:26 - Processing attribute `pages` : value = NOT NULL COLLECTION
+2026-04-14 23:40:26 - Attribute (`pages`)  - enhanced for lazy-loading? - false
+2026-04-14 23:40:26 - Processing attribute `status` : value = INDEXING
+2026-04-14 23:40:26 - Attribute (`status`)  - enhanced for lazy-loading? - false
+2026-04-14 23:40:26 - Processing attribute `statusTime` : value = 2026-04-13T23:28:53.040219
+2026-04-14 23:40:26 - Attribute (`statusTime`)  - enhanced for lazy-loading? - false
+2026-04-14 23:40:26 - Processing attribute `url` : value = https://www.elibrary.ru/defaultx.asp?
+2026-04-14 23:40:26 - Attribute (`url`)  - enhanced for lazy-loading? - false
+2026-04-14 23:40:26 - Done materializing entity [searchengine.model.Site#77]
+2026-04-14 23:40:26 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:26 - Initializing non-lazy collections
+2026-04-14 23:40:26 - committing
+2026-04-14 23:40:26 - Unable to locate HQL query plan in cache; generating (select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0)
+2026-04-14 23:40:26 - Find: select count(generatedAlias0) from Page as generatedAlias0 where generatedAlias0.site=:param0
+2026-04-14 23:40:26 - Named parameters: {param0=searchengine.model.Site#77}
+2026-04-14 23:40:26 - select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?
+2026-04-14 23:40:26 - Registering last query statement [HikariProxyPreparedStatement@2101544554 wrapping select count(page0_.id) as col_0_0_ from page page0_ where page0_.site_id=?]
+2026-04-14 23:40:26 - binding parameter [1] as [INTEGER] - [77]
+2026-04-14 23:40:26 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:26 - Initializing non-lazy collections
+2026-04-14 23:40:26 - Unable to locate HQL query plan in cache; generating (select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0)
+2026-04-14 23:40:26 - Find: select count(generatedAlias0) from Lemma as generatedAlias0 where generatedAlias0.site=:param0
+2026-04-14 23:40:26 - Named parameters: {param0=searchengine.model.Site#77}
+2026-04-14 23:40:26 - select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?
+2026-04-14 23:40:26 - Registering last query statement [HikariProxyPreparedStatement@1188706949 wrapping select count(lemma0_.id) as col_0_0_ from lemma lemma0_ where lemma0_.site_id=?]
+2026-04-14 23:40:26 - binding parameter [1] as [INTEGER] - [77]
+2026-04-14 23:40:26 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:26 - Initializing non-lazy collections
+2026-04-14 23:40:26 - Unable to locate HQL query plan in cache; generating (select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0)
+2026-04-14 23:40:26 - Find: select count(generatedAlias0) from Topic as generatedAlias0 left join generatedAlias0.site as generatedAlias1 where generatedAlias1.id=:param0
+2026-04-14 23:40:26 - Named parameters: {param0=77}
+2026-04-14 23:40:26 - select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?
+2026-04-14 23:40:26 - Registering last query statement [HikariProxyPreparedStatement@1065675960 wrapping select count(topic0_.id) as col_0_0_ from topic topic0_ left outer join site site1_ on topic0_.site_id=site1_.id where site1_.id=?]
+2026-04-14 23:40:26 - binding parameter [1] as [INTEGER] - [77]
+2026-04-14 23:40:26 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:26 - Initializing non-lazy collections
+2026-04-14 23:40:26 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@284778eb]
+2026-04-14 23:40:27 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@5f9973f0]
+2026-04-14 23:40:29 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:29 - begin
+2026-04-14 23:40:29 - committing
+2026-04-14 23:40:29 - Unable to locate HQL query plan in cache; generating (select generatedAlias0 from Site as generatedAlias0 where generatedAlias0.url=:param0)
+2026-04-14 23:40:29 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1d3b62c5]
+2026-04-14 23:40:29 - Find: select generatedAlias0 from Site as generatedAlias0 where generatedAlias0.url=:param0
+2026-04-14 23:40:29 - Named parameters: {param0=https://mjl.clarivate.com/search-results}
+2026-04-14 23:40:29 - select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_ where site0_.url=?
+2026-04-14 23:40:29 - Registering last query statement [HikariProxyPreparedStatement@1040905847 wrapping select site0_.id as id1_3_, site0_.last_error as last_err2_3_, site0_.name as name3_3_, site0_.status as status4_3_, site0_.status_time as status_t5_3_, site0_.url as url6_3_ from site site0_ where site0_.url=?]
+2026-04-14 23:40:29 - binding parameter [1] as [VARCHAR] - [https://mjl.clarivate.com/search-results]
+2026-04-14 23:40:29 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:29 - Initializing non-lazy collections
+2026-04-14 23:40:29 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@7b11a9cd]
+2026-04-14 23:40:29 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:29 - begin
+2026-04-14 23:40:29 - ID unsaved-value: 0
+2026-04-14 23:40:29 - Processing cascade ACTION_PERSIST for: searchengine.model.Site
+2026-04-14 23:40:29 - Done processing cascade ACTION_PERSIST for: searchengine.model.Site
+2026-04-14 23:40:29 - Adding an EntityIdentityInsertAction for [searchengine.model.Site] object
+2026-04-14 23:40:29 - Executing inserts before finding non-nullable transient entities for early insert: [EntityIdentityInsertAction[searchengine.model.Site#<null>]]
+2026-04-14 23:40:29 - Adding insert with no non-nullable, transient entities: [EntityIdentityInsertAction[searchengine.model.Site#<null>]]
+2026-04-14 23:40:29 - Executing insertions before resolved early-insert
+2026-04-14 23:40:29 - Executing identity-insert immediately
+2026-04-14 23:40:29 - insert into site (last_error, name, status, status_time, url) values (?, ?, ?, ?, ?)
+2026-04-14 23:40:29 - binding parameter [1] as [VARCHAR] - [null]
+2026-04-14 23:40:29 - binding parameter [2] as [VARCHAR] - [web of science]
+2026-04-14 23:40:29 - binding parameter [3] as [VARCHAR] - [INDEXING]
+2026-04-14 23:40:29 - binding parameter [4] as [TIMESTAMP] - [2026-04-14T23:40:29.666861400]
+2026-04-14 23:40:29 - binding parameter [5] as [VARCHAR] - [https://mjl.clarivate.com/search-results]
+2026-04-14 23:40:29 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:29 - Processing cascade ACTION_PERSIST for: searchengine.model.Site
+2026-04-14 23:40:29 - Done processing cascade ACTION_PERSIST for: searchengine.model.Site
+2026-04-14 23:40:29 - Сохранен сайт: https://mjl.clarivate.com/search-results
+2026-04-14 23:40:29 - committing
+2026-04-14 23:40:29 - Processing cascade ACTION_PERSIST_ON_FLUSH for: searchengine.model.Site
+2026-04-14 23:40:29 - Done processing cascade ACTION_PERSIST_ON_FLUSH for: searchengine.model.Site
+2026-04-14 23:40:29 - Collection found: [searchengine.model.Site.pages#78], was: [<unreferenced>] (initialized)
+2026-04-14 23:40:29 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:29 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@c232188]
+2026-04-14 23:40:31 - Запрос к https://mjl.clarivate.com/search-results выполнен за 845 мс
+2026-04-14 23:40:31 - On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2026-04-14 23:40:31 - begin
+2026-04-14 23:40:31 - Processing cascade ACTION_PERSIST for: searchengine.model.Page
+2026-04-14 23:40:31 - Done processing cascade ACTION_PERSIST for: searchengine.model.Page
+2026-04-14 23:40:31 - Adding an EntityIdentityInsertAction for [searchengine.model.Page] object
+2026-04-14 23:40:31 - Executing inserts before finding non-nullable transient entities for early insert: [EntityIdentityInsertAction[searchengine.model.Page#<null>]]
+2026-04-14 23:40:31 - ID unsaved-value: 0
+2026-04-14 23:40:31 - Adding insert with no non-nullable, transient entities: [EntityIdentityInsertAction[searchengine.model.Page#<null>]]
+2026-04-14 23:40:31 - Executing insertions before resolved early-insert
+2026-04-14 23:40:31 - Executing identity-insert immediately
+2026-04-14 23:40:31 - ID unsaved-value: 0
+2026-04-14 23:40:31 - insert into page (code, content, path, site_id, topic_count) values (?, ?, ?, ?, ?)
+2026-04-14 23:40:31 - binding parameter [1] as [INTEGER] - [200]
+2026-04-14 23:40:31 - binding parameter [2] as [VARCHAR] - [<!doctype html>
+<html lang="en">
+ <head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" type="image/x-icon" href="/mjl/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/mjl/assets/favicon.png">
+  <link rel="preconnect" href="https://cdn.digital-experience.clarivate.io" crossorigin="">
+  <link rel="canonical" href="">
+  <meta name="description" content="">
+  <meta name="author" content="Web of Science Group, a Clarivate company">
+  <script type="text/javascript" async src="https://play.vidyard.com/embed/v4.js"></script>
+  <title>Web of Science Master Journal List - WoS MJL by Clarivate</title>
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What Is Master Journal List?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Master Journal List is an invaluable tool to help you to find the right journal for your needs across multiple indices hosted on the Web of Science platform. Spanning all disciplines and regions, Web of Science Core Collection is at the heart of the Web of Science platform. Curated with care by an expert team of in-house editors, Web of Science Core Collection includes only journals that demonstrate high levels of editorial rigor and best practice. As well as the Web of Science Core Collection, you can search across the following specialty collections: Biological Abstracts, BIOSIS Previews, Zoological Record, and Current Contents Connect, as well as the Chemical Information products."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which Journals Are Included in Master Journal List?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Master Journal List includes all journals indexed in Web of Science, including the complete list of journal in the Web of Science Core Collection (including Science Citation Index Expanded, Social Sciences Citation Index, Arts & Humanities Citation Index, and Emerging Sources Citation Index), Biological Abstracts, BIOSIS Previews, Zoological Record, and Current Contents Connect, as well as the Chemical Information products."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I Have to Create an Account to Use Master Journal List?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Users are required to create a free account and log in to use Manuscript Matcher, view journal profile pages, submit journals for evaluation, and request status of journal evaluation; all other information is available to view without logging in."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I Submit to a Journal for Inclusion Directly Through Master Journal List?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Publishers may submit journals to Web of Science for evaluation via the journal submission form."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I Download the Master Journal List?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Please visit the Collection List Downloads page. Each collection list download includes the journal title, ISSN/eISSN, publisher name and address. You will need a free Master Journal List login to access the download files."
+            }
+          }
+        ]
+      }
+    </script>
+  <script>
+    //
+    // Function here used only for IE with some tweaks so it'll work for login page
+    //
+    function runForLoginIFrameForIE() {
+      let eventMethod = window.addEventListener
+        ? 'addEventListener'
+        : 'attachEvent';
+
+      let eventer = window[eventMethod];
+      let messageEvent =
+        eventMethod === 'attachEvent' ? 'onmessage' : 'message';
+      let errorTimeout;
+      let loginFrame;
+      let iframeErrorMsg;
+      let spinner;
+      let isIframeAlreadyRendered = false;
+      // check if iframe is loaded or not
+      setTimeout(function () {
+        errorTimeout = setTimeout(error, 8000);
+      }, 10);
+      // Listen to message from child window
+
+      window.addEventListener('message', function (e) {
+        let urlRegex = new RegExp('access\.(.*)\.?clarivate\.com', 'g');
+        let isClarivateDomain =
+          urlRegex.test(e.origin) ||
+          e.origin == 'http://local.1p.clarivate.com:1981';
+
+        spinner = document.getElementById('iframe-spinner');
+        loginFrame = document.getElementById('loginIframe');
+
+        if (isClarivateDomain && e.data === 'loaded') {
+          spinner.style.display = 'none';
+          loginFrame.style.display = 'block';
+          isIframeAlreadyRendered = true;
+          clearTimeout(errorTimeout);
+          e.source.postMessage('url:' + window.location.href, '*');
+        } else if (isClarivateDomain && e.data.length) {
+          localStorage.setItem('ca.token', e.data);
+          window.location.href = window['base-href'] + 'login-redirect';
+        }
+      });
+
+      function error() {
+        loginFrame = document.getElementById('loginIframe');
+        iframeErrorMsg = document.getElementById('iframe-error-msg');
+        spinner = document.getElementById('iframe-spinner');
+        loginFrame.style.display = 'none';
+        iframeErrorMsg.style.display = 'block';
+        spinner.style.display = 'none';
+      }
+    }
+  </script><!-- Google RecaptchaV2 -->
+  <script src="https://www.google.com/recaptcha/api.js?" async defer></script><!-- Google Tag Manager --> <!-- <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-MQ9MX8S');
+    </script> --> <!-- End Google Tag Manager --> <!-- Datadog --> <!--
+    <script
+      src="https://www.datadoghq-browser-agent.com/datadog-rum-us.js"
+      type="text/javascript">
+    </script>
+    <script>
+      window.DD_RUM.init({
+      //gitleaks:allow
+        clientToken: 'pub11718c179e1bfb129f286ec03f4ec018',
+      //gitleaks:allow
+        applicationId: '2c9397a4-13d1-4cce-9e3f-ba5cea6f005f',
+      });
+    </script>
+    --> <!-- Handle browser back button -->
+  <script>
+      //
+      // Handle legacy case where we start app at /mjl-beta/xxx then set base-href which sets APP_BASE_HREF in app
+      // Otherwise set default app base path to / (new way)
+      // TODO: Once we remove old app paths and
+      //
+      // var winLocationPathname = window.location.pathname;
+
+      var winLocationPathname = window.location.pathname;
+      if (winLocationPathname.indexOf('/mjl') > -1) {
+        winLocationPathname ='/mjl/';
+        window['base-href'] = winLocationPathname;
+      } else {
+        window['base-href'] ='/';
+      }
+
+    console.log('App set root base-href: ' + window['base-href']);
+    console.log("Deploy url", winLocationPathname);
+    window.addEventListener(
+      'popstate',
+      function (e) {
+        console.log(
+          '*** window.onpopstate + ' +
+          window.location.href +
+          ' ' +
+          e.state.search_id
+        );
+        localStorage.setItem('search_back_hash', e.state.search_id);
+
+        if (document.getElementById('hiddenBackButton') !== null) {
+          document.getElementById('hiddenBackButton').click(); // Primary way to do it (works nicest)
+        } else {
+          localStorage.setItem('hiddenBackButtonPress', 'Y'); // Fallback way when we are going back to search results from another page
+        }
+      },
+      false
+    );
+
+    //
+    // Grab browser events for push/pop state
+    // This also handles back button where 2 replaceStates() come in for same page - one has our search hash and one does not. We need to preserve it.
+    //
+    // JS: Note: Does not work on IE11
+    //
+    const isIEOrEdge2 = /msie\s|trident\/|edge\//i.test(
+      window.navigator.userAgent
+    );
+    if (!isIEOrEdge2) {
+      var _wr = function (type) {
+        var orig = history[type];
+        return function () {
+          var rv = orig.apply(this, arguments);
+          var e = new Event(type);
+          e.arguments = arguments;
+          window.dispatchEvent(e);
+          return rv;
+        };
+      };
+      (history.pushState = _wr('pushState')),
+        (history.replaceState = _wr('replaceState'));
+
+      window.addEventListener('replaceState', function (e) {
+        if (
+          e.arguments != null &&
+          e.arguments[0] &&
+          e.arguments[0].search_id
+        ) {
+          console.log(
+            '*** window.replace state = ' + e.arguments[0].search_id
+          );
+        } else {
+          console.log('*** window.replace state = ' + e);
+
+          // We did a replace state. Sometimes this gets doubled second time without search id hash
+          // If we're on search results AND we have no search hash and we have one in memory from last time then set that...
+          if (
+            window.location.href.indexOf('search-results') > -1 ||
+            window.location.href.indexOf('manuscript-matcher') > -1
+          ) {
+            if (
+              localStorage.getItem('search_back_hash') &&
+              localStorage.getItem('search_back_hash').length > 0
+            ) {
+              console.log(
+                '*** window.replace state did not find old search id.. resetting to ' +
+                localStorage.getItem('search_back_hash')
+              );
+              history.replaceState(
+                {
+                  search_id: localStorage.getItem('search_back_hash'),
+                  search_text: '',
+                },
+                null,
+                window.location.href
+              );
+            }
+          }
+        }
+      });
+      /* Uncomment for debugging
+      *
+      window.addEventListener('pushState', function(e) {
+        if (e.arguments != null && e.arguments[0] && e.arguments[0].search_id) {
+          console.log('*** window.push state = ' + e.arguments[0].search_id);
+        } else {
+          console.log('*** window.push state = ' + e);
+        }
+      });*/
+    }
+  </script>
+  <link rel="stylesheet" href="/mjl/styles.d4bc61c91783a372.css">
+ </head>
+ <body class="mat-typography" style="overflow: visible;">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MQ9MX8S" height="0" width="0" style="display: none; visibility: hidden"></iframe>
+  </noscript><!-- End Google Tag Manager (noscript) --> <cdx-app></cdx-app>
+  <script src="/mjl/runtime.9e22cf209c834508.js" type="module"></script>
+  <script src="/mjl/polyfills.2bb705979160c91e.js" type="module"></script>
+  <script src="/mjl/main.8762ce790d666e78.js" type="module"></script>
+ </body>
+</html>]
+2026-04-14 23:40:31 - binding parameter [3] as [VARCHAR] - []
+2026-04-14 23:40:31 - ID unsaved-value: 0
+2026-04-14 23:40:31 - binding parameter [4] as [INTEGER] - [78]
+2026-04-14 23:40:31 - binding parameter [5] as [INTEGER] - [0]
+2026-04-14 23:40:31 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:31 - Processing cascade ACTION_PERSIST for: searchengine.model.Page
+2026-04-14 23:40:31 - Cascade ACTION_PERSIST for collection: searchengine.model.Page.topics
+2026-04-14 23:40:31 - Done cascade ACTION_PERSIST for collection: searchengine.model.Page.topics
+2026-04-14 23:40:31 - Done processing cascade ACTION_PERSIST for: searchengine.model.Page
+2026-04-14 23:40:31 - Processing cascade ACTION_PERSIST_ON_FLUSH for: searchengine.model.Page
+2026-04-14 23:40:31 - ID unsaved-value: 0
+2026-04-14 23:40:31 - Cascade ACTION_PERSIST_ON_FLUSH for collection: searchengine.model.Page.topics
+2026-04-14 23:40:31 - Done cascade ACTION_PERSIST_ON_FLUSH for collection: searchengine.model.Page.topics
+2026-04-14 23:40:31 - Done processing cascade ACTION_PERSIST_ON_FLUSH for: searchengine.model.Page
+2026-04-14 23:40:31 - Collection found: [searchengine.model.Page.topics#70533], was: [<unreferenced>] (initialized)
+2026-04-14 23:40:31 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:31 - committing
+2026-04-14 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@1bbd5c23]
+2026-04-14 23:40:31 - Unable to locate HQL query plan in cache; generating (select generatedAlias0 from Topic as generatedAlias0 left join generatedAlias0.page as generatedAlias1 where generatedAlias1.id=:param0)
+2026-04-14 23:40:31 - Find: select generatedAlias0 from Topic as generatedAlias0 left join generatedAlias0.page as generatedAlias1 where generatedAlias1.id=:param0
+2026-04-14 23:40:31 - Named parameters: {param0=70533}
+2026-04-14 23:40:31 - select topic0_.id as id1_4_, topic0_.content as content2_4_, topic0_.created_at as created_3_4_, topic0_.lemma_count as lemma_co4_4_, topic0_.order_num as order_nu5_4_, topic0_.page_id as page_id7_4_, topic0_.site_id as site_id8_4_, topic0_.title as title6_4_, topic0_.topic_group_id as topic_gr9_4_ from topic topic0_ left outer join page page1_ on topic0_.page_id=page1_.id where page1_.id=?
+2026-04-14 23:40:31 - Registering last query statement [HikariProxyPreparedStatement@894931219 wrapping select topic0_.id as id1_4_, topic0_.content as content2_4_, topic0_.created_at as created_3_4_, topic0_.lemma_count as lemma_co4_4_, topic0_.order_num as order_nu5_4_, topic0_.page_id as page_id7_4_, topic0_.site_id as site_id8_4_, topic0_.title as title6_4_, topic0_.topic_group_id as topic_gr9_4_ from topic topic0_ left outer join page page1_ on topic0_.page_id=page1_.id where page1_.id=?]
+2026-04-14 23:40:31 - binding parameter [1] as [INTEGER] - [70533]
+2026-04-14 23:40:31 - Starting after statement execution processing [ON_CLOSE]
+2026-04-14 23:40:31 - Initializing non-lazy collections
+2026-04-14 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@2c2f3012]
+2026-04-14 23:40:31 - Страница https://mjl.clarivate.com/search-results проиндексирована с 0 темами
+2026-04-14 23:40:31 - Closing JDBC container [org.hibernate.engine.jdbc.internal.JdbcCoordinatorImpl@602c08b1]
+2026-04-14 23:40:44 - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2026-04-14 23:40:44 - HikariPool-1 - Fill pool skipped, pool is at sufficient level.
+2026-04-14 23:41:08 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-14 23:41:08 - Cleaning QueryPlan Cache
+2026-04-14 23:41:08 - HikariPool-1 - Shutdown initiated...
+2026-04-14 23:41:08 - HikariPool-1 - Before shutdown stats (total=10, active=0, idle=10, waiting=0)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@77724cbe: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@6b6cc5e2: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@2e6e46eb: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@1244ec19: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@4e41b9a4: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@70594b2b: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@3cd100fe: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@9400759: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@4a0f034c: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - Closing connection org.postgresql.jdbc.PgConnection@70351935: (connection evicted)
+2026-04-14 23:41:08 - HikariPool-1 - After shutdown stats (total=0, active=0, idle=0, waiting=0)
+2026-04-14 23:41:08 - HikariPool-1 - Shutdown completed.

@@ -51,17 +51,5 @@ indexing-settings:
   userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
   referrer: "http://www.google.com"
   sites:
-    - url: http://esxr.ru/
-      name: "Журнал Экономика сельского хозяйства России"
-    - url: https://eshpp.ru/
-      name: "Журнал Экономика сельскохозяйственных и перерабатывающих предприятий"
-    - url: http://apk-eu.ru/
-      name: "АПК: Экономика и управление"
-    - url: https://www.vetpress.ru/jour
-      name: "Журнал: Аграрная наука"
-    - url: https://agroobzor.ru/
-      name: "Ежедневное аграрное обозрение"
-    - url: https://www.agroinvestor.ru/
-      name: "Агроинвестор"
-    - url: https://www.agroinvestor.ru
-      name: "Агроинвестор"
+    - url: https://mjl.clarivate.com/search-results
+      name: web of science

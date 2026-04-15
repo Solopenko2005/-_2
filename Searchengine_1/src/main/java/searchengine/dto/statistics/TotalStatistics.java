@@ -8,5 +8,5 @@ public class TotalStatistics {
     private int pages;
     private int lemmas;
     private boolean indexing;
-    private int topics; // ДОБАВЬТЕ ЭТО
+    private int topics;
 }
