@@ -75,7 +75,7 @@ public class EnhancedTopicFilterService {
     }};
 
     /**
-     * Улучшенная фильтрация тем
+     * Улучшенная фильтрация тем - более мягкие правила для сохранения большего количества тем
      */
     public boolean isRelevantAndCleanTopic(TopicGroup group) {
         if (group == null) return false;
@@ -83,7 +83,7 @@ public class EnhancedTopicFilterService {
         String title = group.getTitle().toLowerCase();
 
         // Проверяем слишком длинные заголовки (вероятно содержат весь текст)
-        if (title.length() > 200) {
+        if (title.length() > 300) {
             return false;
         }
 
@@ -104,13 +104,13 @@ public class EnhancedTopicFilterService {
             return false;
         }
 
-        // Минимальная частота (но не слишком большая - это может быть артефакт)
-        if (group.getFrequency() < 2 || group.getFrequency() > 100) {
+        // Минимальная частота - разрешаем от 1
+        if (group.getFrequency() < 1) {
             return false;
         }
 
-        // Минимальное количество сайтов
-        if (group.getSiteCount() < 2) {
+        // Минимальное количество сайтов - разрешаем от 1
+        if (group.getSiteCount() < 1) {
             return false;
         }
 
@@ -118,7 +118,7 @@ public class EnhancedTopicFilterService {
     }
 
     /**
-     * Проверка, является ли текст фрагментом контента
+     * Проверка, является ли текст фрагментом контента - более мягкие правила
      */
     private boolean isContentFragment(String text) {
         // Фрагменты контента часто содержат:
@@ -128,8 +128,8 @@ public class EnhancedTopicFilterService {
 
         String[] words = text.split("\\s+");
 
-        // Слишком много слов (вероятно контент)
-        if (words.length > 15) {
+        // Слишком много слов (вероятно контент) - увеличиваем порог
+        if (words.length > 25) {
             return true;
         }
 
@@ -142,8 +142,8 @@ public class EnhancedTopicFilterService {
             if (!Character.isLetterOrDigit(c) && c != ' ') punctuationCount++;
         }
 
-        // Если слишком много цифр или спецсимволов
-        if (digitCount > text.length() * 0.3 || punctuationCount > text.length() * 0.2) {
+        // Если слишком много цифр или спецсимволов - увеличиваем пороги
+        if (digitCount > text.length() * 0.5 || punctuationCount > text.length() * 0.4) {
             return true;
         }
 
