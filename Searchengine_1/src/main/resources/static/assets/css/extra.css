@@ -37,7 +37,7 @@
 .HideBlock {
   position: relative;
   padding: 0 25px;
-  background-color: #fafafa;
+  background-color: rgb (159, 186, 241);
 }
 @media screen and (max-width: 480px) {
   .HideBlock {
@@ -48,7 +48,7 @@
   margin-top: 10px;
 }
 .HideBlock-title {
-  color: #5e5e5e;
+  color: #000000;
   font-size: 17px;
   font-weight: 500;
   line-height: 1.2em;
@@ -60,9 +60,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 25px;
-  background-color: #f1f1f1;
+  background-color: #9FBAF1;
   margin-left: -25px;
   margin-right: -25px;
+  border: 2px solid #3D568F;
 }
 @media screen and (max-width: 480px) {
   .HideBlock-header {
@@ -76,7 +77,7 @@
   padding: 20px 0;
   overflow: hidden;
   transition: height 200ms, padding 150ms 50ms;
-  color: #505050;
+  color: #000000;
   font-size: 14px;
   font-weight: 400;
   letter-spacing: 0.42px;
@@ -774,7 +775,7 @@
   display: block;
 }
 .Statistics-option_error {
-  color: #ba6347;
+  color: #FF0000;
 }
 .Statistics-option_error strong {
   color: #2b2b2b;
@@ -803,7 +804,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #EAF3B2;
 }
+
 .Tabs-link + .Tabs-link {
   margin-left: 2.3rem;
 }
@@ -817,7 +820,6 @@
 }
 .Tabs-wrap {
   padding: 40px;
-  border: 1px solid #e0e0e0;
   border-top: none;
   margin-top: 0;
 }
@@ -871,7 +873,7 @@
   }
 }
 .Tabs_steps .Tabs-link {
-  color: #2c2d2e;
+  color: #00000;
   border: none;
   height: auto;
   width: auto;
@@ -951,7 +953,7 @@
   }
 }
 .Tabs_steps .Tabs-link_ACTIVE {
-  color: #2c2d2e;
+  color: #00000;
 }
 .Tabs_steps .Tabs-link_ACTIVE span:after {
   display: none;
