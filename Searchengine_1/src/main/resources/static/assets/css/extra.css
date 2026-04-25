@@ -37,7 +37,8 @@
 .HideBlock {
   position: relative;
   padding: 0 25px;
-  background-color: rgb (159, 186, 241);
+  background-color: #FDFDF5;
+  border: 2px solid #3D568F;
 }
 @media screen and (max-width: 480px) {
   .HideBlock {
@@ -63,7 +64,6 @@
   background-color: #9FBAF1;
   margin-left: -25px;
   margin-right: -25px;
-  border: 2px solid #3D568F;
 }
 @media screen and (max-width: 480px) {
   .HideBlock-header {
@@ -90,6 +90,12 @@
 .HideBlock-footer {
   text-align: center;
   margin-top: 3.8rem;
+}
+.Site {
+  min-height: 100vh;
+  background: url("../bg/my_background.jpg") center center no-repeat;
+  background-size: 100%;
+  position: relative;
 }
 .HideBlock-trigger {
   cursor: pointer;
@@ -716,6 +722,7 @@
   border: 2px solid #3D568F;
   border-radius: 10px;
   margin-right: 20px;
+  background: #FDFDF5;
 }
 @media screen and (max-width: 480px) {
   .Statistics-block {
@@ -1051,8 +1058,8 @@
   border-bottom: 2px solid #3D568F;
 }
 .Tabs_column .Tabs-link_ACTIVE {
-  border-left-color: #9FBAF1;
-  color: #9FBAF1;
+  border-left-color: #000000;
+  color: #000000;
   font-weight: 600;
 }
 .Tabs_column .Tabs-icon {
