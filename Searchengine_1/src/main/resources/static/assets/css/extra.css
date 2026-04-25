@@ -186,7 +186,7 @@
   position: absolute;
   content: '';
   display: block;
-  background: url("../img/bg/entry.jpg") center center no-repeat;
+  background: url("../bg/my_background.jpg") center center no-repeat;
   background-size: cover;
   left: 0;
   right: 0;
@@ -197,7 +197,7 @@
 }
 @media screen and (max-width: 480px) {
   .Middle_form:after {
-    background: url("../img/bg/entry_phone.jpg") center center no-repeat;
+    background: url("../bg/my_background.jpg") center center no-repeat;
   }
 }
 .Middle_form:before {
@@ -336,8 +336,8 @@
 .Section-title {
   margin-bottom: 28px;
   margin-top: 45px;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 700;
   line-height: 1.2em;
   text-transform: uppercase;
   letter-spacing: 3px;
@@ -713,8 +713,8 @@
   display: block;
   text-align: center;
   padding: 20px 25px;
-  border: 1px solid #177db8;
-  border-radius: 5px;
+  border: 2px solid #3D568F;
+  border-radius: 10px;
   margin-right: 20px;
 }
 @media screen and (max-width: 480px) {
@@ -805,13 +805,14 @@
   justify-content: center;
   align-items: center;
   background: #EAF3B2;
+  border: 2px solid #3D568F;
 }
 
 .Tabs-link + .Tabs-link {
   margin-left: 2.3rem;
 }
 .Tabs-link_ACTIVE {
-  border-color: #177db8;
+  border: 2px solid #3D568F;
 }
 .Tabs-icon {
   max-width: 35px;
@@ -909,7 +910,7 @@
   content: counter(steps);
   width: 2.8rem;
   height: 2.8rem;
-  color: #177db8;
+  color: #00000;
   font-family: Montserrat, 'Arial Black', "Helvetica CY", Helvetica, "Nimbus Sans L", sans-serif;
   font-size: 13px;
   font-weight: 700;
@@ -1021,7 +1022,7 @@
 }
 .Tabs_default .Tabs-link_ACTIVE {
   background-color: #177db8;
-  color: #fff;
+  color: #00000;
 }
 .Tabs_column {
   display: flex;
@@ -1041,18 +1042,17 @@
   text-transform: uppercase;
   padding: 20px 20px;
   height: auto;
-  border: 2px solid #f7f7f7;
+  border: 1px solid #00000;
   border-bottom: none;
   justify-content: flex-start;
-  color: #999;
   width: 100%;
 }
 .Tabs_column .Tabs-link:last-child {
-  border-bottom: 2px solid #f7f7f7;
+  border-bottom: 2px solid #3D568F;
 }
 .Tabs_column .Tabs-link_ACTIVE {
-  border-left-color: #177db8;
-  color: #177db8;
+  border-left-color: #9FBAF1;
+  color: #9FBAF1;
   font-weight: 600;
 }
 .Tabs_column .Tabs-icon {

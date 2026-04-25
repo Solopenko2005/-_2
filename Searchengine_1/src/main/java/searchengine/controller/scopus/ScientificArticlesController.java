@@ -2,6 +2,7 @@ package searchengine.controller.scopus;
 
 import lombok.extern.slf4j.Slf4j;
 import searchengine.model.scopus.ScientificArticle;
+import searchengine.services.scopus.ExcelExportService;
 import searchengine.services.scopus.TechnologyExtractionService;
 import searchengine.services.scopus.WordExportService;
 import searchengine.services.scopus.ScopusApiService;
@@ -10,9 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Контроллер для работы с научными статьями и экспорта результатов
@@ -26,14 +25,16 @@ public class ScientificArticlesController {
     private final ScopusApiService scopusApiService;
     private final TechnologyExtractionService extractionService;
     private final WordExportService wordExportService;
+    private final ExcelExportService excelExportService;
 
     public ScientificArticlesController(
             ScopusApiService scopusApiService,
             TechnologyExtractionService extractionService,
-            WordExportService wordExportService) {
+            WordExportService wordExportService, ExcelExportService excelExportService) {
         this.scopusApiService = scopusApiService;
         this.extractionService = extractionService;
         this.wordExportService = wordExportService;
+        this.excelExportService = excelExportService;
     }
 
     /**
@@ -48,6 +49,51 @@ public class ScientificArticlesController {
         List<ScientificArticle> articles = scopusApiService.searchSeedBreedingArticles();
 
         return ResponseEntity.ok(articles);
+    }
+    /**
+     * Экспорт тем и статей в Excel
+     * @return Excel файл со статьями по темам
+     */
+    @GetMapping("/scopus/export-topics-excel")
+    public ResponseEntity<byte[]> exportTopicsToExcel() {
+        log.info("Exporting topics and articles to Excel");
+
+        // Список тем
+        List<String> topics = Arrays.asList(
+                "Digital plant breeding",
+                "Speed Breeding",
+                "Predictive plant breeding",
+                "Advanced Genome Editing",
+                "Epigenome EditingMulti-Omics and Systems Biology",
+                "AI and Machine Learning in Breeding",
+                "High-Throughput Phenotyping",
+                "Precision Breeding",
+                "Synthetic Biology",
+                "RNA-Based Technologies (RNAi, SIGS)",
+                "Pangenomics and Genetic Diversity",
+                "Automation and Robotics in Breeding",
+                "Climate-Smart Breeding"
+        );
+
+        // Поиск статей по темам
+        Map<String, List<ScientificArticle>> topicsWithArticles =
+                scopusApiService.searchArticlesByTopics(topics);
+
+        // Создаем Excel файл
+        byte[] excelBytes = excelExportService.createTopicsWithArticlesExcel(topicsWithArticles);
+
+        if (excelBytes.length == 0) {
+            return ResponseEntity.badRequest().body("Failed to create Excel file".getBytes());
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "breeding_technologies_articles.xlsx");
+        headers.setContentLength(excelBytes.length);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(excelBytes);
     }
 
     /**
@@ -64,6 +110,94 @@ public class ScientificArticlesController {
         List<ScientificArticle> articles = scopusApiService.searchArticles(query);
 
         return ResponseEntity.ok(articles);
+    }
+    /**
+     * Экспорт тем и статей в Excel с фильтром по годам (2024-2026)
+     */
+    @GetMapping("/scopus/export-topics-excel-with-years")
+    public ResponseEntity<byte[]> exportTopicsToExcelWithYears() throws InterruptedException {
+        log.info("Exporting topics and articles to Excel with years 2024-2026");
+
+        List<String> topics = Arrays.asList(
+                "Digital plant breeding",
+                "Speed Breeding",
+                "Predictive plant breeding",
+                "Advanced Genome Editing",
+                "Epigenome EditingMulti-Omics and Systems Biology",
+                "AI and Machine Learning in Breeding",
+                "High-Throughput Phenotyping",
+                "Precision Breeding",
+                "Synthetic Biology",
+                "RNA-Based Technologies (RNAi, SIGS)",
+                "Pangenomics and Genetic Diversity",
+                "Automation and Robotics in Breeding",
+                "Climate-Smart Breeding"
+        );
+
+        List<Integer> years = Arrays.asList(2024, 2025, 2026);
+
+        // Вариант 1: Все годы в одном запросе
+        Map<String, List<ScientificArticle>> topicsWithArticles =
+                scopusApiService.searchArticlesByTopicsWithYears(topics, years);
+
+        // Вариант 2: Разбивка по годам (рекомендуется для большей гибкости)
+        // Map<String, Map<Integer, List<ScientificArticle>>> topicsData =
+        //         scopusApiService.searchArticlesByTopicsAndYearsSeparate(topics, years);
+        // byte[] excelBytes = excelExportService.createTopicsWithYearsExcel(topicsData);
+
+        byte[] excelBytes = excelExportService.createTopicsWithArticlesExcel(topicsWithArticles);
+
+        if (excelBytes.length == 0) {
+            return ResponseEntity.badRequest().body("Failed to create Excel file".getBytes());
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "breeding_technologies_2024_2026.xlsx");
+        headers.setContentLength(excelBytes.length);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(excelBytes);
+    }
+
+    /**
+     * Экспорт тем и статей с разбивкой по годам (отдельные листы для каждого года)
+     */
+    @GetMapping("/scopus/export-topics-excel-by-year")
+    public ResponseEntity<byte[]> exportTopicsToExcelByYear() throws InterruptedException {
+        log.info("Exporting topics and articles to Excel with separate sheets for each year");
+
+        List<String> topics = Arrays.asList(
+                "Digital plant breeding",
+                "Speed Breeding",
+                "Predictive plant breeding",
+                "Advanced Genome Editing",
+                "AI and Machine Learning in Breeding",
+                "High-Throughput Phenotyping",
+                "Precision Breeding",
+                "Climate-Smart Breeding"
+        );
+
+        List<Integer> years = Arrays.asList(2024, 2025, 2026);
+
+        Map<String, Map<Integer, List<ScientificArticle>>> topicsData =
+                scopusApiService.searchArticlesByTopicsAndYearsSeparate(topics, years);
+
+        byte[] excelBytes = excelExportService.createTopicsWithYearsExcel(topicsData);
+
+        if (excelBytes.length == 0) {
+            return ResponseEntity.badRequest().body("Failed to create Excel file".getBytes());
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "breeding_technologies_by_year.xlsx");
+        headers.setContentLength(excelBytes.length);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(excelBytes);
     }
 
     /**
@@ -215,4 +349,5 @@ public class ScientificArticlesController {
         public String getLanguage() { return language; }
         public void setLanguage(String language) { this.language = language; }
     }
+
 }

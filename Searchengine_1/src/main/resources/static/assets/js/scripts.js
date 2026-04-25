@@ -1614,16 +1614,16 @@ var API = function(){
                             .before(site.name + ' - ' + site.url);
                         var time = new Date(site.statusTime);
                         $blockSiteExample.find('.Statistics-description')
-                            .html('<div class="Statistics-option"><strong>Status time:</strong> ' +
+                            .html('<div class="Statistics-option"><strong>Время:</strong> ' +
                                 time.getDate() + '.' +
                                 (time.getMonth() + 1) + '.' +
                                 time.getFullYear() + ' ' +
                                 time.getHours() + ':' +
                                 time.getMinutes() + ':' +
                                 time.getSeconds() +
-                                '</div><div class="Statistics-option"><strong>Pages:</strong> ' + site.pages +
-                                '</div><div class="Statistics-option"><strong>Lemmas:</strong> ' + site.lemmas +
-                                '</div><div class="Statistics-option Statistics-option_error"><strong>Error:</strong> ' + site.error + '</div>'+
+                                '</div><div class="Statistics-option"><strong>Страницы:</strong> ' + site.pages +
+                                '</div><div class="Statistics-option"><strong>Леммы:</strong> ' + site.lemmas +
+                                '</div><div class="Statistics-option Statistics-option_error"><strong>Ошибка:</strong> ' + site.error + '</div>'+
                                 '')
     
                         
