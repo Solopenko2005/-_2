@@ -60,19 +60,19 @@ public class ScientificArticlesController {
 
         // Список тем
         List<String> topics = Arrays.asList(
-                "Digital plant breeding",
-                "Speed Breeding",
-                "Predictive plant breeding",
-                "Advanced Genome Editing",
-                "Epigenome EditingMulti-Omics and Systems Biology",
-                "AI and Machine Learning in Breeding",
-                "High-Throughput Phenotyping",
-                "Precision Breeding",
-                "Synthetic Biology",
-                "RNA-Based Technologies (RNAi, SIGS)",
-                "Pangenomics and Genetic Diversity",
-                "Automation and Robotics in Breeding",
-                "Climate-Smart Breeding"
+                "Digital plant breeding: digital agriculture, precision agriculture, data-driven breeding",
+                "Speed Breeding: accelerated breeding, rapid generation advancement",
+                "Predictive plant breeding: genomic prediction, genomic selection",
+                "Advanced Genome Editing: CRISPR, genome editing, gene editing",
+                "Epigenome Editing, Multi-Omics and Systems Biology: epigenomics, transcriptomics, metabolomics, systems biology",
+                "AI and Machine Learning in Breeding: artificial intelligence, machine learning, deep learning",
+                "High-Throughput Phenotyping: phenomics, image-based phenotyping, plant sensors",
+                "Precision Breeding: marker-assisted selection, molecular breeding, precision breeding",
+                "Synthetic Biology: synthetic biology, engineered biological systems",
+                "RNA-Based Technologies: RNAi, RNA interference, SIGS, gene silencing",
+                "Pangenomics and Genetic Diversity: pangenome, genetic diversity, germplasm",
+                "Automation and Robotics in Breeding: robotics, automation, automated phenotyping",
+                "Climate-Smart Breeding: drought tolerance, heat tolerance, climate resilience"
         );
 
         // Поиск статей по темам
@@ -123,15 +123,15 @@ public class ScientificArticlesController {
                 "Speed Breeding",
                 "Predictive plant breeding",
                 "Advanced Genome Editing",
-                "Epigenome EditingMulti-Omics and Systems Biology",
-                "AI and Machine Learning in Breeding",
-                "High-Throughput Phenotyping",
-                "Precision Breeding",
-                "Synthetic Biology",
-                "RNA-Based Technologies (RNAi, SIGS)",
-                "Pangenomics and Genetic Diversity",
-                "Automation and Robotics in Breeding",
-                "Climate-Smart Breeding"
+                "Epigenome Editing, Multi-Omics and Systems Biology",
+                "AI and Machine Learning in Plant Breeding",
+                "High-Throughput Plant Phenotyping",
+                "Precision Breeding and Marker-Assisted Selection",
+                "Synthetic Biology in Plant Breeding",
+                "RNA-Based Technologies in Plant Breeding",
+                "Pangenomics and Genetic Diversity in Crops",
+                "Automation and Robotics in Plant Breeding",
+                "Climate-Smart Plant Breeding"
         );
 
         List<Integer> years = Arrays.asList(2024, 2025, 2026);

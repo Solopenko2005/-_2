@@ -81,6 +81,94 @@ public class ScopusApiService {
         }
     }
 
+    private boolean isArticleRelevantToTopic(ScientificArticle article, String topic) {
+        String text = String.join(" ",
+                Optional.ofNullable(article.getTitle()).orElse(""),
+                Optional.ofNullable(article.getAbstractText()).orElse(""),
+                article.getKeywords() != null ? String.join(" ", article.getKeywords()) : ""
+        ).toLowerCase();
+
+        String normalizedTopic = topic.toLowerCase();
+
+        List<String> excluded = List.of(
+                "human", "patient", "clinical", "hospital", "medical", "surgery",
+                "finance", "banking", "stock market",
+                "poultry", "livestock", "animal breeding", "cattle", "pig", "chicken"
+        );
+
+        if (excluded.stream().anyMatch(text::contains)) {
+            return false;
+        }
+
+        boolean hasBreedingContext =
+                text.contains("plant breeding")
+                        || text.contains("crop breeding")
+                        || text.contains("breeding program")
+                        || text.contains("crop improvement")
+                        || text.contains("genomic selection")
+                        || text.contains("marker-assisted selection")
+                        || text.contains("cultivar")
+                        || text.contains("germplasm");
+
+        if (!hasBreedingContext) {
+            return false;
+        }
+
+        if (normalizedTopic.contains("digital plant breeding")) {
+            return text.contains("digital plant breeding")
+                    || text.contains("digital agriculture")
+                    || text.contains("precision agriculture")
+                    || text.contains("breeding program");
+        }
+
+        if (normalizedTopic.contains("speed breeding")) {
+            return text.contains("speed breeding")
+                    || text.contains("rapid generation advancement");
+        }
+
+        if (normalizedTopic.contains("predictive plant breeding")) {
+            return text.contains("genomic prediction")
+                    || text.contains("genomic selection")
+                    || text.contains("predictive breeding");
+        }
+
+        if (normalizedTopic.contains("genome editing")) {
+            return text.contains("crispr")
+                    || text.contains("genome editing")
+                    || text.contains("gene editing");
+        }
+
+        if (normalizedTopic.contains("machine learning")
+                || normalizedTopic.contains("artificial intelligence")) {
+            return text.contains("machine learning")
+                    || text.contains("deep learning")
+                    || text.contains("artificial intelligence")
+                    || text.contains("genomic prediction");
+        }
+
+        if (normalizedTopic.contains("high-throughput phenotyping")) {
+            return text.contains("high-throughput phenotyping")
+                    || text.contains("plant phenotyping")
+                    || text.contains("phenomics");
+        }
+
+        if (normalizedTopic.contains("precision breeding")) {
+            return text.contains("precision breeding")
+                    || text.contains("marker-assisted selection")
+                    || text.contains("molecular marker")
+                    || text.contains("genomic selection");
+        }
+
+        if (normalizedTopic.contains("climate-smart")) {
+            return text.contains("climate-smart breeding")
+                    || text.contains("drought tolerance")
+                    || text.contains("heat tolerance")
+                    || text.contains("climate resilience");
+        }
+
+        return true;
+    }
+
     /**
      * Поиск статей для списка тем с фильтрацией по годам
      */
@@ -100,15 +188,16 @@ public class ScopusApiService {
             for (Integer year : years) {
                 String searchTerm = getScopusSearchTerm(topic);
                 String query = String.format(
-                        "TITLE-ABS-KEY(%s) AND PUBYEAR = %d AND DOCTYPE(ar) AND SRCTYPE(j) AND LANGUAGE(english)",
-                        searchTerm, year
+                        "TITLE-ABS-KEY(%s AND %s) AND PUBYEAR = %d AND DOCTYPE(ar) AND SRCTYPE(j) AND LANGUAGE(english)",
+                        searchTerm, PLANT_BREEDING_CONTEXT, year
                 );
 
                 List<ScientificArticle> articles = executeSearch(query);
 
                 List<ScientificArticle> filtered = articles.stream()
                         .filter(a -> a.getPublicationYear() != null && a.getPublicationYear().equals(year))
-                        .limit(3)
+                        .filter(a -> isArticleRelevantToTopic(a, topic))
+                        .limit(5)
                         .collect(Collectors.toList());
 
                 allArticles.addAll(filtered);
@@ -143,14 +232,15 @@ public class ScopusApiService {
 
                 String searchTerm = getScopusSearchTerm(topic);
                 String query = String.format(
-                        "TITLE-ABS-KEY(%s) AND PUBYEAR = %d AND DOCTYPE(ar) AND SRCTYPE(j) AND LANGUAGE(english)",
-                        searchTerm, year
+                        "TITLE-ABS-KEY(%s AND %s) AND PUBYEAR = %d AND DOCTYPE(ar) AND SRCTYPE(j) AND LANGUAGE(english)",
+                        searchTerm, PLANT_BREEDING_CONTEXT, year
                 );
 
                 List<ScientificArticle> articles = executeSearch(query);
 
                 List<ScientificArticle> filtered = articles.stream()
                         .filter(a -> a.getPublicationYear() != null && a.getPublicationYear().equals(year))
+                        .filter(a -> isArticleRelevantToTopic(a, topic))
                         .limit(5)
                         .collect(Collectors.toList());
 
@@ -179,12 +269,12 @@ public class ScopusApiService {
 
             String searchTerm = getScopusSearchTerm(topic);
             String query = String.format(
-                    "TITLE-ABS-KEY(%s) AND DOCTYPE(ar) AND SRCTYPE(j) AND LANGUAGE(english)",
-                    searchTerm
+                    "TITLE-ABS-KEY(%s AND %s) AND DOCTYPE(ar) AND SRCTYPE(j) AND LANGUAGE(english)",
+                    searchTerm, PLANT_BREEDING_CONTEXT
             );
-
             List<ScientificArticle> articles = executeSearch(query);
             List<ScientificArticle> limited = articles.stream()
+                    .filter(a -> isArticleRelevantToTopic(a, topic))
                     .limit(5)
                     .collect(Collectors.toList());
 
@@ -199,28 +289,149 @@ public class ScopusApiService {
      * Возвращает поисковый термин для Scopus
      */
     private String getScopusSearchTerm(String topic) {
-        Map<String, String> termMap = new HashMap<>();
-        termMap.put("Digital plant breeding", "\"precision agriculture\" OR \"digital agriculture\"");
-        termMap.put("Speed Breeding", "\"speed breeding\"");
-        termMap.put("Predictive plant breeding", "\"genomic prediction\" OR \"genomic selection\"");
-        termMap.put("Advanced Genome Editing", "CRISPR OR \"genome editing\"");
-        termMap.put("Epigenome EditingMulti-Omics and Systems Biology", "\"multi-omics\" OR \"systems biology\"");
-        termMap.put("AI and Machine Learning in Breeding", "\"machine learning\" OR \"deep learning\"");
-        termMap.put("High-Throughput Phenotyping", "\"high-throughput phenotyping\" OR phenomics");
-        termMap.put("Precision Breeding", "\"precision breeding\" OR \"marker-assisted selection\"");
-        termMap.put("Synthetic Biology", "\"synthetic biology\"");
-        termMap.put("RNA-Based Technologies (RNAi, SIGS)", "RNAi OR \"RNA interference\"");
-        termMap.put("Pangenomics and Genetic Diversity", "pangenomics OR \"genetic diversity\"");
-        termMap.put("Automation and Robotics in Breeding", "robotics OR automation");
-        termMap.put("Climate-Smart Breeding", "\"climate smart\" OR \"drought tolerance\"");
+        String normalized = topic.toLowerCase();
 
-        String term = termMap.getOrDefault(topic, "\"" + topic.split(" ")[0] + "\"");
-
-        if (term.contains(" OR ")) {
-            term = "(" + term + ")";
+        if (normalized.contains("digital plant breeding")) {
+            return "(" +
+                    "\"digital plant breeding\"" +
+                    " OR " +
+                    "(\"digital agriculture\" AND \"plant breeding\")" +
+                    " OR " +
+                    "(\"precision agriculture\" AND \"breeding program\")" +
+                    ")";
         }
 
-        return term;
+        if (normalized.contains("speed breeding")) {
+            return "(" +
+                    "\"speed breeding\"" +
+                    " OR " +
+                    "\"rapid generation advancement\"" +
+                    ")";
+        }
+
+        if (normalized.contains("predictive plant breeding")) {
+            return "(" +
+                    "\"genomic prediction\"" +
+                    " OR " +
+                    "\"genomic selection\"" +
+                    " OR " +
+                    "(\"predictive breeding\" AND plant)" +
+                    ")";
+        }
+
+        if (normalized.contains("genome editing")) {
+            return "(" +
+                    "(CRISPR AND plant)" +
+                    " OR " +
+                    "(\"genome editing\" AND plant)" +
+                    " OR " +
+                    "(\"gene editing\" AND crop)" +
+                    ")";
+        }
+
+        if (normalized.contains("epigenome") || normalized.contains("multi-omics")) {
+            return "(" +
+                    "(epigenomics AND plant)" +
+                    " OR " +
+                    "(\"multi-omics\" AND breeding)" +
+                    " OR " +
+                    "(transcriptomics AND breeding)" +
+                    " OR " +
+                    "(metabolomics AND breeding)" +
+                    ")";
+        }
+
+        if (normalized.contains("machine learning")
+                || normalized.contains("artificial intelligence")) {
+
+            return "(" +
+                    "(\"machine learning\" AND \"plant breeding\")" +
+                    " OR " +
+                    "(\"deep learning\" AND \"plant breeding\")" +
+                    " OR " +
+                    "(\"artificial intelligence\" AND \"plant breeding\")" +
+                    " OR " +
+                    "(\"genomic prediction\" AND breeding)" +
+                    ")";
+        }
+
+        if (normalized.contains("high-throughput phenotyping")) {
+            return "(" +
+                    "\"high-throughput phenotyping\"" +
+                    " OR " +
+                    "(\"plant phenotyping\" AND breeding)" +
+                    " OR " +
+                    "(phenomics AND breeding)" +
+                    ")";
+        }
+
+        if (normalized.contains("precision breeding")) {
+            return "(" +
+                    "\"marker-assisted selection\"" +
+                    " OR " +
+                    "\"genomic selection\"" +
+                    " OR " +
+                    "\"molecular marker\"" +
+                    " OR " +
+                    "(\"precision breeding\" AND plant)" +
+                    ")";
+        }
+
+        if (normalized.contains("synthetic biology")) {
+            return "(" +
+                    "(\"synthetic biology\" AND plant)" +
+                    " OR " +
+                    "(\"synthetic biology\" AND crop)" +
+                    ")";
+        }
+
+        if (normalized.contains("rna-based")
+                || normalized.contains("rnai")) {
+
+            return "(" +
+                    "(RNAi AND plant)" +
+                    " OR " +
+                    "(\"RNA interference\" AND crop)" +
+                    " OR " +
+                    "(SIGS AND plant)" +
+                    ")";
+        }
+
+        if (normalized.contains("pangenomics")) {
+            return "(" +
+                    "(pangenome AND crop)" +
+                    " OR " +
+                    "(pangenomics AND breeding)" +
+                    " OR " +
+                    "(\"genetic diversity\" AND breeding)" +
+                    ")";
+        }
+
+        if (normalized.contains("automation")
+                || normalized.contains("robotics")) {
+
+            return "(" +
+                    "(robotics AND breeding)" +
+                    " OR " +
+                    "(\"field robot\" AND crop)" +
+                    " OR " +
+                    "(\"automated phenotyping\" AND breeding)" +
+                    ")";
+        }
+
+        if (normalized.contains("climate-smart")) {
+            return "(" +
+                    "(\"climate-smart breeding\")" +
+                    " OR " +
+                    "(\"drought tolerance\" AND breeding)" +
+                    " OR " +
+                    "(\"heat tolerance\" AND breeding)" +
+                    " OR " +
+                    "(\"climate resilience\" AND crop)" +
+                    ")";
+        }
+
+        return "\"" + topic + "\"";
     }
 
     /**
@@ -392,4 +603,16 @@ public class ScopusApiService {
                 .stream()
                 .collect(Collectors.toList());
     }
+
+    private static final String PLANT_BREEDING_CONTEXT =
+            "(" +
+                    "\"plant breeding\" OR " +
+                    "\"crop breeding\" OR " +
+                    "\"breeding program\" OR " +
+                    "\"crop improvement\" OR " +
+                    "\"genomic selection\" OR " +
+                    "\"marker-assisted selection\" OR " +
+                    "cultivar OR " +
+                    "germplasm" +
+                    ")";
 }
