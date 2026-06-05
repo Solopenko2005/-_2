@@ -242,6 +242,12 @@ public class ExcelExportService {
      * Создает Excel файл с темами, годами и статьями
      */
     public byte[] createTopicsWithYearsExcel(Map<String, Map<Integer, List<ScientificArticle>>> topicsData) {
+        log.info("Starting Excel creation. Topics count: {}", topicsData != null ? topicsData.size() : "null");
+
+        if (topicsData == null || topicsData.isEmpty()) {
+            log.warn("topicsData is empty, creating empty Excel");
+        }
+
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Breeding Technologies 2024-2026");
 
@@ -267,15 +273,16 @@ public class ExcelExportService {
                 String topic = topicEntry.getKey();
                 Map<Integer, List<ScientificArticle>> yearArticles = topicEntry.getValue();
 
+                log.info("Processing topic: '{}', Years: {}", topic, yearArticles.keySet());
+
+                int topicStartRow = rowNum;  // ✅ Запоминаем начало темы
                 boolean firstRow = true;
-                int articlesCount = 0;
 
                 for (Map.Entry<Integer, List<ScientificArticle>> yearEntry : yearArticles.entrySet()) {
                     Integer year = yearEntry.getKey();
                     List<ScientificArticle> articles = yearEntry.getValue();
-                    articlesCount += articles.size();
 
-                    if (articles.isEmpty()) {
+                    if (articles == null || articles.isEmpty()) {
                         // Если нет статей за год, добавляем строку с сообщением
                         Row row = sheet.createRow(rowNum++);
                         if (firstRow) {
@@ -290,7 +297,7 @@ public class ExcelExportService {
                         for (ScientificArticle article : articles) {
                             Row row = sheet.createRow(rowNum++);
 
-                            // Номер темы и название (только для первой статьи темы)
+                            // Номер темы и название (только для первой строки темы)
                             if (firstRow) {
                                 row.createCell(0).setCellValue(topicNumber);
                                 row.createCell(1).setCellValue(topic);
@@ -326,13 +333,12 @@ public class ExcelExportService {
                     }
                 }
 
-                // Объединяем ячейки для тем с несколькими строками
-                if (articlesCount > 0) {
-                    int startRow = rowNum - articlesCount;
-                    if (startRow > 0) {
-                        sheet.addMergedRegion(new CellRangeAddress(startRow, rowNum - 1, 0, 0));
-                        sheet.addMergedRegion(new CellRangeAddress(startRow, rowNum - 1, 1, 1));
-                    }
+                // ✅ ПРАВИЛЬНОЕ объединение ячеек: используем topicStartRow и rowNum
+                int topicEndRow = rowNum - 1;
+                if (topicEndRow > topicStartRow) {  // Объединяем только если 2+ строк
+                    log.info("Merging cells for topic '{}' from row {} to {}", topic, topicStartRow, topicEndRow);
+                    sheet.addMergedRegion(new CellRangeAddress(topicStartRow, topicEndRow, 0, 0));
+                    sheet.addMergedRegion(new CellRangeAddress(topicStartRow, topicEndRow, 1, 1));
                 }
 
                 topicNumber++;
@@ -348,6 +354,7 @@ public class ExcelExportService {
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
+            log.info("Excel file created successfully, size: {} bytes", outputStream.size());
             return outputStream.toByteArray();
 
         } catch (Exception e) {
