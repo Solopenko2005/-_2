@@ -38,27 +38,32 @@
 Создайте базу данных:
 ```sql
 CREATE DATABASE search_engine DEFAULT CHARACTER SET utf8mb4;
+```
 
 ⚡Настройте подключение в application.yml:
-yaml
-Copy
+```yaml
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/search_engine
     username: your_username
     password: your_password
+```
 
 ⚡Добавьте сайты для индексации в application.yml:
+```yaml
 indexing:
   sites:
     - url: https://example.com
       name: Пример сайта
     - url: https://another-site.org
       name: Другой сайт
+```
 
 ⚡Запуск приложения
+```bash
 mvn clean install
 mvn spring-boot:run
+```
 
 ⚡Использование
 Веб-интерфейс : http://localhost:8080

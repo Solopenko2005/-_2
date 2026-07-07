@@ -613,9 +613,9 @@ textarea {
   color: #2aa73a !important;
 }
 .btn_primary {
-  border-color: #177db8;
+  border-color: 2px solid #000000;
   color: #fff;
-  background: #177db8;
+  background: #3D568F;
   transition: all 200ms;
 }
 .btn_primary.btn_outline {
@@ -1048,6 +1048,9 @@ select + select {
 .form .form-selectWrap {
   position: relative;
   width: 100%;
+  background: #FDFDF5;
+  border: #3D568F;
+  border-radius: 10px;
 }
 .form .form-selectWrap .form-select {
   padding-right: 55px;
@@ -2068,7 +2071,7 @@ body {
 только для стилизации стандартных элементов через скрипты */
 a {
   text-decoration: none;
-  color: #177db8;
+  color: #000000;
   border-bottom: 1px solid #91cef1;
   border-bottom: 1px solid rgba(23,125,184,0);
   padding-bottom: 0;
@@ -2077,7 +2080,7 @@ a {
 @media screen and (min-width: 990px) {
   a:hover {
     position: relative;
-    border-bottom: 1px solid #177db8;
+    border-bottom: 1px solid #000000;
     transition: border 0.4s;
   }
 }

@@ -37,7 +37,8 @@
 .HideBlock {
   position: relative;
   padding: 0 25px;
-  background-color: #fafafa;
+  background-color: #FDFDF5;
+  border: 2px solid #3D568F;
 }
 @media screen and (max-width: 480px) {
   .HideBlock {
@@ -48,7 +49,7 @@
   margin-top: 10px;
 }
 .HideBlock-title {
-  color: #5e5e5e;
+  color: #000000;
   font-size: 17px;
   font-weight: 500;
   line-height: 1.2em;
@@ -60,7 +61,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 25px;
-  background-color: #f1f1f1;
+  background-color: #9FBAF1;
   margin-left: -25px;
   margin-right: -25px;
 }
@@ -76,7 +77,7 @@
   padding: 20px 0;
   overflow: hidden;
   transition: height 200ms, padding 150ms 50ms;
-  color: #505050;
+  color: #000000;
   font-size: 14px;
   font-weight: 400;
   letter-spacing: 0.42px;
@@ -89,6 +90,12 @@
 .HideBlock-footer {
   text-align: center;
   margin-top: 3.8rem;
+}
+.Site {
+  min-height: 100vh;
+  background: url("../bg/my_background.jpg") center center no-repeat;
+  background-size: 100%;
+  position: relative;
 }
 .HideBlock-trigger {
   cursor: pointer;
@@ -185,7 +192,7 @@
   position: absolute;
   content: '';
   display: block;
-  background: url("../img/bg/entry.jpg") center center no-repeat;
+  background: url("../bg/my_background.jpg") center center no-repeat;
   background-size: cover;
   left: 0;
   right: 0;
@@ -196,7 +203,7 @@
 }
 @media screen and (max-width: 480px) {
   .Middle_form:after {
-    background: url("../img/bg/entry_phone.jpg") center center no-repeat;
+    background: url("../bg/my_background.jpg") center center no-repeat;
   }
 }
 .Middle_form:before {
@@ -335,8 +342,8 @@
 .Section-title {
   margin-bottom: 28px;
   margin-top: 45px;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 700;
   line-height: 1.2em;
   text-transform: uppercase;
   letter-spacing: 3px;
@@ -712,9 +719,10 @@
   display: block;
   text-align: center;
   padding: 20px 25px;
-  border: 1px solid #177db8;
-  border-radius: 5px;
+  border: 2px solid #3D568F;
+  border-radius: 10px;
   margin-right: 20px;
+  background: #FDFDF5;
 }
 @media screen and (max-width: 480px) {
   .Statistics-block {
@@ -774,7 +782,7 @@
   display: block;
 }
 .Statistics-option_error {
-  color: #ba6347;
+  color: #FF0000;
 }
 .Statistics-option_error strong {
   color: #2b2b2b;
@@ -803,12 +811,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #EAF3B2;
+  border: 2px solid #3D568F;
 }
+
 .Tabs-link + .Tabs-link {
   margin-left: 2.3rem;
 }
 .Tabs-link_ACTIVE {
-  border-color: #177db8;
+  border: 2px solid #3D568F;
 }
 .Tabs-icon {
   max-width: 35px;
@@ -817,7 +828,6 @@
 }
 .Tabs-wrap {
   padding: 40px;
-  border: 1px solid #e0e0e0;
   border-top: none;
   margin-top: 0;
 }
@@ -871,7 +881,7 @@
   }
 }
 .Tabs_steps .Tabs-link {
-  color: #2c2d2e;
+  color: #00000;
   border: none;
   height: auto;
   width: auto;
@@ -907,7 +917,7 @@
   content: counter(steps);
   width: 2.8rem;
   height: 2.8rem;
-  color: #177db8;
+  color: #00000;
   font-family: Montserrat, 'Arial Black', "Helvetica CY", Helvetica, "Nimbus Sans L", sans-serif;
   font-size: 13px;
   font-weight: 700;
@@ -951,7 +961,7 @@
   }
 }
 .Tabs_steps .Tabs-link_ACTIVE {
-  color: #2c2d2e;
+  color: #00000;
 }
 .Tabs_steps .Tabs-link_ACTIVE span:after {
   display: none;
@@ -1019,7 +1029,7 @@
 }
 .Tabs_default .Tabs-link_ACTIVE {
   background-color: #177db8;
-  color: #fff;
+  color: #00000;
 }
 .Tabs_column {
   display: flex;
@@ -1039,18 +1049,17 @@
   text-transform: uppercase;
   padding: 20px 20px;
   height: auto;
-  border: 2px solid #f7f7f7;
+  border: 1px solid #00000;
   border-bottom: none;
   justify-content: flex-start;
-  color: #999;
   width: 100%;
 }
 .Tabs_column .Tabs-link:last-child {
-  border-bottom: 2px solid #f7f7f7;
+  border-bottom: 2px solid #3D568F;
 }
 .Tabs_column .Tabs-link_ACTIVE {
-  border-left-color: #177db8;
-  color: #177db8;
+  border-left-color: #000000;
+  color: #000000;
   font-weight: 600;
 }
 .Tabs_column .Tabs-icon {
@@ -1141,4 +1150,207 @@
   left: 0;
   bottom: 0rem;
   right: 0;
+}
+/* ===== Стили для вкладки Topics ===== */
+
+/* Контейнер темы */
+.Topics-container {
+    margin-top: 20px;
+}
+
+/* Таблица тем */
+.Topics-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+.Topics-table th {
+    background-color: #f5f5f5;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+    color: #333;
+}
+
+.Topics-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.Topics-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.Topics-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+/* Ранг */
+.Topics-table td:first-child {
+    font-weight: bold;
+    color: #666;
+    width: 60px;
+}
+
+/* Лемма */
+.Topics-table td:nth-child(2) {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+/* Частота */
+.Topics-table td:nth-child(3) {
+    font-weight: bold;
+    color: #e74c3c;
+    text-align: center;
+}
+
+/* Страницы и сайты */
+.Topics-table td:nth-child(4),
+.Topics-table td:nth-child(5) {
+    text-align: center;
+    color: #3498db;
+}
+
+/* Среднее значение */
+.Topics-table td:nth-child(6) {
+    text-align: center;
+    color: #27ae60;
+    font-size: 13px;
+}
+
+/* Заголовок таблицы */
+.Topics-table th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 10;
+}
+
+/* Контейнер таблицы с прокруткой */
+.Topics-tableContainer {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Фильтры */
+.Topics-filter {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.Topics-filter .form-group_row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.Topics-filter .form-selectWrap {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Статистика тем */
+.Statistics_topics {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Кнопки экспорта */
+.Topics-export {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+/* Загрузка */
+.Topics-loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* Сообщение об отсутствии данных */
+.Topics-emptyRow td {
+    text-align: center;
+    padding: 40px !important;
+    color: #999;
+    font-style: italic;
+}
+
+/* График */
+.Topics-chart {
+    height: 300px;
+    margin: 20px 0;
+    position: relative;
+}
+
+/* Легенда */
+.Topics-legend {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.Topics-legend li {
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.Topics-legend li:last-child {
+    border-bottom: none;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .Topics-filter .form-group_row {
+        flex-direction: column;
+    }
+
+    .Topics-filter .form-selectWrap {
+        width: 100%;
+    }
+
+    .Topics-tableContainer {
+        font-size: 12px;
+    }
+
+    .Topics-table th,
+    .Topics-table td {
+        padding: 8px 10px;
+    }
+
+    .Topics-export {
+        flex-direction: column;
+    }
+}
+
+/* Цветовые коды для рейтингов */
+.rank-1 { background-color: #fff9e6; }
+.rank-2 { background-color: #fff3cc; }
+.rank-3 { background-color: #ffedb3; }
+
+/* Анимация загрузки */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.Topics-loading {
+    animation: pulse 1.5s infinite;
 }

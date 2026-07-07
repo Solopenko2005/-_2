@@ -46,11 +46,141 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml  # Файл с миграциями
-
+    change-log: classpath:db/changelog/db.changelog-master_topic.xml  # Файл с миграциями
 indexing-settings:
   userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
   referrer: "http://www.google.com"
   sites:
-    - url: https://sendel.ru
-      name: sendel
+    - url: https://www.vetpress.ru/jour
+      name: "Журнал: Аграрная наука"
+    - url: https://cyberleninka.ru/
+      name: "КИБЕРЛЕНИНКА"
+
+
+# Конфигурация для научных источников (Scopus, Web of Science, eLibrary)
+scientific:
+  sources:
+    scopus:
+      api-key: 58851ba253d4cc247cdd64fbcf8c4bcc
+      base-url: https://api.elsevier.com
+      max-results: 100
+      #wos:
+      # api-key: ${WOS_API_KEY:your_wos_api_key_here}
+      #base-url: https://api.clarivate.com/api/wos
+      #max-results: 100
+      #elibrary:
+      #api-key: ${ELIBRARY_API_KEY:your_elibrary_api_key_here}
+      #base-url: https://elibrary.ru/query_api.asp
+      #max-results: 100
+    # Темы для автоматического поиска статей по семеноводству и селекции
+    seed-breeding-topics:
+      # Ключевые слова на английском языке для поиска в Scopus
+      keywords-en:
+        - seed breeding
+        - plant breeding
+        - crop improvement
+        - seed production
+        - seed quality
+        - germination
+        - hybrid seeds
+        - seed treatment
+        - molecular breeding
+        - genetic improvement
+        - seed technology
+        - plant genetics
+        - seed storage
+        - seed certification
+        - conventional breeding
+      # Ключевые слова на русском языке для поиска в eLibrary
+      keywords-ru:
+        - семеноводство
+        - селекция растений
+        - производство семян
+        - качество семян
+        - всхожесть семян
+        - гибридные семена
+        - обработка семян
+        - молекулярная селекция
+        - генетическое улучшение
+        - технология семян
+        - генетика растений
+        - хранение семян
+        - сертификация семян
+        - традиционная селекция
+      # Предопределённые поисковые запросы для Scopus (автоматический поиск)
+      search-queries-en:
+        - "seed breeding AND genetics"
+        - "plant breeding AND seed production"
+        - "crop improvement AND seed technology"
+        - "seed quality AND germination"
+        - "hybrid seed production"
+        - "seed treatment AND protection"
+        - "molecular breeding AND seeds"
+        - "seed storage AND preservation"
+        - "seed certification AND standards"
+        - "conventional breeding AND modern varieties"
+      # Предопределённые поисковые запросы для eLibrary (автоматический поиск)
+      search-queries-ru:
+        - "семеноводство И селекция"
+        - "производство семян И качество"
+        - "селекция растений И генетика"
+        - "гибридные семена И технология"
+        - "хранение семян И сохранность"
+
+# Настройки для извлечения технологий
+technology-extraction:
+  # Минимальная длина слова для рассмотрения как технологии
+  min-word-length: 3
+  # Максимальное количество слов в названии технологии (n-gram)
+  max-ngram-size: 4
+  # Минимальная частота упоминания для включения в результат
+  min-frequency: 1
+  # Технологические маркеры для английского языка
+  tech-markers-en:
+    - technology
+    - method
+    - system
+    - approach
+    - technique
+    - tool
+    - platform
+    - framework
+    - model
+    - algorithm
+    - gene
+    - editing
+    - crispr
+    - marker
+    - sequencing
+    - genomic
+    - molecular
+    - breeding
+    - selection
+    - hybrid
+    - transformation
+    - conservation
+    - treatment
+    - analysis
+  # Технологические маркеры для русского языка
+  tech-markers-ru:
+    - технология
+    - метод
+    - система
+    - подход
+    - методика
+    - инструмент
+    - платформа
+    - модель
+    - алгоритм
+    - ген
+    - редактирование
+    - маркер
+    - секвенирование
+    - геномный
+    - молекулярный
+    - селекция
+    - гибрид
+    - трансформация
+    - консервация
+    - обработка
+    - анализ
